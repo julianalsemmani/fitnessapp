@@ -39,9 +39,6 @@ class ExerciseCameraFragment : Fragment() {
 
     // Camera
     private lateinit var cameraExecutor: ExecutorService
-    private var imageCapture: ImageCapture? = null
-    private var videoCapture: VideoCapture<Recorder>? = null
-    private var recording: Recording? = null
 
     // ML-kit
     private lateinit var poseDetector: PoseDetector
@@ -65,10 +62,8 @@ class ExerciseCameraFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         // Request camera permission
         activityResultLauncher.launch(Manifest.permission.CAMERA)
-
     }
 
     override fun onCreateView(
@@ -77,7 +72,6 @@ class ExerciseCameraFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentExerciseCameraBinding.inflate(layoutInflater)
-
         return binding.root
     }
 
