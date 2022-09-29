@@ -30,22 +30,21 @@ class ExerciseCameraFragment : Fragment() {
         private const val TAG = "ExerciseCameraFragment"
     }
 
-//    val options = PoseDetectorOptions.Builder()
-//        .setDetectorMode(PoseDetectorOptions.STREAM_MODE)
-//        .build()
-//
-//    val poseDetector = PoseDetection.getClient(options)
-
     private lateinit var binding: FragmentExerciseCameraBinding
 
+    // ML-kit
+    val poseDetector = PoseDetection.getClient(
+        PoseDetectorOptions.Builder()
+        .setDetectorMode(PoseDetectorOptions.STREAM_MODE)
+        .build())
+
+    // Camera
     private lateinit var cameraExecutor: ExecutorService
-
     private var imageCapture: ImageCapture? = null
-
     private var videoCapture: VideoCapture<Recorder>? = null
     private var recording: Recording? = null
 
-
+    // Permission handler
     private val activityResultLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             // Handle Permission granted/rejected
@@ -62,8 +61,6 @@ class ExerciseCameraFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        Log.e(TAG, "CREATED FRAGMENT!!!!!!!!")
 
         // Request camera permission
         activityResultLauncher.launch(Manifest.permission.CAMERA)
