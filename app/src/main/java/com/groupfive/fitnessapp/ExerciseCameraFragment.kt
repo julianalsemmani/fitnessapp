@@ -20,11 +20,13 @@ import androidx.camera.video.Recorder
 import androidx.camera.video.Recording
 import androidx.camera.video.VideoCapture
 import androidx.core.content.ContextCompat
+import com.groupfive.fitnessapp.posedetector.GraphicOverlay
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.pose.PoseDetection
 import com.google.mlkit.vision.pose.PoseDetector
 import com.google.mlkit.vision.pose.defaults.PoseDetectorOptions
 import com.groupfive.fitnessapp.databinding.FragmentExerciseCameraBinding
+import com.groupfive.fitnessapp.posedetector.PoseGraphic
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
