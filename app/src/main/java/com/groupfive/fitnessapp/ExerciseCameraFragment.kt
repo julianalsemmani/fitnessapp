@@ -1,10 +1,8 @@
 package com.groupfive.fitnessapp
 
 import android.Manifest
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.util.Size
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,25 +10,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.*
-import androidx.camera.core.impl.Config
-import androidx.camera.core.impl.UseCaseConfig
-import androidx.camera.core.impl.UseCaseConfigFactory
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.video.Recorder
-import androidx.camera.video.Recording
-import androidx.camera.video.VideoCapture
 import androidx.core.content.ContextCompat
 import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.pose.Pose
 import com.google.mlkit.vision.pose.PoseDetection
 import com.google.mlkit.vision.pose.PoseDetector
-import com.google.mlkit.vision.pose.PoseLandmark
 import com.google.mlkit.vision.pose.defaults.PoseDetectorOptions
 import com.groupfive.fitnessapp.databinding.FragmentExerciseCameraBinding
+import com.groupfive.fitnessapp.exercise.ExerciseDetector
+import com.groupfive.fitnessapp.exercise.SquatExerciseDetector
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import kotlin.math.abs
-import kotlin.math.atan2
 
 @ExperimentalGetImage
 class ExerciseCameraFragment : Fragment() {
@@ -49,6 +39,10 @@ class ExerciseCameraFragment : Fragment() {
     private lateinit var imageAnalyzer: ImageAnalyzer
     private lateinit var imageAnalysis: ImageAnalysis
 
+    private var exerciseDetector: ExerciseDetector = SquatExerciseDetector()
+
+    private var reps = 0
+
     // Permission handler
     private val activityResultLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -63,6 +57,11 @@ class ExerciseCameraFragment : Fragment() {
                     Toast.LENGTH_SHORT).show()
             }
         }
+
+    private fun onRepetition() {
+        reps++
+        binding.repView.text = reps.toString()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,7 +102,11 @@ class ExerciseCameraFragment : Fragment() {
                 PoseDetectorOptions.Builder()
                     .setDetectorMode(PoseDetectorOptions.STREAM_MODE)
                     .build())
-            imageAnalyzer = ImageAnalyzer(poseDetector)
+            imageAnalyzer = ImageAnalyzer(poseDetector, exerciseDetector,
+                onRepetition = {
+                    onRepetition()
+                }
+            )
             imageAnalysis = ImageAnalysis.Builder()
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .build()
@@ -130,30 +133,10 @@ class ExerciseCameraFragment : Fragment() {
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
-    private class ImageAnalyzer(val poseDetector: PoseDetector) : ImageAnalysis.Analyzer {
-        fun getAngle(firstPoint: PoseLandmark, midPoint: PoseLandmark, lastPoint: PoseLandmark): Double {
-            var result = Math.toDegrees(
-                (atan2(lastPoint.position.y - midPoint.position.y,
-                    lastPoint.position.x - midPoint.position.x)
-                        - atan2(firstPoint.position.y - midPoint.position.y,
-                    firstPoint.position.x - midPoint.position.x)).toDouble()
-            )
-            result = abs(result) // Angle should never be negative
-            if (result > 180) {
-                result = 360.0 - result // Always get the acute representation of the angle
-            }
-            return result
-        }
-
-        fun getAngle(pose: Pose, firstPoint: Int, midPoint: Int, lastPoint: Int) : Double {
-            return getAngle(
-                pose.getPoseLandmark(firstPoint)!!,
-                pose.getPoseLandmark(midPoint)!!,
-                pose.getPoseLandmark(lastPoint)!!)
-        }
-
-        var armUp = false
-        var reps = 0
+    private class ImageAnalyzer(
+        val poseDetector: PoseDetector,
+        val exerciseDetector: ExerciseDetector,
+        val onRepetition: ()->Unit) : ImageAnalysis.Analyzer {
 
         override fun analyze(imageProxy: ImageProxy) {
             val mediaImage = imageProxy.image
@@ -165,24 +148,9 @@ class ExerciseCameraFragment : Fragment() {
                         if(pose.allPoseLandmarks.isNotEmpty()) {
 //                            Log.w(TAG, pose.allPoseLandmarks.map{ it.position3D.toString() }.toString())
 
-                            val rightHipAngle = getAngle(pose,
-                                PoseLandmark.RIGHT_WRIST,
-                                PoseLandmark.RIGHT_SHOULDER,
-                                PoseLandmark.RIGHT_HIP)
-
-                            if(armUp) {
-                                if(rightHipAngle > 120) {
-                                    armUp = false
-                                }
-                            } else {
-                                if(rightHipAngle < 30) {
-                                    armUp = true
-                                    reps++
-                                    Log.w(TAG, "Reps: $reps")
-                                }
+                            if(exerciseDetector.detectRepetition(pose)) {
+                                onRepetition()
                             }
-
-//                            Log.w(TAG, "Right hip $rightHipAngle")
                         }
                     }
                     .addOnFailureListener { exception ->
