@@ -9,19 +9,19 @@ class SquatExerciseDetector : ExerciseDetector {
         const val TAG = "SquatExerciseDetector"
     }
 
-    val downConstraints = ExercisePoseConstraints(listOf<ExercisePoseConstraint>(
+    val downConstraints = ExercisePoseConstraints(
         ExerciseAngleConstraint(PoseLandmark.LEFT_ANKLE, PoseLandmark.LEFT_KNEE, PoseLandmark.LEFT_HIP,
             ComparisonType.SMALLER_THAN, 95.0),
         ExerciseAngleConstraint(PoseLandmark.RIGHT_ANKLE, PoseLandmark.RIGHT_KNEE, PoseLandmark.RIGHT_HIP,
             ComparisonType.SMALLER_THAN, 95.0)
-    ))
+    )
 
-    val upConstraints = ExercisePoseConstraints(listOf<ExercisePoseConstraint>(
+    val upConstraints = ExercisePoseConstraints(
         ExerciseAngleConstraint(PoseLandmark.LEFT_ANKLE, PoseLandmark.LEFT_KNEE, PoseLandmark.LEFT_HIP,
             ComparisonType.GREATER_THAN, 160.0),
         ExerciseAngleConstraint(PoseLandmark.RIGHT_ANKLE, PoseLandmark.RIGHT_KNEE, PoseLandmark.RIGHT_HIP,
             ComparisonType.GREATER_THAN, 160.0)
-    ))
+    )
 
     var isSquatDown = true
 

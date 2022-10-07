@@ -146,10 +146,11 @@ class ExerciseCameraFragment : Fragment() {
                 poseDetector.process(image)
                     .addOnSuccessListener { pose ->
                         if(pose.allPoseLandmarks.isNotEmpty()) {
-//                            Log.w(TAG, pose.allPoseLandmarks.map{ it.position3D.toString() }.toString())
-
-                            if(exerciseDetector.detectRepetition(pose)) {
-                                onRepetition()
+                            // Check that user is likely within frame before detection
+                            if(pose.allPoseLandmarks.all { it.inFrameLikelihood >= 0.9 }) {
+                                if(exerciseDetector.detectRepetition(pose)) {
+                                    onRepetition()
+                                }
                             }
                         }
                     }

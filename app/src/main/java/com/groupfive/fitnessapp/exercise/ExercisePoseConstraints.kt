@@ -2,7 +2,9 @@ package com.groupfive.fitnessapp.exercise
 
 import com.google.mlkit.vision.pose.Pose
 
-class ExercisePoseConstraints(private val constraints: List<ExercisePoseConstraint>) {
+class ExercisePoseConstraints(vararg constraintArgs: ExercisePoseConstraint) {
+    private val constraints: List<ExercisePoseConstraint> = listOf(*constraintArgs)
+
     fun evaluate(pose: Pose): Boolean {
         return constraints.all { it.evaluate(pose) }
     }
