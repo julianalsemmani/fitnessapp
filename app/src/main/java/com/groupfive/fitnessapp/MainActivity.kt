@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         binding.bottomNavigation.setOnItemSelectedListener {
-            Log.e("hei","hei")
             when(it.itemId){
                 R.id.ic_home->changeFragment(homeFragment)
                 R.id.ic_stats->changeFragment(statsFragment)
