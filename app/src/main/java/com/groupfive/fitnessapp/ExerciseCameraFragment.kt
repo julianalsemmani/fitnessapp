@@ -26,10 +26,6 @@ import java.util.concurrent.Executors
 @ExperimentalGetImage
 class ExerciseCameraFragment : Fragment() {
 
-    companion object {
-        private const val TAG = "ExerciseCameraFragment"
-    }
-
     private lateinit var binding: FragmentExerciseCameraBinding
 
     // Camera
@@ -139,7 +135,7 @@ class ExerciseCameraFragment : Fragment() {
                     this, cameraSelector, preview, imageAnalysis)
 
             } catch(exc: Exception) {
-                Log.e(TAG, "Use case binding failed", exc)
+                Log.e(javaClass.name, "Use case binding failed", exc)
             }
 
         }, ContextCompat.getMainExecutor(requireContext()))
@@ -171,7 +167,7 @@ class ExerciseCameraFragment : Fragment() {
                         }
                     }
                     .addOnFailureListener { exception ->
-                        Log.e(TAG, "ml-kit failed to process image from camera: " + exception.message)
+                        Log.e(javaClass.name, "ml-kit failed to process image from camera: " + exception.message)
                     }
                     .addOnCompleteListener {
                         imageProxy.close()
