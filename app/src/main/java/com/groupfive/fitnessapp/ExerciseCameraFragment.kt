@@ -1,6 +1,7 @@
 package com.groupfive.fitnessapp
 
 import android.Manifest
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -63,6 +64,14 @@ class ExerciseCameraFragment : Fragment() {
         binding.repView.text = reps.toString()
     }
 
+    private fun onWithinFrame(withinFrame: Boolean) {
+        if(withinFrame) {
+            binding.repView.setTextColor(Color.GREEN)
+        } else {
+            binding.repView.setTextColor(Color.RED)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Request camera permission
@@ -105,6 +114,9 @@ class ExerciseCameraFragment : Fragment() {
             imageAnalyzer = ImageAnalyzer(poseDetector, exerciseDetector,
                 onRepetition = {
                     onRepetition()
+                },
+                onWithinFrame = {
+                    onWithinFrame(it)
                 }
             )
             imageAnalysis = ImageAnalysis.Builder()
@@ -136,7 +148,8 @@ class ExerciseCameraFragment : Fragment() {
     private class ImageAnalyzer(
         val poseDetector: PoseDetector,
         val exerciseDetector: ExerciseDetector,
-        val onRepetition: ()->Unit) : ImageAnalysis.Analyzer {
+        val onRepetition: ()->Unit,
+        val onWithinFrame: (Boolean)->Unit) : ImageAnalysis.Analyzer {
 
         override fun analyze(imageProxy: ImageProxy) {
             val mediaImage = imageProxy.image
@@ -151,6 +164,9 @@ class ExerciseCameraFragment : Fragment() {
                                 if(exerciseDetector.detectRepetition(pose)) {
                                     onRepetition()
                                 }
+                                onWithinFrame(true)
+                            } else {
+                                onWithinFrame(false)
                             }
                         }
                     }
