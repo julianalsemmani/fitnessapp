@@ -5,9 +5,6 @@ import com.google.mlkit.vision.pose.Pose
 import com.google.mlkit.vision.pose.PoseLandmark
 
 class SquatExerciseDetector : ExerciseDetector {
-    companion object {
-        const val TAG = "SquatExerciseDetector"
-    }
 
     val downConstraints = ExercisePoseConstraints(
         ExerciseAngleConstraint(PoseLandmark.LEFT_ANKLE, PoseLandmark.LEFT_KNEE, PoseLandmark.LEFT_HIP,
@@ -26,19 +23,19 @@ class SquatExerciseDetector : ExerciseDetector {
     var isSquatDown = true
 
     override fun detectRepetition(pose: Pose): Boolean {
-        Log.w(TAG, ExerciseUtils.getAngle(pose,
+        Log.w(javaClass.name, ExerciseUtils.getAngle(pose,
             PoseLandmark.LEFT_ANKLE,
             PoseLandmark.LEFT_KNEE,
             PoseLandmark.LEFT_HIP).toString())
         if(isSquatDown) {
             if(downConstraints.evaluate(pose)) {
                 isSquatDown = false
-                Log.w(TAG, "DOWN")
+                Log.w(javaClass.name, "DOWN")
             }
         } else {
             if(upConstraints.evaluate(pose)) {
                 isSquatDown = true
-                Log.w(TAG, "UP")
+                Log.w(javaClass.name, "UP")
                 return true
             }
         }
