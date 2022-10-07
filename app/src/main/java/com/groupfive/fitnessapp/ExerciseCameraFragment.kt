@@ -1,10 +1,9 @@
 package com.groupfive.fitnessapp
 
 import android.Manifest
-import android.os.Build
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.util.Size
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,28 +11,20 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.*
-import androidx.camera.core.impl.Config
-import androidx.camera.core.impl.UseCaseConfig
-import androidx.camera.core.impl.UseCaseConfigFactory
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.video.Recorder
-import androidx.camera.video.Recording
-import androidx.camera.video.VideoCapture
 import androidx.core.content.ContextCompat
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.pose.PoseDetection
 import com.google.mlkit.vision.pose.PoseDetector
 import com.google.mlkit.vision.pose.defaults.PoseDetectorOptions
 import com.groupfive.fitnessapp.databinding.FragmentExerciseCameraBinding
+import com.groupfive.fitnessapp.exercise.ExerciseDetector
+import com.groupfive.fitnessapp.exercise.SquatExerciseDetector
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 @ExperimentalGetImage
 class ExerciseCameraFragment : Fragment() {
-
-    companion object {
-        private const val TAG = "ExerciseCameraFragment"
-    }
 
     private lateinit var binding: FragmentExerciseCameraBinding
 
@@ -44,6 +35,10 @@ class ExerciseCameraFragment : Fragment() {
     private lateinit var poseDetector: PoseDetector
     private lateinit var imageAnalyzer: ImageAnalyzer
     private lateinit var imageAnalysis: ImageAnalysis
+
+    private var exerciseDetector: ExerciseDetector = SquatExerciseDetector()
+
+    private var reps = 0
 
     // Permission handler
     private val activityResultLauncher =
@@ -59,6 +54,19 @@ class ExerciseCameraFragment : Fragment() {
                     Toast.LENGTH_SHORT).show()
             }
         }
+
+    private fun onRepetition() {
+        reps++
+        binding.repView.text = reps.toString()
+    }
+
+    private fun onWithinFrame(withinFrame: Boolean) {
+        if(withinFrame) {
+            binding.repView.setTextColor(Color.GREEN)
+        } else {
+            binding.repView.setTextColor(Color.RED)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,7 +107,14 @@ class ExerciseCameraFragment : Fragment() {
                 PoseDetectorOptions.Builder()
                     .setDetectorMode(PoseDetectorOptions.STREAM_MODE)
                     .build())
-            imageAnalyzer = ImageAnalyzer(poseDetector)
+            imageAnalyzer = ImageAnalyzer(poseDetector, exerciseDetector,
+                onRepetition = {
+                    onRepetition()
+                },
+                onWithinFrame = {
+                    onWithinFrame(it)
+                }
+            )
             imageAnalysis = ImageAnalysis.Builder()
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .build()
@@ -120,24 +135,39 @@ class ExerciseCameraFragment : Fragment() {
                     this, cameraSelector, preview, imageAnalysis)
 
             } catch(exc: Exception) {
-                Log.e(TAG, "Use case binding failed", exc)
+                Log.e(javaClass.name, "Use case binding failed", exc)
             }
 
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
-    private class ImageAnalyzer(val poseDetector: PoseDetector) : ImageAnalysis.Analyzer {
+    private class ImageAnalyzer(
+        val poseDetector: PoseDetector,
+        val exerciseDetector: ExerciseDetector,
+        val onRepetition: ()->Unit,
+        val onWithinFrame: (Boolean)->Unit) : ImageAnalysis.Analyzer {
+
         override fun analyze(imageProxy: ImageProxy) {
             val mediaImage = imageProxy.image
             if (mediaImage != null) {
                 val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
 
                 poseDetector.process(image)
-                    .addOnSuccessListener { results ->
-                        Log.w(TAG, results.allPoseLandmarks.map{ it.position3D.toString() }.toString())
+                    .addOnSuccessListener { pose ->
+                        if(pose.allPoseLandmarks.isNotEmpty()) {
+                            // Check that user is likely within frame before detection
+                            if(pose.allPoseLandmarks.all { it.inFrameLikelihood >= 0.9 }) {
+                                if(exerciseDetector.detectRepetition(pose)) {
+                                    onRepetition()
+                                }
+                                onWithinFrame(true)
+                            } else {
+                                onWithinFrame(false)
+                            }
+                        }
                     }
                     .addOnFailureListener { exception ->
-                        Log.e(TAG, "ml-kit failed to process image from camera: " + exception.message)
+                        Log.e(javaClass.name, "ml-kit failed to process image from camera: " + exception.message)
                     }
                     .addOnCompleteListener {
                         imageProxy.close()
