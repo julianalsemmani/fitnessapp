@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-android'
 }
 
 android {
@@ -17,12 +18,17 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -59,12 +65,6 @@ dependencies {
     implementation "androidx.camera:camera-view:${camerax_version}"
     implementation "androidx.camera:camera-extensions:${camerax_version}"
 
-    // Guava
-    implementation 'com.google.guava:guava:27.1-android'
-}
-
-configurations {
-    // Resolves dependency conflict caused by some dependencies use
-    // com.google.guava:guava and com.google.guava:listenablefuture together.
-    all*.exclude group: 'com.google.guava', module: 'listenablefuture'
+    // Material Design Dependency
+    implementation 'com.google.android.material:material:1.6.1'
 }
