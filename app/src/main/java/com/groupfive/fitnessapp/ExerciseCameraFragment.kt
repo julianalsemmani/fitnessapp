@@ -1,10 +1,8 @@
 package com.groupfive.fitnessapp
 
 import android.Manifest
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.util.Size
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,21 +10,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.*
-import androidx.camera.core.impl.Config
-import androidx.camera.core.impl.UseCaseConfig
-import androidx.camera.core.impl.UseCaseConfigFactory
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.video.Recorder
-import androidx.camera.video.Recording
-import androidx.camera.video.VideoCapture
 import androidx.core.content.ContextCompat
-import com.groupfive.fitnessapp.posedetector.GraphicOverlay
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.pose.PoseDetection
 import com.google.mlkit.vision.pose.PoseDetector
 import com.google.mlkit.vision.pose.defaults.PoseDetectorOptions
 import com.groupfive.fitnessapp.databinding.FragmentExerciseCameraBinding
-import com.groupfive.fitnessapp.posedetector.PoseGraphic
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
