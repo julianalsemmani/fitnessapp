@@ -1,9 +1,6 @@
 package com.groupfive.fitnessapp
 
-import android.Manifest
 import android.os.Bundle
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.groupfive.fitnessapp.databinding.ActivityMainBinding
@@ -11,7 +8,7 @@ import com.groupfive.fitnessapp.fragments.HomeFragment
 import com.groupfive.fitnessapp.fragments.NotificationsFragment
 import com.groupfive.fitnessapp.fragments.ProfileFragment
 import com.groupfive.fitnessapp.fragments.StatsFragment
-import java.time.Duration
+
 
 class MainActivity : AppCompatActivity() {
     private val homeFragment = HomeFragment()

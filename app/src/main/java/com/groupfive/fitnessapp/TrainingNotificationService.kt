@@ -1,5 +1,6 @@
 package com.groupfive.fitnessapp
 
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -11,6 +12,8 @@ import java.time.Duration
 class TrainingNotificationService(
     private val context: Context
 ){
+    private val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
     fun showNotification(notificationId:Int, minutesLeft:Int) {
         val activityIntent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -33,10 +36,11 @@ class TrainingNotificationService(
             .build()
 
         // Shows the notification
-        with(NotificationManagerCompat.from(context)) {
+/*        with(NotificationManagerCompat.from(context)) {
             // notificationId is a unique int for each notification that you must define
             notify(notificationId, notification)
-        }
+        }*/
+        notificationManager.notify(notificationId, notification)
     }
 
     companion object {
