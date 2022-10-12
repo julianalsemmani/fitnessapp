@@ -2,7 +2,6 @@ package com.groupfive.fitnessapp
 
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.ExperimentalGetImage
@@ -24,6 +23,7 @@ import com.groupfive.fitnessapp.fragments.StatsFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.fragment_home)
         changeFragment(homeFragment)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -37,6 +37,12 @@ import com.groupfive.fitnessapp.fragments.StatsFragment
                 R.id.ic_profile->changeFragment(profileFragment)
             }
             true
+        }
+
+        val cameraBtn = findViewById<Button>(R.id.cameraBtn)
+
+        cameraBtn.setOnClickListener {
+           changeFragment(cameraExerciseFragment)
         }
 
         setContentView(binding.root)
