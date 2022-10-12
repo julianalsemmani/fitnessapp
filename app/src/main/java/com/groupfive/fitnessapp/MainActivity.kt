@@ -1,40 +1,29 @@
 package com.groupfive.fitnessapp
 
 import android.os.Bundle
-import android.util.Log
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.ExperimentalGetImage
-import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
 import com.groupfive.fitnessapp.databinding.ActivityMainBinding
-import com.groupfive.fitnessapp.fragments.HomeFragment
-import com.groupfive.fitnessapp.fragments.NotificationsFragment
-import com.groupfive.fitnessapp.fragments.ProfileFragment
-import com.groupfive.fitnessapp.fragments.StatsFragment
 
 
-@ExperimentalGetImage class MainActivity : AppCompatActivity() {
-    private val homeFragment = HomeFragment()
-    private val statsFragment = StatsFragment()
-    private val notificationsFragment = NotificationsFragment()
-    private val profileFragment = ProfileFragment()
-    private val cameraExerciseFragment = ExerciseCameraFragment()
-    private lateinit var binding:ActivityMainBinding
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_home)
-        changeFragment(homeFragment)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
 
+        // Retrieve nav controller
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+
         binding.bottomNavigation.setOnItemSelectedListener {
-            Log.e("hei","hei")
             when(it.itemId){
-                R.id.ic_home->changeFragment(homeFragment)
-                R.id.ic_stats->changeFragment(statsFragment)
-                R.id.ic_notifications->changeFragment(notificationsFragment)
-                R.id.ic_profile->changeFragment(profileFragment)
+                R.id.ic_home->navController.navigate(R.id.action_global_homeFragment)
+                R.id.ic_stats->navController.navigate(R.id.action_global_statsFragment)
+                R.id.ic_notifications->navController.navigate(R.id.action_global_notificationsFragment)
+                R.id.ic_profile->navController.navigate(R.id.action_global_profileFragment)
             }
             true
         }
@@ -46,11 +35,5 @@ import com.groupfive.fitnessapp.fragments.StatsFragment
         }
 
         setContentView(binding.root)
-    }
-
-    private fun changeFragment(fragment: Fragment) {
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_container, fragment)
-        transaction.commit()
     }
 }
