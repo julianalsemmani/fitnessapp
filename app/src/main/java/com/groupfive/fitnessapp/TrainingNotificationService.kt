@@ -23,15 +23,19 @@ class TrainingNotificationService(
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
         )
 
+        // Notification contents
         val notification = NotificationCompat.Builder(context, TRAINING_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_training_reminder)
             .setContentTitle("Training reminder")
             .setContentText("This is reminder for you to train. Your training starts in $minutesLeft minutes.")
             .setContentIntent(activityPendingIntent)
             .setAutoCancel(true)
+            .build()
+
+        // Shows the notification
         with(NotificationManagerCompat.from(context)) {
             // notificationId is a unique int for each notification that you must define
-            notify(notificationId, notification.build())
+            notify(notificationId, notification)
         }
     }
 

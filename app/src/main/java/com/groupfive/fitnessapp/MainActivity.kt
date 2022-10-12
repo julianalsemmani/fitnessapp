@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         transaction.commit()
     }
 
-    // Used to give permission
+    // Notification permission
 /*    private val activityResultLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             // Handle Permission granted/rejected
