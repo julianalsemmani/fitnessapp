@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.groupfive.fitnessapp.R
 import com.groupfive.fitnessapp.databinding.FragmentHomeBinding
 
@@ -20,6 +21,19 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater)
+
+        binding.cameraBtn.setOnClickListener {
+            val controller = findNavController()
+            controller.navigate(R.id.action_homeFragment_to_exerciseCameraFragment)
+        }
+
+//        binding.calenderBtn.setOnClickListener {
+//            val controller = findNavController()
+//            controller.navigate(R.id.action_homeFragment_to_calenderFragment)
+//        }
+
+
+
         return binding.root
     }
 }

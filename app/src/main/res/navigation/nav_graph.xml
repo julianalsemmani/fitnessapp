@@ -9,7 +9,14 @@
         android:id="@+id/homeFragment"
         android:name="com.groupfive.fitnessapp.fragments.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_exerciseCameraFragment"
+            app:destination="@id/exerciseCameraFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_calendarFragment"
+            app:destination="@id/calendarFragment" />
+    </fragment>
     <fragment
         android:id="@+id/calendarFragment"
         android:name="com.groupfive.fitnessapp.fragments.CalendarFragment"

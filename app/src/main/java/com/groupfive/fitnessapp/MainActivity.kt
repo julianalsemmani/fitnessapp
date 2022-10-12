@@ -28,11 +28,7 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        val cameraBtn = findViewById<Button>(R.id.cameraBtn)
-
-        cameraBtn.setOnClickListener {
-           changeFragment(cameraExerciseFragment)
-        }
+        
 
         setContentView(binding.root)
     }
