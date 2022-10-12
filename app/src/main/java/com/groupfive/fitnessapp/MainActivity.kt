@@ -2,6 +2,7 @@ package com.groupfive.fitnessapp
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.ExperimentalGetImage
@@ -34,16 +35,9 @@ import com.groupfive.fitnessapp.fragments.StatsFragment
                 R.id.ic_stats->changeFragment(statsFragment)
                 R.id.ic_notifications->changeFragment(notificationsFragment)
                 R.id.ic_profile->changeFragment(profileFragment)
-                R.id.cameraBtn->changeFragment(cameraExerciseFragment)
             }
             true
         }
-
-//        val cameraBtn = findViewById<Button>(R.id.cameraBtn)
-//
-//        cameraBtn.setOnClickListener {
-//            changeFragment(cameraExerciseFragment)
-//        }
 
         setContentView(binding.root)
     }
