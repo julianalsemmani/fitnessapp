@@ -17,6 +17,7 @@ import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.model.ScrollMode
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
+import java.time.DayOfWeek
 import java.time.YearMonth
 import java.time.temporal.WeekFields
 import java.util.*
@@ -25,17 +26,15 @@ class CalendarFragment : Fragment() {
 
     private lateinit var binding: FragmentCalendarBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCalendarBinding.inflate(inflater)
 
-        binding.calendarView.dayBinder = object : DayBinder<DayViewContainer> {
+        val calendarView = binding.calendarView
+
+        calendarView.dayBinder = object : DayBinder<DayViewContainer> {
             // Called only when a new container is needed.
             override fun create(view: View) = DayViewContainer(view)
 
@@ -51,27 +50,44 @@ class CalendarFragment : Fragment() {
             }
         }
 
-        binding.calendarView.monthHeaderBinder = object :
-            MonthHeaderFooterBinder<MonthViewContainer> {
+        val daysOfWeek = daysOfWeekFromLocale()
+        calendarView.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
+            // Called only when a new container is needed.
             override fun create(view: View) = MonthViewContainer(view)
+
+            // Called every time we need to reuse a container.
             override fun bind(container: MonthViewContainer, month: CalendarMonth) {
-                container.textView.text = "${
-                    month.yearMonth.month.name.lowercase(Locale.getDefault()).capitalize()} ${month.year}"
+                container.textView.text = "${month.yearMonth.month.name.lowercase(Locale.getDefault()).capitalize()} ${month.year}"
+                container.dayTexts.forEachIndexed { i, textView -> textView.text = daysOfWeek[i].name.substring(0, 3) }
             }
         }
 
-        binding.calendarView.scrollMode = ScrollMode.PAGED
+        calendarView.scrollMode = ScrollMode.PAGED
+        calendarView.orientation = 0
+        calendarView.maxRowCount = 6
 
         val currentMonth = YearMonth.now()
-        val firstMonth = currentMonth.minusMonths(10)
-        val lastMonth = currentMonth.plusMonths(10)
-        val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
-        binding.calendarView.setup(firstMonth, lastMonth, firstDayOfWeek)
-        binding.calendarView.scrollToMonth(currentMonth)
+        val startMonth = currentMonth.minusMonths(10)
+        val endMonth = currentMonth.plusMonths(10)
+        calendarView.setup(startMonth, endMonth, daysOfWeek.first())
+        calendarView.scrollToMonth(currentMonth)
 
         Log.e(javaClass.name, currentMonth.toString())
 
         return binding.root
+    }
+
+    private fun daysOfWeekFromLocale(): Array<DayOfWeek> {
+        val firstDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
+        val daysOfWeek = DayOfWeek.values()
+        // Order `daysOfWeek` array so that firstDayOfWeek is at index 0.
+        // Only necessary if firstDayOfWeek is not DayOfWeek.MONDAY which has ordinal 0.
+        if (firstDayOfWeek != DayOfWeek.MONDAY) {
+            val rhs = daysOfWeek.sliceArray(firstDayOfWeek.ordinal..daysOfWeek.indices.last)
+            val lhs = daysOfWeek.sliceArray(0 until firstDayOfWeek.ordinal)
+            return rhs + lhs
+        }
+        return daysOfWeek
     }
 
     companion object {

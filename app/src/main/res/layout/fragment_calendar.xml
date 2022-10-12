@@ -16,8 +16,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
 
-        app:cv_dayViewResource="@layout/calendar_day_layout"
-        app:cv_monthHeaderResource="@layout/calendar_month_header_layout"/>
+        app:cv_dayViewResource="@layout/layout_calendar_day"
+        app:cv_monthHeaderResource="@layout/layout_calendar_month_header"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

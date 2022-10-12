@@ -1,11 +1,11 @@
 package com.groupfive.fitnessapp.calendar
 
 import android.view.View
-import com.groupfive.fitnessapp.databinding.CalendarDayLayoutBinding
+import com.groupfive.fitnessapp.databinding.LayoutCalendarDayBinding
 import com.kizitonwose.calendarview.ui.ViewContainer
 
 class DayViewContainer(view: View) : ViewContainer(view) {
-    val textView = CalendarDayLayoutBinding.bind(view).dayText
+    val textView = LayoutCalendarDayBinding.bind(view).dayText
 
 
 }
