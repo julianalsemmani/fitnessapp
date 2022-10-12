@@ -1,4 +1,4 @@
-package com.groupfive.fitnessapp
+package com.groupfive.fitnessapp.fragments
 
 import android.Manifest
 import android.graphics.Color
