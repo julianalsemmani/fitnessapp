@@ -62,11 +62,10 @@ dependencies {
     implementation "androidx.camera:camera-extensions:${camerax_version}"
 
     // Material Design
-    implementation 'com.google.android.material:material:1.6.1'
+    def material_version = "1.6.0"
+    implementation "com.google.android.material:material:${material_version}"
 
     // NotificationCompat
-    val core_version = "1.6.0"
-    dependencies {
-        implementation("androidx.core:core-ktx:$core_version")
-    }
+    def core_version = "1.6.0"
+    implementation"androidx.core:core-ktx:${core_version}"
 }
