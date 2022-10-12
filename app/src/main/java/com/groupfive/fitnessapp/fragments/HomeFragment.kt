@@ -27,12 +27,10 @@ class HomeFragment : Fragment() {
             controller.navigate(R.id.action_homeFragment_to_exerciseCameraFragment)
         }
 
-//        binding.calenderBtn.setOnClickListener {
-//            val controller = findNavController()
-//            controller.navigate(R.id.action_homeFragment_to_calenderFragment)
-//        }
-
-
+        binding.calenderBtn.setOnClickListener {
+            val controller = findNavController()
+            controller.navigate(R.id.action_homeFragment_to_calendarFragment)
+        }
 
         return binding.root
     }

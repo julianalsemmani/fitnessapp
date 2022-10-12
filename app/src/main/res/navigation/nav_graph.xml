@@ -24,7 +24,7 @@
         tools:layout="@layout/fragment_calendar" />
     <fragment
         android:id="@+id/exerciseCameraFragment"
-        android:name="com.groupfive.fitnessapp.ExerciseCameraFragment"
+        android:name="com.groupfive.fitnessapp.fragments.ExerciseCameraFragment"
         android:label="fragment_exercise_camera"
         tools:layout="@layout/fragment_exercise_camera" />
     <fragment
