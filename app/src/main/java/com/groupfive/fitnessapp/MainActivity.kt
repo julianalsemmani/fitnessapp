@@ -1,7 +1,9 @@
 package com.groupfive.fitnessapp
 
+import android.Manifest
 import android.os.Bundle
-import android.util.Log
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.groupfive.fitnessapp.databinding.ActivityMainBinding
@@ -9,7 +11,7 @@ import com.groupfive.fitnessapp.fragments.HomeFragment
 import com.groupfive.fitnessapp.fragments.NotificationsFragment
 import com.groupfive.fitnessapp.fragments.ProfileFragment
 import com.groupfive.fitnessapp.fragments.StatsFragment
-
+import java.time.Duration
 
 class MainActivity : AppCompatActivity() {
     private val homeFragment = HomeFragment()
@@ -20,7 +22,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         changeFragment(homeFragment)
+
+        // Notifications
+        // activityResultLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
 
@@ -41,4 +47,20 @@ class MainActivity : AppCompatActivity() {
         transaction.replace(R.id.fragment_container, fragment)
         transaction.commit()
     }
+
+    // Used to give permission
+/*    private val activityResultLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            // Handle Permission granted/rejected
+            if (isGranted) {
+                // Permission is granted
+                val trainingNotificationService = TrainingNotificationService(this)
+                trainingNotificationService.showNotification(10,1)
+            } else {
+                // Permission is denied
+                Toast.makeText(this,
+                    "Permissions not granted by the user.",
+                    Toast.LENGTH_SHORT).show()
+            }
+        }*/
 }

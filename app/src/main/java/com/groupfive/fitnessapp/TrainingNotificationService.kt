@@ -5,12 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import java.time.Duration
 
 class TrainingNotificationService(
     private val context: Context
 ){
-    fun showNotification(timeLeft:Duration) {
+    fun showNotification(notificationId:Int, minutesLeft:Int) {
         val activityIntent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
@@ -25,9 +26,13 @@ class TrainingNotificationService(
         val notification = NotificationCompat.Builder(context, TRAINING_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_training_reminder)
             .setContentTitle("Training reminder")
-            .setContentText("This is reminder for you to train. Your training starts in $timeLeft")
+            .setContentText("This is reminder for you to train. Your training starts in $minutesLeft minutes.")
             .setContentIntent(activityPendingIntent)
             .setAutoCancel(true)
+        with(NotificationManagerCompat.from(context)) {
+            // notificationId is a unique int for each notification that you must define
+            notify(notificationId, notification.build())
+        }
     }
 
     companion object {
