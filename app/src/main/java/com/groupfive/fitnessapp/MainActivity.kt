@@ -2,7 +2,9 @@ package com.groupfive.fitnessapp
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.core.ExperimentalGetImage
 import androidx.fragment.app.Fragment
 import com.groupfive.fitnessapp.databinding.ActivityMainBinding
 import com.groupfive.fitnessapp.fragments.HomeFragment
@@ -11,11 +13,12 @@ import com.groupfive.fitnessapp.fragments.ProfileFragment
 import com.groupfive.fitnessapp.fragments.StatsFragment
 
 
-class MainActivity : AppCompatActivity() {
+@ExperimentalGetImage class MainActivity : AppCompatActivity() {
     private val homeFragment = HomeFragment()
     private val statsFragment = StatsFragment()
     private val notificationsFragment = NotificationsFragment()
     private val profileFragment = ProfileFragment()
+    private val cameraExerciseFragment = ExerciseCameraFragment()
     private lateinit var binding:ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +37,13 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+
+        val cameraBtn = findViewById<Button>(R.id.cameraBtn)
+
+        cameraBtn.setOnClickListener {
+            changeFragment(cameraExerciseFragment)
+        }
+
         setContentView(binding.root)
     }
 
