@@ -5,7 +5,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
-import androidx.core.app.NotificationManagerCompat
 
 class MyApp: Application() {
     override fun onCreate() {
