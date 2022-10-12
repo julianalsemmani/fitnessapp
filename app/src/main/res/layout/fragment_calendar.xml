@@ -9,13 +9,15 @@
 
     <com.kizitonwose.calendarview.CalendarView
         android:id="@+id/calendarView"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cv_dayViewResource="@layout/calendar_day_layout"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:cv_dayViewResource="@layout/calendar_day_layout"
+        app:cv_monthHeaderResource="@layout/calendar_month_header_layout"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
