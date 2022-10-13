@@ -21,7 +21,11 @@
         android:id="@+id/calendarFragment"
         android:name="com.groupfive.fitnessapp.fragments.CalendarFragment"
         android:label="fragment_calendar"
-        tools:layout="@layout/fragment_calendar" />
+        tools:layout="@layout/fragment_calendar" >
+        <action
+            android:id="@+id/action_calendarFragment_to_workoutDayFragment"
+            app:destination="@id/workoutDayFragment" />
+    </fragment>
     <fragment
         android:id="@+id/exerciseCameraFragment"
         android:name="com.groupfive.fitnessapp.fragments.ExerciseCameraFragment"
@@ -54,4 +58,13 @@
     <action
         android:id="@+id/action_global_statsFragment"
         app:destination="@id/statsFragment" />
+    <fragment
+        android:id="@+id/workoutDayFragment"
+        android:name="com.groupfive.fitnessapp.fragments.workoutday.WorkoutDayFragment"
+        android:label="fragment_workout_day"
+        tools:layout="@layout/fragment_workout_day" >
+        <argument
+            android:name="day"
+            app:argType="java.time.LocalDate" />
+    </fragment>
 </navigation>
