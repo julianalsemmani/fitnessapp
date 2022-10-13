@@ -2,6 +2,8 @@ package com.groupfive.fitnessapp.calendar.repository
 
 import com.groupfive.fitnessapp.exercise.WorkoutType
 import java.time.Instant
+import kotlin.math.roundToLong
+import kotlin.random.Random
 
 class TestCalendarRepository: CalendarRepository {
     private val plannedWorkoutSessions: ArrayList<PlannedWorkoutSession> = ArrayList()
@@ -22,14 +24,18 @@ class TestCalendarRepository: CalendarRepository {
         fun repositoryWithPlannedExercisesForToday(): TestCalendarRepository {
             val result = TestCalendarRepository()
 
-            result.createPlannedWorkoutSession(PlannedWorkoutSession(
-                Instant.now(),
-                Instant.now().plusSeconds(3600),
-                WorkoutType.SQUAT))
-            result.createPlannedWorkoutSession(PlannedWorkoutSession(
-                Instant.now().plusSeconds(4000),
-                Instant.now().plusSeconds(5000),
-                WorkoutType.PUSH_UP))
+            // Add random workouts with random time beginning from now
+            var time = Instant.now()
+            for (i in 1..20) {
+
+                val endTime = time.plusSeconds((Random.nextFloat()*1800).roundToLong())
+                result.createPlannedWorkoutSession(PlannedWorkoutSession(
+                    time,
+                    endTime,
+                    WorkoutType.values()[Random.nextInt(WorkoutType.values().size)]))
+
+                time =  time.plusSeconds((Random.nextFloat()*1800).roundToLong())
+            }
 
             return result
         }

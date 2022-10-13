@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
 import com.groupfive.fitnessapp.R
 import com.groupfive.fitnessapp.calendar.DayViewContainer
 import com.groupfive.fitnessapp.calendar.MonthViewContainer
@@ -46,6 +48,12 @@ class CalendarFragment : Fragment() {
                     container.textView.setTextColor(Color.BLACK)
                 } else {
                     container.textView.setTextColor(Color.GRAY)
+                }
+
+                container.view.setOnClickListener {
+                    val action = CalendarFragmentDirections.actionCalendarFragmentToWorkoutDayFragment(day.date)
+
+                    findNavController().navigate(action)
                 }
             }
         }
