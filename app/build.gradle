@@ -85,4 +85,7 @@ dependencies {
 
     // View-model
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+
+    // JUnit
+    testImplementation "junit:junit:1.9.1"
 }
