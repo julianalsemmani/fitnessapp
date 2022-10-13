@@ -1,4 +1,4 @@
-package com.groupfive.fitnessapp.fragments
+package com.groupfive.fitnessapp.fragments.workoutday
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -15,10 +15,13 @@ class WorkoutDayFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentWorkoutDayBinding.inflate(inflater)
-
-
-
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        
     }
 
     companion object {
