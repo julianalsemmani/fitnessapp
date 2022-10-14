@@ -23,6 +23,7 @@ package com.groupfive.fitness <<Folder>> {
         Class ExerciseUtils
         Class SquatExerciseDetector
         Enum WorkoutType
+    }
 
     package Fragments <<Folder>> {
         package Calendar <<Folder>> {
