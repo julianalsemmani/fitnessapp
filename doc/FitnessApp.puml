@@ -1,0 +1,64 @@
+@startuml FitnessApp
+
+left to right direction
+
+package com.groupfive.fitness <<Folder>> {
+    Class MainActivity
+    Class MyApp
+    Class TrainingNotificationService
+
+    package Calender <<Folder>>{ 
+        Class DayViewContainer
+        Class MonthViewContainer
+
+        package Repository <<Folder>> { 
+        Interface CalenderRepository
+            Class PlannedWorkoutSession
+            Class TestCalenderRepository 
+        }  
+    }
+
+    package Exercise <<Folder>> {
+        Class ExerciseAngleConstraint
+        Interface ExerciseDetector
+        Interface ExercisePoseConstraint
+        Class ExercisePoseConstraints
+        Class ExerciseUtils
+        Class SquatExerciseDetector
+        Enum WorkoutType
+
+    package Fragments <<Folder>> {
+        Class CalenderFragment
+        Class ExerciseCameraFragment
+        Class HomeFragment
+        Class NotficiationsFragment
+        Class ProfileFragment
+        Class StatsFragment
+
+        package Workoutday <<Folder>> {
+            Class PlannedWorkoutSessionAdapter
+            Class WorkoutDayFragment
+            Class WorkoutDayViewModel
+
+        }
+    }
+}
+
+' Exercise system
+ExerciseDetector <|-- SquatExerciseDetector
+ExercisePoseConstraint <|-- ExerciseAngleConstraint
+ExercisePoseConstraints o-- ExercisePoseConstraint
+ExerciseCameraFragment o-- ExerciseDetector
+ExercisePoseConstraint o-- SquatExerciseDetector
+
+' Calender
+CalenderRepository <|-- TestCalenderRepository
+PlannedWorkoutSession o-- CalenderRepository
+CalenderRepository o-- WorkoutDayViewModel
+CalenderRepository o-- CalenderFragment
+WorkoutDayViewModel o-- WorkoutDayFragment
+PlannedWorkoutSessionAdapter o-- WorkoutDayFragment
+TrainingNotificationService o-- MyApp
+DayViewContainer o-- CalenderFragment
+MonthViewContainer o-- CalenderFragment
+@enduml
