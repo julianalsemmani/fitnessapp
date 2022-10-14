@@ -10,7 +10,7 @@ import java.time.ZoneOffset
 
 class WorkoutDayViewModel: ViewModel() {
     //TODO(edward): Swap this out with a repository that communicates with firebase
-    private val calendarRepository = TestCalendarRepository.repositoryWithPlannedExercisesForToday()
+    private val calendarRepository = TestCalendarRepository.instance()
 
     private val _plannedWorkoutSessions = MutableLiveData<List<PlannedWorkoutSession>>()
     val plannedWorkoutSessions: LiveData<List<PlannedWorkoutSession>>
