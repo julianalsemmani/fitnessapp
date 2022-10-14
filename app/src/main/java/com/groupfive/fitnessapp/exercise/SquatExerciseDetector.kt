@@ -6,14 +6,16 @@ import com.google.mlkit.vision.pose.PoseLandmark
 
 class SquatExerciseDetector : ExerciseDetector {
 
-    val downConstraints = ExercisePoseConstraints(
+    private val safetyMargin = 10.0
+
+    private val squatDownConstraints = ExercisePoseConstraints(
         ExerciseAngleConstraint(PoseLandmark.LEFT_ANKLE, PoseLandmark.LEFT_KNEE, PoseLandmark.LEFT_HIP,
-            ComparisonType.SMALLER_THAN, 95.0),
+            ComparisonType.SMALLER_THAN, (95.0 + safetyMargin)),
         ExerciseAngleConstraint(PoseLandmark.RIGHT_ANKLE, PoseLandmark.RIGHT_KNEE, PoseLandmark.RIGHT_HIP,
-            ComparisonType.SMALLER_THAN, 95.0)
+            ComparisonType.SMALLER_THAN, 95.0 + safetyMargin)
     )
 
-    val upConstraints = ExercisePoseConstraints(
+    private val squatUpConstraints = ExercisePoseConstraints(
         ExerciseAngleConstraint(PoseLandmark.LEFT_ANKLE, PoseLandmark.LEFT_KNEE, PoseLandmark.LEFT_HIP,
             ComparisonType.GREATER_THAN, 160.0),
         ExerciseAngleConstraint(PoseLandmark.RIGHT_ANKLE, PoseLandmark.RIGHT_KNEE, PoseLandmark.RIGHT_HIP,
@@ -23,17 +25,13 @@ class SquatExerciseDetector : ExerciseDetector {
     var isSquatDown = true
 
     override fun detectRepetition(pose: Pose): Boolean {
-        Log.w(javaClass.name, ExerciseUtils.getAngle(pose,
-            PoseLandmark.LEFT_ANKLE,
-            PoseLandmark.LEFT_KNEE,
-            PoseLandmark.LEFT_HIP).toString())
         if(isSquatDown) {
-            if(downConstraints.evaluate(pose)) {
+            if(squatDownConstraints.checkPose(pose)) {
                 isSquatDown = false
                 Log.w(javaClass.name, "DOWN")
             }
         } else {
-            if(upConstraints.evaluate(pose)) {
+            if(squatUpConstraints.checkPose(pose)) {
                 isSquatDown = true
                 Log.w(javaClass.name, "UP")
                 return true

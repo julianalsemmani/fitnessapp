@@ -1,4 +1,4 @@
-package com.groupfive.fitnessapp
+package com.groupfive.fitnessapp.fragments
 
 import android.Manifest
 import android.graphics.Color
@@ -30,18 +30,18 @@ class ExerciseCameraFragment : Fragment() {
 
     // Camera
     private lateinit var cameraExecutor: ExecutorService
+    private lateinit var imageAnalysis: ImageAnalysis
 
     // ML-kit
     private lateinit var poseDetector: PoseDetector
-    private lateinit var imageAnalyzer: ImageAnalyzer
-    private lateinit var imageAnalysis: ImageAnalysis
 
+    private lateinit var exerciseImageAnalyzer: ExerciseImageAnalyzer
     private var exerciseDetector: ExerciseDetector = SquatExerciseDetector()
 
     private var reps = 0
 
     // Permission handler
-    private val activityResultLauncher =
+    private val permissionResultLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             // Handle Permission granted/rejected
             if (isGranted) {
@@ -55,11 +55,18 @@ class ExerciseCameraFragment : Fragment() {
             }
         }
 
+    /**
+     * Called when a new exercise repition has been detected
+     */
     private fun onRepetition() {
         reps++
         binding.repView.text = reps.toString()
+
     }
 
+    /**
+     * Notifies whether user is in frame or not
+     */
     private fun onWithinFrame(withinFrame: Boolean) {
         if(withinFrame) {
             binding.repView.setTextColor(Color.GREEN)
@@ -71,7 +78,7 @@ class ExerciseCameraFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Request camera permission
-        activityResultLauncher.launch(Manifest.permission.CAMERA)
+        permissionResultLauncher.launch(Manifest.permission.CAMERA)
     }
 
     override fun onCreateView(
@@ -107,13 +114,9 @@ class ExerciseCameraFragment : Fragment() {
                 PoseDetectorOptions.Builder()
                     .setDetectorMode(PoseDetectorOptions.STREAM_MODE)
                     .build())
-            imageAnalyzer = ImageAnalyzer(poseDetector, exerciseDetector,
-                onRepetition = {
-                    onRepetition()
-                },
-                onWithinFrame = {
-                    onWithinFrame(it)
-                }
+            exerciseImageAnalyzer = ExerciseImageAnalyzer(poseDetector, exerciseDetector,
+                onRepetition = this::onRepetition,
+                onWithinFrame = this::onWithinFrame
             )
             imageAnalysis = ImageAnalysis.Builder()
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
@@ -121,7 +124,7 @@ class ExerciseCameraFragment : Fragment() {
 
             cameraExecutor = Executors.newSingleThreadExecutor()
 
-            imageAnalysis.setAnalyzer(cameraExecutor, imageAnalyzer)
+            imageAnalysis.setAnalyzer(cameraExecutor, exerciseImageAnalyzer)
 
             // Select back camera as a default
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
@@ -141,7 +144,7 @@ class ExerciseCameraFragment : Fragment() {
         }, ContextCompat.getMainExecutor(requireContext()))
     }
 
-    private class ImageAnalyzer(
+    private class ExerciseImageAnalyzer(
         val poseDetector: PoseDetector,
         val exerciseDetector: ExerciseDetector,
         val onRepetition: ()->Unit,
