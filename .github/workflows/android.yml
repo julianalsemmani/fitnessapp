@@ -20,6 +20,9 @@ jobs:
         distribution: 'temurin'
         cache: gradle
         
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+        
     - name: Run Unit tests
       run: ./gradlew test
 
@@ -53,6 +56,9 @@ jobs:
         distribution: 'temurin'
         cache: gradle
         
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+        
     - name: Build Project
       run: ./gradlew assemble
       
@@ -67,6 +73,9 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: gradle
+        
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
         
     - name: Build APK
       run: ./gradlew assembleDebug --stacktrace
