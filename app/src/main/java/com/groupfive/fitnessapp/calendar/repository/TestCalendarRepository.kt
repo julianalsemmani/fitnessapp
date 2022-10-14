@@ -21,6 +21,8 @@ class TestCalendarRepository: CalendarRepository {
     }
 
     companion object {
+        private var instance: TestCalendarRepository? = null
+
         fun repositoryWithPlannedExercisesForToday(): TestCalendarRepository {
             val result = TestCalendarRepository()
 
@@ -34,10 +36,17 @@ class TestCalendarRepository: CalendarRepository {
                     endTime,
                     WorkoutType.values()[Random.nextInt(WorkoutType.values().size)]))
 
-                time =  time.plusSeconds((Random.nextFloat()*1800).roundToLong())
+                time =  endTime.plusSeconds((Random.nextFloat()*1800).roundToLong())
             }
 
             return result
+        }
+
+        fun instance(): TestCalendarRepository {
+            if(instance == null) {
+                instance = repositoryWithPlannedExercisesForToday()
+            }
+            return instance as TestCalendarRepository
         }
     }
 }
