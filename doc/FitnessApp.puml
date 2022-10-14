@@ -8,9 +8,6 @@ package com.groupfive.fitness <<Folder>> {
     Class TrainingNotificationService
 
     package Calender <<Folder>>{ 
-        Class DayViewContainer
-        Class MonthViewContainer
-
         package Repository <<Folder>> { 
         Interface CalenderRepository
             Class PlannedWorkoutSession
@@ -28,7 +25,11 @@ package com.groupfive.fitness <<Folder>> {
         Enum WorkoutType
 
     package Fragments <<Folder>> {
-        Class CalenderFragment
+        package Calendar <<Folder>> {
+        	Class CalenderFragment
+        	Class DayViewContainer
+        	Class MonthViewContainer
+	}
         Class ExerciseCameraFragment
         Class HomeFragment
         Class NotficiationsFragment
