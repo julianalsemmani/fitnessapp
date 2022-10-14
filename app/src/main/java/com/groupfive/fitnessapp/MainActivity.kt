@@ -12,6 +12,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Notifications
+        // activityResultLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         // Retrieve nav controller
@@ -32,4 +35,20 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
     }
+
+    // Notification permission
+/*    private val activityResultLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            // Handle Permission granted/rejected
+            if (isGranted) {
+                // Permission is granted
+                val trainingNotificationService = TrainingNotificationService(this)
+                trainingNotificationService.showNotification(10,1)
+            } else {
+                // Permission is denied
+                Toast.makeText(this,
+                    "Permissions not granted by the user.",
+                    Toast.LENGTH_SHORT).show()
+            }
+        }*/
 }
