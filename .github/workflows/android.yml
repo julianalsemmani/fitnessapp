@@ -1,4 +1,4 @@
-name: Android CI
+name: Android CI - Test, Build Gradle, Build Project and Build & Upload APK
 
 on:
   push:
