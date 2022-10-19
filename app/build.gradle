@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android'
     id 'androidx.navigation.safeargs'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -89,4 +90,9 @@ dependencies {
 
     // JUnit
     testImplementation "junit:junit:1.9.1"
+
+    // Google Firebase
+    implementation platform('com.google.firebase:firebase-bom:31.0.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-auth'
 }
