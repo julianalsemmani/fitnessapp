@@ -1,4 +1,4 @@
-package com.groupfive.fitnessapp.calendar
+package com.groupfive.fitnessapp.screens.calendar
 
 import android.view.View
 import com.groupfive.fitnessapp.databinding.LayoutCalendarDayBinding

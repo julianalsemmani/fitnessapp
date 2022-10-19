@@ -1,16 +1,14 @@
-package com.groupfive.fitnessapp.fragments
+package com.groupfive.fitnessapp.screens.stats
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.groupfive.fitnessapp.R
-import com.groupfive.fitnessapp.databinding.FragmentHomeBinding
-import com.groupfive.fitnessapp.databinding.FragmentNotificationsBinding
+import com.groupfive.fitnessapp.databinding.FragmentStatsBinding
 
-class NotificationsFragment : Fragment() {
-    private lateinit var binding: FragmentNotificationsBinding
+class StatsFragment : Fragment() {
+    private lateinit var binding: FragmentStatsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +18,7 @@ class NotificationsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentNotificationsBinding.inflate(inflater)
+        binding = FragmentStatsBinding.inflate(inflater)
         return binding.root
     }
 }
