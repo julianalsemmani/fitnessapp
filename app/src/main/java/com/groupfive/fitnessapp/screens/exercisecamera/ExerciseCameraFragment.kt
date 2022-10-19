@@ -14,6 +14,7 @@ import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.pose.Pose
 import com.google.mlkit.vision.pose.PoseDetection
 import com.google.mlkit.vision.pose.PoseDetector
 import com.google.mlkit.vision.pose.defaults.PoseDetectorOptions
@@ -61,7 +62,6 @@ class ExerciseCameraFragment : Fragment() {
     private fun onRepetition() {
         reps++
         binding.repView.text = reps.toString()
-
     }
 
     /**
@@ -73,6 +73,14 @@ class ExerciseCameraFragment : Fragment() {
         } else {
             binding.repView.setTextColor(Color.RED)
         }
+    }
+
+    /**
+     * Called when a pose has been detected
+     */
+    private fun onPoseDetected(pose: Pose, imageWidth: Int, imageHeight: Int)  {
+        // Send the pose to pose view to for drawing
+        binding.poseView.setPose(pose, imageWidth, imageHeight)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -116,7 +124,8 @@ class ExerciseCameraFragment : Fragment() {
                     .build())
             exerciseImageAnalyzer = ExerciseImageAnalyzer(poseDetector, exerciseDetector,
                 onRepetition = this::onRepetition,
-                onWithinFrame = this::onWithinFrame
+                onWithinFrame = this::onWithinFrame,
+                onPoseDetected = this::onPoseDetected
             )
             imageAnalysis = ImageAnalysis.Builder()
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
@@ -148,7 +157,8 @@ class ExerciseCameraFragment : Fragment() {
         val poseDetector: PoseDetector,
         val exerciseDetector: ExerciseDetector,
         val onRepetition: ()->Unit,
-        val onWithinFrame: (Boolean)->Unit) : ImageAnalysis.Analyzer {
+        val onWithinFrame: (Boolean)->Unit,
+        val onPoseDetected: (Pose, Int, Int)->Unit) : ImageAnalysis.Analyzer {
 
         override fun analyze(imageProxy: ImageProxy) {
             val mediaImage = imageProxy.image
@@ -164,9 +174,12 @@ class ExerciseCameraFragment : Fragment() {
                                     onRepetition()
                                 }
                                 onWithinFrame(true)
+                                onPoseDetected(pose, mediaImage.width, mediaImage.height)
                             } else {
                                 onWithinFrame(false)
                             }
+                        } else {
+                            onWithinFrame(false)
                         }
                     }
                     .addOnFailureListener { exception ->
