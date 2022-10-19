@@ -1,4 +1,4 @@
-package com.groupfive.fitnessapp.fragments
+package com.groupfive.fitnessapp.screens.exercisecamera
 
 import android.Manifest
 import android.graphics.Color

@@ -5,7 +5,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.CalendarFragment" >
+    tools:context=".screens.calendar.CalendarFragment" >
 
     <com.kizitonwose.calendarview.CalendarView
         android:id="@+id/calendarView"

@@ -1,4 +1,4 @@
-package com.groupfive.fitnessapp.fragments.workoutday
+package com.groupfive.fitnessapp.screens.workoutday
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

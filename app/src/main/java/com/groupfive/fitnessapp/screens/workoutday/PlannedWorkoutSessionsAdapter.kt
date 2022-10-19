@@ -1,4 +1,4 @@
-package com.groupfive.fitnessapp.fragments.workoutday
+package com.groupfive.fitnessapp.screens.workoutday
 
 import android.view.LayoutInflater
 import android.view.View

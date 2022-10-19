@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.groupfive.fitnessapp.fragments.HomeFragment"
+        android:name="com.groupfive.fitnessapp.screens.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/calendarFragment"
-        android:name="com.groupfive.fitnessapp.fragments.CalendarFragment"
+        android:name="com.groupfive.fitnessapp.screens.calendar.CalendarFragment"
         android:label="fragment_calendar"
         tools:layout="@layout/fragment_calendar" >
         <action
@@ -28,22 +28,22 @@
     </fragment>
     <fragment
         android:id="@+id/exerciseCameraFragment"
-        android:name="com.groupfive.fitnessapp.fragments.ExerciseCameraFragment"
+        android:name="com.groupfive.fitnessapp.screens.exercisecamera.ExerciseCameraFragment"
         android:label="fragment_exercise_camera"
         tools:layout="@layout/fragment_exercise_camera" />
     <fragment
         android:id="@+id/notificationsFragment"
-        android:name="com.groupfive.fitnessapp.fragments.NotificationsFragment"
+        android:name="com.groupfive.fitnessapp.screens.notifications.NotificationsFragment"
         android:label="fragment_notifications"
         tools:layout="@layout/fragment_notifications" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.groupfive.fitnessapp.fragments.ProfileFragment"
+        android:name="com.groupfive.fitnessapp.screens.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/statsFragment"
-        android:name="com.groupfive.fitnessapp.fragments.StatsFragment"
+        android:name="com.groupfive.fitnessapp.screens.stats.StatsFragment"
         android:label="fragment_stats"
         tools:layout="@layout/fragment_stats" />
     <action
@@ -60,7 +60,7 @@
         app:destination="@id/statsFragment" />
     <fragment
         android:id="@+id/workoutDayFragment"
-        android:name="com.groupfive.fitnessapp.fragments.workoutday.WorkoutDayFragment"
+        android:name="com.groupfive.fitnessapp.screens.workoutday.WorkoutDayFragment"
         android:label="fragment_workout_day"
         tools:layout="@layout/fragment_workout_day" >
         <argument
