@@ -1,9 +1,15 @@
 package com.groupfive.fitnessapp.screens.exercisecamera
 
 import android.Manifest
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.ImageFormat
+import android.media.Image
+import android.media.ImageReader
 import android.os.Bundle
 import android.util.Log
+import android.util.Size
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +27,7 @@ import com.google.mlkit.vision.pose.defaults.PoseDetectorOptions
 import com.groupfive.fitnessapp.databinding.FragmentExerciseCameraBinding
 import com.groupfive.fitnessapp.exercise.ExerciseDetector
 import com.groupfive.fitnessapp.exercise.SquatExerciseDetector
+import java.nio.ByteBuffer
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -31,12 +38,20 @@ class ExerciseCameraFragment : Fragment() {
 
     // Camera
     private lateinit var cameraExecutor: ExecutorService
-    private lateinit var imageAnalysis: ImageAnalysis
+
+    private val imageAnalysis = ImageAnalysis.Builder()
+        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+        .build()
+
+    private var lensFacing = CameraSelector.LENS_FACING_BACK
 
     // ML-kit
-    private lateinit var poseDetector: PoseDetector
+    private val poseDetector: PoseDetector  = PoseDetection.getClient(
+        PoseDetectorOptions.Builder()
+            .setDetectorMode(PoseDetectorOptions.STREAM_MODE)
+            .build()
+    )
 
-    private lateinit var exerciseImageAnalyzer: ExerciseImageAnalyzer
     private var exerciseDetector: ExerciseDetector = SquatExerciseDetector()
 
     private var reps = 0
@@ -72,15 +87,22 @@ class ExerciseCameraFragment : Fragment() {
             binding.repView.setTextColor(Color.GREEN)
         } else {
             binding.repView.setTextColor(Color.RED)
+
+            binding.poseView.setPose(null)
         }
     }
 
     /**
      * Called when a pose has been detected
      */
-    private fun onPoseDetected(pose: Pose, imageWidth: Int, imageHeight: Int)  {
+    private fun onPoseDetected(pose: Pose)  {
+        // Check if we have a repetition
+        if (exerciseDetector.detectRepetition(pose)) {
+            onRepetition()
+        }
+
         // Send the pose to pose view to for drawing
-        binding.poseView.setPose(pose, imageWidth, imageHeight)
+        binding.poseView.setPose(pose)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -110,35 +132,62 @@ class ExerciseCameraFragment : Fragment() {
             // Used to bind the lifecycle of cameras to the lifecycle owner
             val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
+
             // Preview
             val preview = Preview.Builder()
                 .build()
                 .also {
-                    it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
+                    it.setSurfaceProvider(binding.previewView.surfaceProvider)
                 }
-
-            // Pose detector image analysis
-            poseDetector = PoseDetection.getClient(
-                PoseDetectorOptions.Builder()
-                    .setDetectorMode(PoseDetectorOptions.STREAM_MODE)
-                    .build())
-            exerciseImageAnalyzer = ExerciseImageAnalyzer(poseDetector, exerciseDetector,
-                onRepetition = this::onRepetition,
-                onWithinFrame = this::onWithinFrame,
-                onPoseDetected = this::onPoseDetected
-            )
-            imageAnalysis = ImageAnalysis.Builder()
-                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                .build()
 
             cameraExecutor = Executors.newSingleThreadExecutor()
 
-            imageAnalysis.setAnalyzer(cameraExecutor, exerciseImageAnalyzer)
+            imageAnalysis.setAnalyzer(cameraExecutor) { imageProxy: ImageProxy ->
+                val mediaImage = imageProxy.image
+                if (mediaImage != null) {
+                    val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
 
-            // Select back camera as a default
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+                    poseDetector.process(image)
+                        .addOnSuccessListener { pose ->
+                            // Pass image info to pose view such that it can transform properly
+                            val isImageFlipped = lensFacing == CameraSelector.LENS_FACING_FRONT
+                            val rotationDegrees = imageProxy.imageInfo.rotationDegrees
+                            if (rotationDegrees == 0 || rotationDegrees == 180) {
+                                binding.poseView.setImageSourceInfo(imageProxy.width, imageProxy.height, isImageFlipped)
+                            } else {
+                                binding.poseView.setImageSourceInfo(imageProxy.height, imageProxy.width, isImageFlipped)
+                            }
+
+                            // Perform pose detection if detected
+                            if (pose.allPoseLandmarks.isNotEmpty()) {
+                                // Check that user is likely within frame before detection
+                                if (pose.allPoseLandmarks.all { it.inFrameLikelihood >= 0.9 }) {
+                                    onWithinFrame(true)
+                                    onPoseDetected(pose)
+                                } else {
+                                    onWithinFrame(false)
+                                }
+                            } else {
+                                onWithinFrame(false)
+                            }
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.e(
+                                javaClass.name,
+                                "ml-kit failed to process image from camera: " + exception.message
+                            )
+                        }
+                        .addOnCompleteListener {
+                            imageProxy.close()
+                        }
+                }
+            }
+
+            // Select camera based on desired lens facing
+            val cameraSelector = CameraSelector.Builder().requireLensFacing(lensFacing).build()
 
             try {
+
                 // Unbind use cases before rebinding
                 cameraProvider.unbindAll()
 
@@ -151,45 +200,6 @@ class ExerciseCameraFragment : Fragment() {
             }
 
         }, ContextCompat.getMainExecutor(requireContext()))
-    }
-
-    private class ExerciseImageAnalyzer(
-        val poseDetector: PoseDetector,
-        val exerciseDetector: ExerciseDetector,
-        val onRepetition: ()->Unit,
-        val onWithinFrame: (Boolean)->Unit,
-        val onPoseDetected: (Pose, Int, Int)->Unit) : ImageAnalysis.Analyzer {
-
-        override fun analyze(imageProxy: ImageProxy) {
-            val mediaImage = imageProxy.image
-            if (mediaImage != null) {
-                val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
-
-                poseDetector.process(image)
-                    .addOnSuccessListener { pose ->
-                        if(pose.allPoseLandmarks.isNotEmpty()) {
-                            // Check that user is likely within frame before detection
-                            if(pose.allPoseLandmarks.all { it.inFrameLikelihood >= 0.9 }) {
-                                if(exerciseDetector.detectRepetition(pose)) {
-                                    onRepetition()
-                                }
-                                onWithinFrame(true)
-                                onPoseDetected(pose, mediaImage.width, mediaImage.height)
-                            } else {
-                                onWithinFrame(false)
-                            }
-                        } else {
-                            onWithinFrame(false)
-                        }
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.e(javaClass.name, "ml-kit failed to process image from camera: " + exception.message)
-                    }
-                    .addOnCompleteListener {
-                        imageProxy.close()
-                    }
-            }
-        }
     }
 }
 
