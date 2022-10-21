@@ -7,15 +7,71 @@
     tools:context=".screens.profile.ProfileFragment">
 
     <!-- TODO: Update blank fragment layout -->
+
     <TextView
         android:id="@+id/profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="148dp"
         android:text="Profile"
         android:textSize="30sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        tools:layout_editor_absoluteY="16dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="153dp"
+        android:layout_height="145dp"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="109dp"
+        tools:src="@tools:sample/avatars" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        tools:layout_editor_absoluteX="94dp"
+        tools:layout_editor_absoluteY="359dp" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        tools:layout_editor_absoluteX="35dp"
+        tools:layout_editor_absoluteY="648dp" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        tools:layout_editor_absoluteX="94dp"
+        tools:layout_editor_absoluteY="441dp" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="25dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="279dp"
+        tools:layout_editor_absoluteY="148dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="52dp"
+        tools:layout_editor_absoluteY="267dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
