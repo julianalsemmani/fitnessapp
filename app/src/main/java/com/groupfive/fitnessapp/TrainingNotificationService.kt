@@ -2,18 +2,16 @@ package com.groupfive.fitnessapp
 
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.os.Build
+import android.os.IBinder
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import com.groupfive.fitnessapp.calendar.repository.TestCalendarRepository
 import com.groupfive.fitnessapp.exercise.WorkoutType
-import java.time.Duration
 
 class TrainingNotificationService(
     private val context: Context
-){
+) : Service() {
     private val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
     fun showNotification(notificationId:Int, minutesLeft:Int, workoutType:WorkoutType) {
@@ -43,5 +41,9 @@ class TrainingNotificationService(
 
     companion object {
         const val TRAINING_CHANNEL_ID = "training_channel"
+    }
+
+    override fun onBind(p0: Intent?): IBinder? {
+        TODO("Not yet implemented")
     }
 }
