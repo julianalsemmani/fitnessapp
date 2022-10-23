@@ -1,8 +1,6 @@
 package com.groupfive.fitnessapp
 
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.Service
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
@@ -13,6 +11,28 @@ class TrainingNotificationService(
     private val context: Context
 ) : Service() {
     private val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+    companion object {
+        const val TRAINING_CHANNEL_ID = "training_channel"
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        super.onStartCommand(intent, flags, startId)
+
+        // Notification Channel
+        createNotificationChannel()
+
+        val alarmManager = applicationContext.getSystemService(Context.ALARM_SERVICE) as? AlarmManager
+
+        alarmManager?.setExact(AlarmManager.ELAPSED_REALTIME, )
+
+        return START_NOT_STICKY
+    }
 
     fun showNotification(notificationId:Int, minutesLeft:Int, workoutType:WorkoutType) {
         val activityIntent = Intent(context, MainActivity::class.java).apply {
@@ -39,11 +59,20 @@ class TrainingNotificationService(
         notificationManager.notify(notificationId, notification)
     }
 
-    companion object {
-        const val TRAINING_CHANNEL_ID = "training_channel"
+    private fun createNotificationChannel() {
+        val channel = NotificationChannel(
+            TRAINING_CHANNEL_ID,
+            "Training Reminder Channel",
+            NotificationManager.IMPORTANCE_HIGH
+        )
+        channel.description = "Used for training reminder notification."
+
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 
     override fun onBind(p0: Intent?): IBinder? {
-        TODO("Not yet implemented")
+        // We don't provide binding, so return null
+        return null
     }
 }
