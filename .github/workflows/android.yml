@@ -3,7 +3,8 @@ name: Android CI - Test, Build Gradle, Build Project and Build & Upload APK
 on:
   push:
     branches:
-      - 37-firebase
+      - develop
+      - main
   pull_request:
     branches:
       - develop
