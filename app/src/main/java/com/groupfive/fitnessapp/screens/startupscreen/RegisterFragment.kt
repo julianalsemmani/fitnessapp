@@ -1,6 +1,5 @@
 package com.groupfive.fitnessapp.screens.startupscreen
 
-import android.nfc.Tag
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -14,25 +13,27 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.groupfive.fitnessapp.R
 import com.groupfive.fitnessapp.databinding.FragmentLoginBinding
+import com.groupfive.fitnessapp.databinding.FragmentRegisterBinding
 
 
-class LoginFragment : Fragment() {
+class RegisterFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var binding: FragmentLoginBinding
+    private lateinit var binding: FragmentRegisterBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = Firebase.auth
     }
 
-    public override fun onStart() {
+    override fun onStart() {
         super.onStart()
         val currentUser = auth.currentUser
-        if (currentUser != null) {
+        if(currentUser != null){
             val controller = findNavController()
-            controller.navigate(R.id.action_loginFragment_to_homeFragment)
+            controller.navigate(R.id.action_registerFragment_to_homeFragment)
         }
+
     }
 
     override fun onCreateView(
@@ -40,29 +41,25 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentLoginBinding.inflate(inflater)
+        binding = FragmentRegisterBinding.inflate(inflater)
 
-        binding.loginBtn.setOnClickListener {
-            auth.signInWithEmailAndPassword(binding.loginEmailInput.text.toString(), binding.loginPasswordInput.text.toString())
+        binding.registerBtn.setOnClickListener {
+            auth.createUserWithEmailAndPassword(binding.registerEmailInput.text.toString(), binding.registerPasswordInput.text.toString())
                 .addOnCompleteListener(requireActivity()) { task ->
                     if (task.isSuccessful) {
-                        Log.d(javaClass.name, "signInWithEmail:success")
-                        Toast.makeText(context, "Auth success", Toast.LENGTH_SHORT).show()
+                        Log.d(javaClass.name, "createUserWithEmail:success")
                         val user = auth.currentUser
+                        Toast.makeText(context, "Registration Successful", Toast.LENGTH_SHORT).show()
                         val controller = findNavController()
-                        controller.navigate(R.id.action_loginFragment_to_homeFragment)
+                        controller.navigate(R.id.action_registerFragment_to_homeFragment)
                     } else {
-                        Log.w(javaClass.name, "signInWithEmail:failure", task.exception)
-                        Toast.makeText(context, "Auth failed", Toast.LENGTH_SHORT).show()
+                        Log.w(javaClass.name, "createUserWithEmail:failure", task.exception)
+                        Toast.makeText(context, "Authentication failed", Toast.LENGTH_SHORT).show()
                     }
                 }
         }
 
-        binding.registerBtn.setOnClickListener {
-            val controller = findNavController()
-            controller.navigate(R.id.action_loginFragment_to_registerFragment)
-        }
-
         return binding.root
     }
+
 }
