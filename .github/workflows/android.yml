@@ -45,7 +45,7 @@ jobs:
       run: chmod +x gradlew
       
     - name: Create file
-      run: cat app/google-services.json | base64
+      run: cat /home/runner/work/fitnessapp/fitnessapp/app/google-services.json | base64
       
     - name: Build with Gradle
       run: ./gradlew build
@@ -68,7 +68,7 @@ jobs:
     - name: Putting data
       env:
         DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
-      run: echo $DATA > app/google-services.json
+      run: echo $DATA > /home/runner/work/fitnessapp/fitnessapp/app/google-services.json
       
   build-project:
     runs-on: ubuntu-latest
