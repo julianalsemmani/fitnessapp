@@ -3,8 +3,7 @@ name: Android CI - Test, Build Gradle, Build Project and Build & Upload APK
 on:
   push:
     branches:
-      - develop
-      - main
+      - 37-firebase
   pull_request:
     branches:
       - develop
@@ -45,8 +44,31 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       
+    - name: Create file
+      run: cat app/google-services.json | base64
+      
     - name: Build with Gradle
       run: ./gradlew build
+      
+  set-secret:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    - name: Run JUnit Tests
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: gradle
+        
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    
+    - name: Putting data
+      env:
+        DATA: ${{ secrets.GOOGLE_SERVICES_JSON }}
+      run: echo $DATA > app/google-services.json
       
   build-project:
     runs-on: ubuntu-latest
