@@ -44,19 +44,24 @@ class RegisterFragment : Fragment() {
         binding = FragmentRegisterBinding.inflate(inflater)
 
         binding.registerBtn.setOnClickListener {
-            auth.createUserWithEmailAndPassword(binding.registerEmailInput.text.toString(), binding.registerPasswordInput.text.toString())
-                .addOnCompleteListener(requireActivity()) { task ->
-                    if (task.isSuccessful) {
-                        Log.d(javaClass.name, "createUserWithEmail:success")
-                        val user = auth.currentUser
-                        Toast.makeText(context, "Registration Successful", Toast.LENGTH_SHORT).show()
-                        val controller = findNavController()
-                        controller.navigate(R.id.action_registerFragment_to_homeFragment)
-                    } else {
-                        Log.w(javaClass.name, "createUserWithEmail:failure", task.exception)
-                        Toast.makeText(context, "Authentication failed", Toast.LENGTH_SHORT).show()
+            if (binding.registerEmailInput.text.toString() != "" && binding.registerPasswordInput.text.toString() != "") {
+                auth.createUserWithEmailAndPassword(binding.registerEmailInput.text.toString(), binding.registerPasswordInput.text.toString())
+                    .addOnCompleteListener(requireActivity()) { task ->
+                        if (task.isSuccessful) {
+                            Log.d(javaClass.name, "createUserWithEmail:success")
+                            val user = auth.currentUser
+                            Toast.makeText(context, "Registration Successful", Toast.LENGTH_SHORT).show()
+                            val controller = findNavController()
+                            controller.navigate(R.id.action_registerFragment_to_homeFragment)
+                        } else {
+                            Log.w(javaClass.name, "createUserWithEmail:failure", task.exception)
+                            Toast.makeText(context, "Authentication failed", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                }
+            } else {
+                Toast.makeText(context, "Email/Password can not be empty.", Toast.LENGTH_SHORT).show()
+            }
+
         }
 
         return binding.root
