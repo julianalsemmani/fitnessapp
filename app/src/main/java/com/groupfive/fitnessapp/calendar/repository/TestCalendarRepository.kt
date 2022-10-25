@@ -26,12 +26,13 @@ class TestCalendarRepository: CalendarRepository {
         fun repositoryWithPlannedExercisesForToday(): TestCalendarRepository {
             val result = TestCalendarRepository()
 
-            // Add random workouts with random time beginning from now
-            var time = Instant.now()
+            // Add random workouts with random time beginning from 5 minutes from now
+            var time = Instant.now().plusSeconds(300)
             for (i in 1..20) {
 
                 val endTime = time.plusSeconds((Random.nextFloat()*1800).roundToLong())
                 result.createPlannedWorkoutSession(PlannedWorkoutSession(
+                    i,
                     time,
                     endTime,
                     WorkoutType.values()[Random.nextInt(WorkoutType.values().size)]))
