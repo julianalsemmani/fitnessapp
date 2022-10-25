@@ -29,8 +29,6 @@ class TrainingNotificationService : Service() {
     override fun onCreate() {
         super.onCreate()
 
-        Log.e(javaClass.simpleName, "onCreate")
-
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         //TODO: Use proper persistent repository here
@@ -41,8 +39,6 @@ class TrainingNotificationService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-
-        Log.e(javaClass.simpleName, "onStartCommand")
 
         showNotificationsForApproachingWorkoutSessions()
 
@@ -88,13 +84,7 @@ class TrainingNotificationService : Service() {
                     pendingServiceIntent),
                 pendingServiceIntent)
 
-//            alarmManager.setExact(
-//                AlarmManager.ELAPSED_REALTIME,
-//                nextWorkoutSession.startTime.minusMillis(notificationTimeOffsetMillis).toEpochMilli(),
-//                pendingServiceIntent
-//            )
-
-            Log.e(javaClass.simpleName, "Scheduled alarm at ${LocalDateTime.ofInstant(nextWorkoutSession.startTime.minusMillis(notificationTimeOffsetMillis), ZoneId.systemDefault())} ${alarmManager.nextAlarmClock}")
+            Log.d(javaClass.simpleName, "Scheduled alarm at ${LocalDateTime.ofInstant(nextWorkoutSession.startTime.minusMillis(notificationTimeOffsetMillis), ZoneId.systemDefault())} ${alarmManager.nextAlarmClock}")
         } else {
             // Cancel intent in case it is already planned
             pendingServiceIntent.cancel()
