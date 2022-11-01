@@ -5,13 +5,14 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.groupfive.fitnessapp.exercise.WorkoutType
+import kotlinx.coroutines.tasks.await
 import java.time.Instant
 
 class FirebaseCalendarRepository : CalendarRepository {
     private val db = Firebase.firestore
     private val auth = Firebase.auth
 
-    override fun createPlannedWorkoutSession(
+    override suspend fun createPlannedWorkoutSession(
         startTime: Instant,
         endTime: Instant,
         workoutType: WorkoutType
@@ -19,12 +20,11 @@ class FirebaseCalendarRepository : CalendarRepository {
         val plannedWorkoutSession = hashMapOf(
             "startTime" to startTime.epochSecond,
             "endTime" to endTime.epochSecond,
-            "workoutType" to workoutType.ordinal //TODO(Edward): we will change this later such that workout type is not part of calendar
+            //TODO(Edward): we will change this later such that workout type is not part of calendar
+            "workoutType" to workoutType.ordinal
         )
 
-        db.collection("users")
-            .document(auth.currentUser?.uid!!)
-            .collection("calendar")
+        userCalendarCollection()
             .add(plannedWorkoutSession)
             .addOnSuccessListener {
                 Log.e(javaClass.simpleName, "ADDED WORKOUT SUCCESS")
@@ -32,16 +32,37 @@ class FirebaseCalendarRepository : CalendarRepository {
             .addOnFailureListener { exception ->
                 Log.e(javaClass.simpleName, "ADDED WORKOUT FAIL", exception)
             }
+            .await()
     }
 
-    override fun deletePlannedWorkoutSession(id: Int) {
-//        db.collection("users")
-//            .document(auth.currentUser?.uid!!)
-//            .collection("calendar")
-//            .document()
+    override suspend fun deletePlannedWorkoutSession(id: String) {
+        userCalendarCollection()
+            .document(id)
+            .delete()
+            .addOnSuccessListener {
+                Log.e(javaClass.simpleName, "DELETE WORKOUT SUCCESS")
+            }
+            .addOnFailureListener { exception ->
+                Log.e(javaClass.simpleName, "DELETE WORKOUT FAIL", exception)
+            }
+            .await()
     }
 
-    override fun getPlannedWorkoutSessions(): List<PlannedWorkoutSession> {
-        return listOf()
+    override suspend fun getPlannedWorkoutSessions(): List<PlannedWorkoutSession> {
+        val plannedWorkoutSessions = userCalendarCollection()
+            .get()
+            .await()
+
+        return plannedWorkoutSessions.map { PlannedWorkoutSession(
+            it.id,
+            Instant.ofEpochMilli(it.data["startTime"]!! as Long),
+            Instant.ofEpochMilli(it.data["endTime"]!! as Long),
+            WorkoutType.values()[(it.data["workoutType"]!! as Long).toInt()]
+        ) }
     }
+
+    private fun userCalendarCollection() =
+        db.collection("users")
+        .document(auth.currentUser?.uid!!)
+        .collection("calendar")
 }
