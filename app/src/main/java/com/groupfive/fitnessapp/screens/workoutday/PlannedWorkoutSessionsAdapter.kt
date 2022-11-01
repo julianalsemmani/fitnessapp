@@ -43,8 +43,6 @@ class PlannedWorkoutSessionsAdapter(private val workoutDayViewModel: WorkoutDayV
             binding.beginTimeView.text = startTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
             val endTime = LocalDateTime.ofInstant(item.endTime, ZoneId.systemDefault())
             binding.endTimeView.text = endTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
-
-            binding.workoutTypeView.text = item.workoutType.name
         }
     }
 }

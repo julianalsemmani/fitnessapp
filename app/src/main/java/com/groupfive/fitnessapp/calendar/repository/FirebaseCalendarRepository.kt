@@ -4,7 +4,6 @@ import android.util.Log
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.groupfive.fitnessapp.exercise.WorkoutType
 import kotlinx.coroutines.tasks.await
 import java.time.Instant
 
@@ -14,14 +13,11 @@ class FirebaseCalendarRepository : CalendarRepository {
 
     override suspend fun createPlannedWorkoutSession(
         startTime: Instant,
-        endTime: Instant,
-        workoutType: WorkoutType
+        endTime: Instant
     ) {
         val plannedWorkoutSession = hashMapOf(
             "startTime" to startTime.epochSecond,
             "endTime" to endTime.epochSecond,
-            //TODO(Edward): we will change this later such that workout type is not part of calendar
-            "workoutType" to workoutType.ordinal
         )
 
         userCalendarCollection()
@@ -50,8 +46,7 @@ class FirebaseCalendarRepository : CalendarRepository {
         return plannedWorkoutSessions.map { PlannedWorkoutSession(
             it.id,
             Instant.ofEpochMilli(it.data["startTime"]!! as Long),
-            Instant.ofEpochMilli(it.data["endTime"]!! as Long),
-            WorkoutType.values()[(it.data["workoutType"]!! as Long).toInt()]
+            Instant.ofEpochMilli(it.data["endTime"]!! as Long)
         ) }
     }
 

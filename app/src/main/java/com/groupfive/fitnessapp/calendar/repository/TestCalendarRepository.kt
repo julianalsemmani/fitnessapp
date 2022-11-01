@@ -10,8 +10,8 @@ class TestCalendarRepository: CalendarRepository {
     private var plannedWorkoutSessions: ArrayList<PlannedWorkoutSession> = ArrayList()
     private var nextId = 0
 
-    override suspend fun createPlannedWorkoutSession(startTime: Instant, endTime: Instant, workoutType: WorkoutType) {
-        plannedWorkoutSessions.add(PlannedWorkoutSession((nextId++).toString(), startTime, endTime, workoutType))
+    override suspend fun createPlannedWorkoutSession(startTime: Instant, endTime: Instant) {
+        plannedWorkoutSessions.add(PlannedWorkoutSession((nextId++).toString(), startTime, endTime))
     }
 
     override suspend fun deletePlannedWorkoutSession(id: String) {
@@ -33,11 +33,8 @@ class TestCalendarRepository: CalendarRepository {
             for (i in 1..20) {
 
                 val endTime = time.plusSeconds((Random.nextFloat()*1800).roundToLong())
-                result.createPlannedWorkoutSession(
-                        time,
-                        endTime,
-                        WorkoutType.values()[Random.nextInt(WorkoutType.values().size)]
-                )
+
+                result.createPlannedWorkoutSession(time, endTime)
 
                 time =  endTime.plusSeconds((Random.nextFloat()*1800).roundToLong())
             }
