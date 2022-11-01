@@ -38,7 +38,7 @@ class HomeFragment : Fragment() {
 
         binding.calenderBtn.setOnClickListener {
             val controller = findNavController()
-            controller.navigate(R.id.action_homeFragment_to_loginFragment)
+            controller.navigate(R.id.action_homeFragment_to_calendarFragment)
         }
 
         return binding.root

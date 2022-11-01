@@ -9,6 +9,7 @@ import androidx.core.app.NotificationCompat
 import com.groupfive.fitnessapp.calendar.repository.CalendarRepository
 import com.groupfive.fitnessapp.calendar.repository.TestCalendarRepository
 import com.groupfive.fitnessapp.exercise.WorkoutType
+import kotlinx.coroutines.runBlocking
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
@@ -50,17 +51,18 @@ class TrainingNotificationService : Service() {
     }
 
     private fun showNotificationsForApproachingWorkoutSessions() {
-        calendarRepository.getPlannedWorkoutSessions().forEach() { plannedWorkoutSession ->
-            if(Instant.now().isBefore(plannedWorkoutSession.startTime)
-                && Instant.now().plusMillis(notificationTimeOffsetMillis).isAfter(plannedWorkoutSession.startTime)) {
+        runBlocking {
+            calendarRepository.getPlannedWorkoutSessions().forEach() { plannedWorkoutSession ->
+                if(Instant.now().isBefore(plannedWorkoutSession.startTime)
+                    && Instant.now().plusMillis(notificationTimeOffsetMillis).isAfter(plannedWorkoutSession.startTime)) {
 
-                showNotification(
-                    plannedWorkoutSession.id,
-                    Duration.between(Instant.now(), plannedWorkoutSession.startTime).toMinutes().toInt(),
-                    plannedWorkoutSession.workoutType)
+                    showNotification(
+                        plannedWorkoutSession.id.hashCode(),
+                        Duration.between(Instant.now(), plannedWorkoutSession.startTime).toMinutes().toInt(),
+                        plannedWorkoutSession.workoutType)
+                }
             }
         }
-
     }
 
     private fun scheduleNextServiceWakeupAlarm() {
@@ -75,20 +77,22 @@ class TrainingNotificationService : Service() {
         val alarmManager = getSystemService(Context.ALARM_SERVICE)!! as AlarmManager
 
         // Find the next workout session that will need to be notified
-        val nextWorkoutSession = calendarRepository.getPlannedWorkoutSessions().find { it.startTime.isAfter(Instant.now().plusMillis(notificationTimeOffsetMillis)) }
-        if(nextWorkoutSession != null) {
-            // Schedule that this service is to be started when it is time for notification to be shown
-            alarmManager.setAlarmClock(
-                AlarmManager.AlarmClockInfo(
-                    nextWorkoutSession.startTime.minusMillis(notificationTimeOffsetMillis).toEpochMilli(),
-                    pendingServiceIntent),
-                pendingServiceIntent)
+        runBlocking {
+            val nextWorkoutSession = calendarRepository.getPlannedWorkoutSessions().find { it.startTime.isAfter(Instant.now().plusMillis(notificationTimeOffsetMillis)) }
+            if(nextWorkoutSession != null) {
+                // Schedule that this service is to be started when it is time for notification to be shown
+                alarmManager.setAlarmClock(
+                    AlarmManager.AlarmClockInfo(
+                        nextWorkoutSession.startTime.minusMillis(notificationTimeOffsetMillis).toEpochMilli(),
+                        pendingServiceIntent),
+                    pendingServiceIntent)
 
-            Log.d(javaClass.simpleName, "Scheduled alarm at ${LocalDateTime.ofInstant(nextWorkoutSession.startTime.minusMillis(notificationTimeOffsetMillis), ZoneId.systemDefault())} ${alarmManager.nextAlarmClock}")
-        } else {
-            // Cancel intent in case it is already planned
-            pendingServiceIntent.cancel()
-            alarmManager.cancel(pendingServiceIntent)
+                Log.d(javaClass.simpleName, "Scheduled alarm at ${LocalDateTime.ofInstant(nextWorkoutSession.startTime.minusMillis(notificationTimeOffsetMillis), ZoneId.systemDefault())} ${alarmManager.nextAlarmClock}")
+            } else {
+                // Cancel intent in case it is already planned
+                pendingServiceIntent.cancel()
+                alarmManager.cancel(pendingServiceIntent)
+            }
         }
     }
 
