@@ -6,14 +6,15 @@ import kotlin.math.roundToLong
 import kotlin.random.Random
 
 class TestCalendarRepository: CalendarRepository {
-    private val plannedWorkoutSessions: ArrayList<PlannedWorkoutSession> = ArrayList()
+    private var plannedWorkoutSessions: ArrayList<PlannedWorkoutSession> = ArrayList()
+    private var nextId = 0
 
-    override fun createPlannedWorkoutSession(plannedWorkoutSession: PlannedWorkoutSession) {
-        plannedWorkoutSessions.add(plannedWorkoutSession)
+    override fun createPlannedWorkoutSession(startTime: Instant, endTime: Instant, workoutType: WorkoutType) {
+        plannedWorkoutSessions.add(PlannedWorkoutSession(nextId++, startTime, endTime, workoutType))
     }
 
-    override fun deletePlannedWorkoutSession(plannedWorkoutSession: PlannedWorkoutSession) {
-        plannedWorkoutSessions.remove(plannedWorkoutSession)
+    override fun deletePlannedWorkoutSession(id: Int) {
+        plannedWorkoutSessions.removeAll { it.id == id }
     }
 
     override fun getPlannedWorkoutSessions(): List<PlannedWorkoutSession> {
@@ -31,11 +32,11 @@ class TestCalendarRepository: CalendarRepository {
             for (i in 1..20) {
 
                 val endTime = time.plusSeconds((Random.nextFloat()*1800).roundToLong())
-                result.createPlannedWorkoutSession(PlannedWorkoutSession(
-                    i,
-                    time,
-                    endTime,
-                    WorkoutType.values()[Random.nextInt(WorkoutType.values().size)]))
+                result.createPlannedWorkoutSession(
+                        time,
+                        endTime,
+                        WorkoutType.values()[Random.nextInt(WorkoutType.values().size)]
+                )
 
                 time =  endTime.plusSeconds((Random.nextFloat()*1800).roundToLong())
             }
