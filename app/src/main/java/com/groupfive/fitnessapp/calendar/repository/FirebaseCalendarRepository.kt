@@ -26,11 +26,8 @@ class FirebaseCalendarRepository : CalendarRepository {
 
         userCalendarCollection()
             .add(plannedWorkoutSession)
-            .addOnSuccessListener {
-                Log.e(javaClass.simpleName, "ADDED WORKOUT SUCCESS")
-            }
             .addOnFailureListener { exception ->
-                Log.e(javaClass.simpleName, "ADDED WORKOUT FAIL", exception)
+                Log.e(javaClass.simpleName, "failed to add workout session", exception)
             }
             .await()
     }
@@ -39,11 +36,8 @@ class FirebaseCalendarRepository : CalendarRepository {
         userCalendarCollection()
             .document(id)
             .delete()
-            .addOnSuccessListener {
-                Log.e(javaClass.simpleName, "DELETE WORKOUT SUCCESS")
-            }
             .addOnFailureListener { exception ->
-                Log.e(javaClass.simpleName, "DELETE WORKOUT FAIL", exception)
+                Log.e(javaClass.simpleName, "failed to delete workout session", exception)
             }
             .await()
     }
