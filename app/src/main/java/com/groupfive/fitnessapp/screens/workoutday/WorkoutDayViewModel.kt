@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.groupfive.fitnessapp.calendar.repository.PlannedWorkoutSession
 import com.groupfive.fitnessapp.calendar.repository.TestCalendarRepository
-import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 import java.time.ZoneOffset
 
@@ -31,10 +30,8 @@ class WorkoutDayViewModel: ViewModel() {
         // Only show planned workouts that begin in the set day
         val startOfDay = day.atStartOfDay(ZoneOffset.systemDefault()).toInstant()
         val endOfDay = day.plusDays(1).atStartOfDay(ZoneOffset.systemDefault()).toInstant()
-        runBlocking {
-            _plannedWorkoutSessions.value = calendarRepository.getPlannedWorkoutSessions().filter {
-                it.startTime.isAfter(startOfDay) && it.startTime.isBefore(endOfDay)
-            }
+        _plannedWorkoutSessions.value = calendarRepository.getPlannedWorkoutSessions().filter {
+            it.startTime.isAfter(startOfDay) && it.startTime.isBefore(endOfDay)
         }
     }
 
