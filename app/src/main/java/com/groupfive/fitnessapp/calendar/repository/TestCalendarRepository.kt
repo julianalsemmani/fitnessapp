@@ -1,40 +1,43 @@
 package com.groupfive.fitnessapp.calendar.repository
 
 import com.groupfive.fitnessapp.exercise.WorkoutType
+import kotlinx.coroutines.runBlocking
 import java.time.Instant
 import kotlin.math.roundToLong
 import kotlin.random.Random
 
 class TestCalendarRepository: CalendarRepository {
-    private val plannedWorkoutSessions: ArrayList<PlannedWorkoutSession> = ArrayList()
+    private var plannedWorkoutSessions: ArrayList<PlannedWorkoutSession> = ArrayList()
+    private var nextId = 0
 
-    override fun createPlannedWorkoutSession(plannedWorkoutSession: PlannedWorkoutSession) {
-        plannedWorkoutSessions.add(plannedWorkoutSession)
+    override suspend fun createPlannedWorkoutSession(startTime: Instant, endTime: Instant, workoutType: WorkoutType) {
+        plannedWorkoutSessions.add(PlannedWorkoutSession((nextId++).toString(), startTime, endTime, workoutType))
     }
 
-    override fun deletePlannedWorkoutSession(plannedWorkoutSession: PlannedWorkoutSession) {
-        plannedWorkoutSessions.remove(plannedWorkoutSession)
+    override suspend fun deletePlannedWorkoutSession(id: String) {
+        plannedWorkoutSessions.removeAll { it.id == id }
     }
 
-    override fun getPlannedWorkoutSessions(): List<PlannedWorkoutSession> {
+    override suspend fun getPlannedWorkoutSessions(): List<PlannedWorkoutSession> {
         return plannedWorkoutSessions
     }
 
     companion object {
         private var instance: TestCalendarRepository? = null
 
-        fun repositoryWithPlannedExercisesForToday(): TestCalendarRepository {
+        private suspend fun repositoryWithPlannedExercisesForToday(): TestCalendarRepository {
             val result = TestCalendarRepository()
 
-            // Add random workouts with random time beginning from now
-            var time = Instant.now()
+            // Add random workouts with random time beginning from 5 minutes from now
+            var time = Instant.now().plusSeconds(300)
             for (i in 1..20) {
 
                 val endTime = time.plusSeconds((Random.nextFloat()*1800).roundToLong())
-                result.createPlannedWorkoutSession(PlannedWorkoutSession(
-                    time,
-                    endTime,
-                    WorkoutType.values()[Random.nextInt(WorkoutType.values().size)]))
+                result.createPlannedWorkoutSession(
+                        time,
+                        endTime,
+                        WorkoutType.values()[Random.nextInt(WorkoutType.values().size)]
+                )
 
                 time =  endTime.plusSeconds((Random.nextFloat()*1800).roundToLong())
             }
@@ -44,7 +47,9 @@ class TestCalendarRepository: CalendarRepository {
 
         fun instance(): TestCalendarRepository {
             if(instance == null) {
-                instance = repositoryWithPlannedExercisesForToday()
+                runBlocking {
+                    instance = repositoryWithPlannedExercisesForToday()
+                }
             }
             return instance as TestCalendarRepository
         }
