@@ -33,7 +33,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="SUN"
-            android:textColor="@color/black"
+            android:textColor="?colorOnPrimary"
             android:textSize="14sp" />
 
         <TextView
@@ -43,7 +43,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="MON"
-            android:textColor="@color/black"
+            android:textColor="?colorOnPrimary"
             android:textSize="14sp" />
 
         <TextView
@@ -53,7 +53,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="TUE"
-            android:textColor="@color/black"
+            android:textColor="?colorOnPrimary"
             android:textSize="14sp" />
 
         <TextView
@@ -63,7 +63,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="WED"
-            android:textColor="@color/black"
+            android:textColor="?colorOnPrimary"
             android:textSize="14sp" />
 
         <TextView
@@ -73,7 +73,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="THU"
-            android:textColor="@color/black"
+            android:textColor="?colorOnPrimary"
             android:textSize="14sp" />
 
         <TextView
@@ -83,7 +83,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="FRI"
-            android:textColor="@color/black"
+            android:textColor="?colorOnPrimary"
             android:textSize="14sp" />
 
         <TextView
@@ -93,7 +93,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="SAT"
-            android:textColor="@color/black"
+            android:textColor="?colorOnPrimary"
             android:textSize="14sp" />
     </LinearLayout>
 
