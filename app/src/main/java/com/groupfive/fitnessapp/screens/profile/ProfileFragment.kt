@@ -14,38 +14,22 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.groupfive.fitnessapp.R
 import com.groupfive.fitnessapp.databinding.FragmentProfileBinding
+import com.groupfive.fitnessapp.user.repository.FirebaseUserRepository
+import com.groupfive.fitnessapp.user.repository.User
+import kotlinx.coroutines.runBlocking
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
-    private lateinit var auth: FirebaseAuth
-    private lateinit var firebaseDb: FirebaseFirestore
+    private var userRepository = FirebaseUserRepository()
+    private lateinit var userInfo: User
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        auth = Firebase.auth
-        firebaseDb = Firebase.firestore
     }
 
     public override fun onStart() {
         super.onStart()
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            val docRef = firebaseDb.collection("users")
-                .document(auth.currentUser?.uid!!)
-                .get()
-                .addOnSuccessListener { document ->
-                    if (document != null) {
-                        Log.d(javaClass.simpleName, auth.currentUser?.uid.toString())
-                        Log.d(javaClass.name, "DocumentSnapshot Data: ${document.data}")
-                    } else {
-                        Log.d(javaClass.name, "No Such document")
-                    }
-                }
-                .addOnFailureListener { exception ->
-                    Log.d(javaClass.name, "get failed with ", exception)
-                }
-        }
     }
 
     override fun onCreateView(
@@ -53,5 +37,16 @@ class ProfileFragment : Fragment() {
     ): View {
         binding = FragmentProfileBinding.inflate(inflater)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        runBlocking {
+            userInfo = userRepository.getLoggedInUser()
+        }
+
+        binding.profile.text = "Hello, " + userInfo.firstName
+        binding.name.text = "${userInfo.firstName} ${userInfo.lastName}"
     }
 }
