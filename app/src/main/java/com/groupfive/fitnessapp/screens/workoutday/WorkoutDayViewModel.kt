@@ -21,10 +21,6 @@ class WorkoutDayViewModel: ViewModel() {
     val day: LiveData<LocalDate>
         get() = _day
 
-    init {
-        setDay(LocalDate.now())
-    }
-
     fun setDay(day: LocalDate) {
         _day.value = day
 

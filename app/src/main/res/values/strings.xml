@@ -11,4 +11,11 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+
+    <string name="add_planned_workout_session_for_this_day">Add planned workout session for this day</string>
+    <string name="session_end_time">Session end time</string>
+    <string name="session_start_time">Session start time</string>
+    <string name="add">Add</string>
+    <string name="repeating">Repeating</string>
+    <string name="complete_planned_exercise">Complete planned exercise</string>
 </resources>
