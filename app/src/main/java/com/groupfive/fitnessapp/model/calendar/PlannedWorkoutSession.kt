@@ -1,4 +1,4 @@
-package com.groupfive.fitnessapp.calendar.repository
+package com.groupfive.fitnessapp.model.calendar
 
 import com.groupfive.fitnessapp.exercise.WorkoutType
 import java.time.Instant

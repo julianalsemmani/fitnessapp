@@ -1,5 +1,6 @@
-package com.groupfive.fitnessapp.calendar.repository
+package com.groupfive.fitnessapp.model.calendar.repository
 
+import com.groupfive.fitnessapp.model.calendar.PlannedWorkoutSession
 import java.time.Instant
 
 interface CalendarRepository {

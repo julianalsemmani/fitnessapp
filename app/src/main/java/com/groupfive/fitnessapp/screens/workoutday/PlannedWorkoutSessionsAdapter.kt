@@ -3,10 +3,9 @@ package com.groupfive.fitnessapp.screens.workoutday
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.groupfive.fitnessapp.R
-import com.groupfive.fitnessapp.calendar.repository.PlannedWorkoutSession
+import com.groupfive.fitnessapp.model.calendar.PlannedWorkoutSession
 import com.groupfive.fitnessapp.databinding.LayoutWorkoutSessionBinding
 import java.time.LocalDateTime
 import java.time.ZoneId
