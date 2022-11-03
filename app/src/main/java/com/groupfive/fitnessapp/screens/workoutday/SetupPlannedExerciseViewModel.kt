@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.groupfive.fitnessapp.calendar.repository.FirebaseCalendarRepository
-import com.groupfive.fitnessapp.calendar.repository.PlannedWorkoutSession
 import kotlinx.coroutines.runBlocking
 import java.time.Duration
 import java.time.Instant
@@ -22,10 +21,8 @@ class SetupPlannedExerciseViewModel: ViewModel() {
         get() = _startTime
 
     private val _durationMinutes = MutableLiveData(30)
-    val durationMinutes: LiveData<Int>
-        get() = _durationMinutes
 
-    private var plannedWorkoutSessionId: String? = null
+    private var plannedWorkoutSessionToUpdateId: String? = null
 
     fun setDay(day: LocalDate) {
         _day.value = day
@@ -39,20 +36,47 @@ class SetupPlannedExerciseViewModel: ViewModel() {
         _durationMinutes.value = durationMinutes
     }
 
-    fun setPlannedWorkoutSession(plannedWorkoutSession: PlannedWorkoutSession) {
-        setStartTime(plannedWorkoutSession.startTime)
-        setDurationMinutes(Duration.between(plannedWorkoutSession.startTime, plannedWorkoutSession.endTime).toMinutes().toInt())
-        plannedWorkoutSessionId = plannedWorkoutSession.id
+    fun getDurationMinutes(): Int {
+        return _durationMinutes.value!!
+    }
+
+    fun setPlannedWorkoutSessionToUpdate(plannedWorkoutSessionId: String?) {
+        plannedWorkoutSessionToUpdateId = plannedWorkoutSessionId
+
+        if(plannedWorkoutSessionId != null) {
+            runBlocking {
+                val plannedWorkoutSession = calendarRepository.getPlannedWorkoutSession(plannedWorkoutSessionId)
+
+                if(plannedWorkoutSession != null) {
+                    setStartTime(plannedWorkoutSession.startTime)
+                    setDurationMinutes(Duration.between(plannedWorkoutSession.startTime, plannedWorkoutSession.endTime).toMinutes().toInt())
+                    plannedWorkoutSessionToUpdateId = plannedWorkoutSessionId
+                }
+            }
+        }
     }
 
     fun submitPlannedWorkoutSession() {
-        if(startTime.value != null) {
-            //TODO(Edward): Do we really need to run blocking all the time here?
-            runBlocking {
-                calendarRepository.createPlannedWorkoutSession(
-                    startTime.value!!,
-                    startTime.value!!.plusSeconds((durationMinutes.value!!*60).toLong())
-                )
+        if(startTime.value != null && getDurationMinutes() > 0) {
+            if(plannedWorkoutSessionToUpdateId != null) {
+                // Update session with given id
+                //TODO(Edward): Do we really need to run blocking all the time here?
+                runBlocking {
+                    calendarRepository.updatePlannedWorkoutSession(
+                        plannedWorkoutSessionToUpdateId!!,
+                        startTime.value!!,
+                        startTime.value!!.plusSeconds((getDurationMinutes()*60).toLong())
+                    )
+                }
+            } else {
+                // Create new session
+                //TODO(Edward): Do we really need to run blocking all the time here?
+                runBlocking {
+                    calendarRepository.createPlannedWorkoutSession(
+                        startTime.value!!,
+                        startTime.value!!.plusSeconds((getDurationMinutes()*60).toLong())
+                    )
+                }
             }
         }
     }

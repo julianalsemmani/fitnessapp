@@ -14,8 +14,21 @@ class TestCalendarRepository: CalendarRepository {
         plannedWorkoutSessions.add(PlannedWorkoutSession((nextId++).toString(), startTime, endTime))
     }
 
+    override suspend fun updatePlannedWorkoutSession(
+        id: String,
+        startTime: Instant,
+        endTime: Instant
+    ) {
+        deletePlannedWorkoutSession(id)
+        createPlannedWorkoutSession(startTime, endTime)
+    }
+
     override suspend fun deletePlannedWorkoutSession(id: String) {
         plannedWorkoutSessions.removeAll { it.id == id }
+    }
+
+    override suspend fun getPlannedWorkoutSession(id: String): PlannedWorkoutSession? {
+        return plannedWorkoutSessions.find { it.id == id }
     }
 
     override suspend fun getPlannedWorkoutSessions(): List<PlannedWorkoutSession> {

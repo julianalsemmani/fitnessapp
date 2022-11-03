@@ -28,6 +28,22 @@ class FirebaseCalendarRepository : CalendarRepository {
             .await()
     }
 
+    override suspend fun updatePlannedWorkoutSession(
+        id: String,
+        startTime: Instant,
+        endTime: Instant
+    ) {
+        val plannedWorkoutSession = mapOf(
+            "startTime" to startTime.toEpochMilli(),
+            "endTime" to endTime.toEpochMilli(),
+        )
+
+        userCalendarCollection()
+            .document(id)
+            .update(plannedWorkoutSession)
+            .await()
+    }
+
     override suspend fun deletePlannedWorkoutSession(id: String) {
         userCalendarCollection()
             .document(id)
@@ -36,6 +52,22 @@ class FirebaseCalendarRepository : CalendarRepository {
                 Log.e(javaClass.simpleName, "failed to delete workout session", exception)
             }
             .await()
+    }
+
+    override suspend fun getPlannedWorkoutSession(id: String): PlannedWorkoutSession? {
+        val document = userCalendarCollection()
+            .document(id)
+            .get()
+            .await()
+
+        if(document.data?.get("startTime") != null && document.data?.get("startTime") != null) {
+            return PlannedWorkoutSession(
+                document.id,
+                Instant.ofEpochMilli(document.data!!["startTime"] as Long),
+                Instant.ofEpochMilli(document.data!!["endTime"] as Long)
+            )
+        }
+        return null
     }
 
     override suspend fun getPlannedWorkoutSessions(): List<PlannedWorkoutSession> {

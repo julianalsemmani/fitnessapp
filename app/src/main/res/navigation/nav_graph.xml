@@ -102,10 +102,10 @@
         <argument
             android:name="day"
             app:argType="java.time.LocalDate" />
-<!--        <argument-->
-<!--            android:name="plannedWorkoutSession"-->
-<!--            app:argType="com.groupfive.fitnessapp.calendar.repository.PlannedWorkoutSession"-->
-<!--            app:nullable="true" />-->
+        <argument
+            android:name="plannedWorkoutSession"
+            app:argType="string"
+            app:nullable="true" />
 
         <action
             android:id="@+id/action_setupPlannedExerciseFragment_to_workoutDayFragment"
