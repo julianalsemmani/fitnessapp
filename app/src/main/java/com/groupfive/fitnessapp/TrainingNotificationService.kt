@@ -7,6 +7,7 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.groupfive.fitnessapp.calendar.repository.CalendarRepository
+import com.groupfive.fitnessapp.calendar.repository.FirebaseCalendarRepository
 import com.groupfive.fitnessapp.calendar.repository.TestCalendarRepository
 import com.groupfive.fitnessapp.exercise.WorkoutType
 import kotlinx.coroutines.runBlocking
@@ -32,8 +33,7 @@ class TrainingNotificationService : Service() {
 
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        //TODO: Use proper persistent repository here
-        calendarRepository = TestCalendarRepository.instance()
+        calendarRepository = FirebaseCalendarRepository()
 
         setupNotificationChannel()
     }
@@ -58,8 +58,7 @@ class TrainingNotificationService : Service() {
 
                     showNotification(
                         plannedWorkoutSession.id.hashCode(),
-                        Duration.between(Instant.now(), plannedWorkoutSession.startTime).toMinutes().toInt(),
-                        plannedWorkoutSession.workoutType)
+                        Duration.between(Instant.now(), plannedWorkoutSession.startTime).toMinutes().toInt())
                 }
             }
         }
@@ -96,7 +95,7 @@ class TrainingNotificationService : Service() {
         }
     }
 
-    private fun showNotification(notificationId:Int, minutesLeft:Int, workoutType:WorkoutType) {
+    private fun showNotification(notificationId:Int, minutesLeft:Int) {
         // When user presses notification the app should be launched
         val activityIntent = Intent(applicationContext, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -112,7 +111,7 @@ class TrainingNotificationService : Service() {
         val notification = NotificationCompat.Builder(applicationContext, TRAINING_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_training_reminder)
             .setContentTitle("Training reminder")
-            .setContentText("This is reminder for you to train. Your ${workoutType.name} starts in $minutesLeft minutes. ")
+            .setContentText("This is reminder for you to train. Your workout starts in $minutesLeft minutes. ")
             .setContentIntent(activityPendingIntent)
             .setAutoCancel(true)
             .build()

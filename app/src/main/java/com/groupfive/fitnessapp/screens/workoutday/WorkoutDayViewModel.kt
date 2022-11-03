@@ -1,8 +1,10 @@
 package com.groupfive.fitnessapp.screens.workoutday
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.groupfive.fitnessapp.calendar.repository.FirebaseCalendarRepository
 import com.groupfive.fitnessapp.calendar.repository.PlannedWorkoutSession
 import com.groupfive.fitnessapp.calendar.repository.TestCalendarRepository
 import kotlinx.coroutines.runBlocking
@@ -10,8 +12,7 @@ import java.time.LocalDate
 import java.time.ZoneOffset
 
 class WorkoutDayViewModel: ViewModel() {
-    //TODO(edward): Swap this out with a repository that communicates with firebase
-    private val calendarRepository = TestCalendarRepository.instance()
+    private val calendarRepository = FirebaseCalendarRepository()
 
     private val _plannedWorkoutSessions = MutableLiveData<List<PlannedWorkoutSession>>()
     val plannedWorkoutSessions: LiveData<List<PlannedWorkoutSession>>
@@ -20,10 +21,6 @@ class WorkoutDayViewModel: ViewModel() {
     private val _day = MutableLiveData<LocalDate>()
     val day: LiveData<LocalDate>
         get() = _day
-
-    init {
-        setDay(LocalDate.now())
-    }
 
     fun setDay(day: LocalDate) {
         _day.value = day

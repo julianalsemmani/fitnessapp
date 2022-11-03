@@ -4,7 +4,6 @@ import android.util.Log
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.groupfive.fitnessapp.exercise.WorkoutType
 import kotlinx.coroutines.tasks.await
 import java.time.Instant
 
@@ -14,14 +13,11 @@ class FirebaseCalendarRepository : CalendarRepository {
 
     override suspend fun createPlannedWorkoutSession(
         startTime: Instant,
-        endTime: Instant,
-        workoutType: WorkoutType
+        endTime: Instant
     ) {
         val plannedWorkoutSession = hashMapOf(
-            "startTime" to startTime.epochSecond,
-            "endTime" to endTime.epochSecond,
-            //TODO(Edward): we will change this later such that workout type is not part of calendar
-            "workoutType" to workoutType.ordinal
+            "startTime" to startTime.toEpochMilli(),
+            "endTime" to endTime.toEpochMilli(),
         )
 
         userCalendarCollection()
@@ -29,6 +25,22 @@ class FirebaseCalendarRepository : CalendarRepository {
             .addOnFailureListener { exception ->
                 Log.e(javaClass.simpleName, "failed to add workout session", exception)
             }
+            .await()
+    }
+
+    override suspend fun updatePlannedWorkoutSession(
+        id: String,
+        startTime: Instant,
+        endTime: Instant
+    ) {
+        val plannedWorkoutSession = mapOf(
+            "startTime" to startTime.toEpochMilli(),
+            "endTime" to endTime.toEpochMilli(),
+        )
+
+        userCalendarCollection()
+            .document(id)
+            .update(plannedWorkoutSession)
             .await()
     }
 
@@ -42,17 +54,34 @@ class FirebaseCalendarRepository : CalendarRepository {
             .await()
     }
 
+    override suspend fun getPlannedWorkoutSession(id: String): PlannedWorkoutSession? {
+        val document = userCalendarCollection()
+            .document(id)
+            .get()
+            .await()
+
+        if(document.data?.get("startTime") != null && document.data?.get("startTime") != null) {
+            return PlannedWorkoutSession(
+                document.id,
+                Instant.ofEpochMilli(document.data!!["startTime"] as Long),
+                Instant.ofEpochMilli(document.data!!["endTime"] as Long)
+            )
+        }
+        return null
+    }
+
     override suspend fun getPlannedWorkoutSessions(): List<PlannedWorkoutSession> {
         val plannedWorkoutSessions = userCalendarCollection()
             .get()
             .await()
 
-        return plannedWorkoutSessions.map { PlannedWorkoutSession(
-            it.id,
-            Instant.ofEpochMilli(it.data["startTime"]!! as Long),
-            Instant.ofEpochMilli(it.data["endTime"]!! as Long),
-            WorkoutType.values()[(it.data["workoutType"]!! as Long).toInt()]
-        ) }
+        return plannedWorkoutSessions.map {
+            PlannedWorkoutSession(
+                it.id,
+                Instant.ofEpochMilli(it.data["startTime"]!! as Long),
+                Instant.ofEpochMilli(it.data["endTime"]!! as Long)
+            )
+        }
     }
 
     private fun userCalendarCollection() =

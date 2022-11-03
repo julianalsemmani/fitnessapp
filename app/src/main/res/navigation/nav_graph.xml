@@ -69,6 +69,9 @@
         <argument
             android:name="day"
             app:argType="java.time.LocalDate" />
+        <action
+            android:id="@+id/action_workoutDayFragment_to_setupPlannedExerciseFragment"
+            app:destination="@id/setupPlannedExerciseFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -90,5 +93,22 @@
         <action
             android:id="@+id/action_registerFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/setupPlannedExerciseFragment"
+        android:name="com.groupfive.fitnessapp.screens.workoutday.SetupPlannedExerciseFragment"
+        android:label="fragment_setup_planned_exercise"
+        tools:layout="@layout/fragment_setup_planned_exercise" >
+        <argument
+            android:name="day"
+            app:argType="java.time.LocalDate" />
+        <argument
+            android:name="plannedWorkoutSession"
+            app:argType="string"
+            app:nullable="true" />
+
+        <action
+            android:id="@+id/action_setupPlannedExerciseFragment_to_workoutDayFragment"
+            app:destination="@id/workoutDayFragment" />
     </fragment>
 </navigation>

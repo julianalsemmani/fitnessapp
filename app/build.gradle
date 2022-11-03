@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-android'
     id 'androidx.navigation.safeargs'
     id 'com.google.gms.google-services'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -43,6 +44,7 @@ android {
     // CameraX
     buildFeatures {
         viewBinding true
+        dataBinding true
     }
 
     // For material design 3

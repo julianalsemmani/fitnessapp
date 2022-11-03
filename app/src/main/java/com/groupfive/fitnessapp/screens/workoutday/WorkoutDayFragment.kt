@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.groupfive.fitnessapp.R
 import com.groupfive.fitnessapp.databinding.FragmentWorkoutDayBinding
 
 class WorkoutDayFragment : Fragment() {
@@ -34,8 +36,21 @@ class WorkoutDayFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.floatingActionButton.setOnClickListener {
+            findNavController().navigate(WorkoutDayFragmentDirections.actionWorkoutDayFragmentToSetupPlannedExerciseFragment(
+                args.day,
+                null
+            ))
+        }
+
         val plannedSessionsRecyclerView = binding.plannedSessionsRecyclerView
-        plannedSessionsRecyclerView.adapter = PlannedWorkoutSessionsAdapter(viewModel)
+        plannedSessionsRecyclerView.adapter = PlannedWorkoutSessionsAdapter(viewModel) { selectedPlannedWorkoutSession ->
+            findNavController().navigate(WorkoutDayFragmentDirections.actionWorkoutDayFragmentToSetupPlannedExerciseFragment(
+                args.day,
+                selectedPlannedWorkoutSession.id
+            ))
+        }
+
         plannedSessionsRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     }
 

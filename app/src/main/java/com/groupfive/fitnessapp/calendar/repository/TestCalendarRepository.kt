@@ -10,12 +10,25 @@ class TestCalendarRepository: CalendarRepository {
     private var plannedWorkoutSessions: ArrayList<PlannedWorkoutSession> = ArrayList()
     private var nextId = 0
 
-    override suspend fun createPlannedWorkoutSession(startTime: Instant, endTime: Instant, workoutType: WorkoutType) {
-        plannedWorkoutSessions.add(PlannedWorkoutSession((nextId++).toString(), startTime, endTime, workoutType))
+    override suspend fun createPlannedWorkoutSession(startTime: Instant, endTime: Instant) {
+        plannedWorkoutSessions.add(PlannedWorkoutSession((nextId++).toString(), startTime, endTime))
+    }
+
+    override suspend fun updatePlannedWorkoutSession(
+        id: String,
+        startTime: Instant,
+        endTime: Instant
+    ) {
+        deletePlannedWorkoutSession(id)
+        createPlannedWorkoutSession(startTime, endTime)
     }
 
     override suspend fun deletePlannedWorkoutSession(id: String) {
         plannedWorkoutSessions.removeAll { it.id == id }
+    }
+
+    override suspend fun getPlannedWorkoutSession(id: String): PlannedWorkoutSession? {
+        return plannedWorkoutSessions.find { it.id == id }
     }
 
     override suspend fun getPlannedWorkoutSessions(): List<PlannedWorkoutSession> {
@@ -33,11 +46,8 @@ class TestCalendarRepository: CalendarRepository {
             for (i in 1..20) {
 
                 val endTime = time.plusSeconds((Random.nextFloat()*1800).roundToLong())
-                result.createPlannedWorkoutSession(
-                        time,
-                        endTime,
-                        WorkoutType.values()[Random.nextInt(WorkoutType.values().size)]
-                )
+
+                result.createPlannedWorkoutSession(time, endTime)
 
                 time =  endTime.plusSeconds((Random.nextFloat()*1800).roundToLong())
             }
