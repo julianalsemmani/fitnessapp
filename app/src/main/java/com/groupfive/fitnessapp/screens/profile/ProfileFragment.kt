@@ -1,21 +1,13 @@
 package com.groupfive.fitnessapp.screens.profile
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import com.groupfive.fitnessapp.R
 import com.groupfive.fitnessapp.databinding.FragmentProfileBinding
-import com.groupfive.fitnessapp.user.repository.FirebaseUserRepository
-import com.groupfive.fitnessapp.user.repository.User
+import com.groupfive.fitnessapp.model.user.repository.FirebaseUserRepository
+import com.groupfive.fitnessapp.model.user.User
 import kotlinx.coroutines.runBlocking
 
 class ProfileFragment : Fragment() {

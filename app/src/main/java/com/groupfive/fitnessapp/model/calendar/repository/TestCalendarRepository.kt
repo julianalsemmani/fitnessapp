@@ -1,6 +1,6 @@
-package com.groupfive.fitnessapp.calendar.repository
+package com.groupfive.fitnessapp.model.calendar.repository
 
-import com.groupfive.fitnessapp.exercise.WorkoutType
+import com.groupfive.fitnessapp.model.calendar.PlannedWorkoutSession
 import kotlinx.coroutines.runBlocking
 import java.time.Instant
 import kotlin.math.roundToLong

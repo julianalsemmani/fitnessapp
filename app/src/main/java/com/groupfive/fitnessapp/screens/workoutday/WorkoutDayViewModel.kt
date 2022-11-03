@@ -1,12 +1,10 @@
 package com.groupfive.fitnessapp.screens.workoutday
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.groupfive.fitnessapp.calendar.repository.FirebaseCalendarRepository
-import com.groupfive.fitnessapp.calendar.repository.PlannedWorkoutSession
-import com.groupfive.fitnessapp.calendar.repository.TestCalendarRepository
+import com.groupfive.fitnessapp.model.calendar.repository.FirebaseCalendarRepository
+import com.groupfive.fitnessapp.model.calendar.PlannedWorkoutSession
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 import java.time.ZoneOffset

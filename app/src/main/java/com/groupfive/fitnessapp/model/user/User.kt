@@ -1,4 +1,4 @@
-package com.groupfive.fitnessapp.user.repository
+package com.groupfive.fitnessapp.model.user
 
 data class User(
     val uid: String,

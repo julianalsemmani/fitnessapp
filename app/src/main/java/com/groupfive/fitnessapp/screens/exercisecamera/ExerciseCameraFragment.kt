@@ -1,15 +1,9 @@
 package com.groupfive.fitnessapp.screens.exercisecamera
 
 import android.Manifest
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.graphics.ImageFormat
-import android.media.Image
-import android.media.ImageReader
 import android.os.Bundle
 import android.util.Log
-import android.util.Size
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,20 +13,26 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.pose.Pose
 import com.google.mlkit.vision.pose.PoseDetection
 import com.google.mlkit.vision.pose.PoseDetector
 import com.google.mlkit.vision.pose.defaults.PoseDetectorOptions
+import com.groupfive.fitnessapp.R
 import com.groupfive.fitnessapp.databinding.FragmentExerciseCameraBinding
 import com.groupfive.fitnessapp.exercise.ExerciseDetector
 import com.groupfive.fitnessapp.exercise.SquatExerciseDetector
-import java.nio.ByteBuffer
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 @ExperimentalGetImage
 class ExerciseCameraFragment : Fragment() {
+
+    private val args: ExerciseCameraFragmentArgs by navArgs()
+    private val viewModel: ExerciseCameraViewModel by viewModels()
 
     private lateinit var binding: FragmentExerciseCameraBinding
 
@@ -54,8 +54,6 @@ class ExerciseCameraFragment : Fragment() {
 
     private var exerciseDetector: ExerciseDetector = SquatExerciseDetector()
 
-    private var reps = 0
-
     // Permission handler
     private val permissionResultLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -70,14 +68,6 @@ class ExerciseCameraFragment : Fragment() {
                     Toast.LENGTH_SHORT).show()
             }
         }
-
-    /**
-     * Called when a new exercise repition has been detected
-     */
-    private fun onRepetition() {
-        reps++
-        binding.repView.text = reps.toString()
-    }
 
     /**
      * Notifies whether user is in frame or not
@@ -98,7 +88,7 @@ class ExerciseCameraFragment : Fragment() {
     private fun onPoseDetected(pose: Pose)  {
         // Check if we have a repetition
         if (exerciseDetector.detectRepetition(pose)) {
-            onRepetition()
+            viewModel.addRep()
         }
 
         // Send the pose to pose view to for drawing
@@ -109,6 +99,8 @@ class ExerciseCameraFragment : Fragment() {
         super.onCreate(savedInstanceState)
         // Request camera permission
         permissionResultLauncher.launch(Manifest.permission.CAMERA)
+
+        viewModel.setWorkoutType(args.workoutType)
     }
 
     override fun onCreateView(
@@ -117,7 +109,18 @@ class ExerciseCameraFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentExerciseCameraBinding.inflate(layoutInflater)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.completeFAB.setOnClickListener {
+            viewModel.submitWorkoutSession()
+            findNavController().navigate(R.id.action_global_homeFragment)
+        }
     }
 
     override fun onDestroy() {

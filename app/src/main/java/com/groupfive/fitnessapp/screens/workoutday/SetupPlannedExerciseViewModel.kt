@@ -3,7 +3,7 @@ package com.groupfive.fitnessapp.screens.workoutday
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.groupfive.fitnessapp.calendar.repository.FirebaseCalendarRepository
+import com.groupfive.fitnessapp.model.calendar.repository.FirebaseCalendarRepository
 import kotlinx.coroutines.runBlocking
 import java.time.Duration
 import java.time.Instant

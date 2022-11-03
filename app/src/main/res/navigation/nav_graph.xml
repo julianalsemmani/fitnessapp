@@ -33,7 +33,12 @@
         android:id="@+id/exerciseCameraFragment"
         android:name="com.groupfive.fitnessapp.screens.exercisecamera.ExerciseCameraFragment"
         android:label="fragment_exercise_camera"
-        tools:layout="@layout/fragment_exercise_camera" />
+        tools:layout="@layout/fragment_exercise_camera" >
+        <argument
+            android:name="workoutType"
+            app:argType="com.groupfive.fitnessapp.exercise.WorkoutType"
+            android:defaultValue="SQUAT" />
+    </fragment>
     <fragment
         android:id="@+id/notificationsFragment"
         android:name="com.groupfive.fitnessapp.screens.notifications.NotificationsFragment"

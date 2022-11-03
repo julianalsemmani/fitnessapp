@@ -6,10 +6,8 @@ import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.groupfive.fitnessapp.calendar.repository.CalendarRepository
-import com.groupfive.fitnessapp.calendar.repository.FirebaseCalendarRepository
-import com.groupfive.fitnessapp.calendar.repository.TestCalendarRepository
-import com.groupfive.fitnessapp.exercise.WorkoutType
+import com.groupfive.fitnessapp.model.calendar.repository.CalendarRepository
+import com.groupfive.fitnessapp.model.calendar.repository.FirebaseCalendarRepository
 import kotlinx.coroutines.runBlocking
 import java.time.Duration
 import java.time.Instant

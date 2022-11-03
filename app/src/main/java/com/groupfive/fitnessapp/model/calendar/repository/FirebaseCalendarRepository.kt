@@ -1,9 +1,10 @@
-package com.groupfive.fitnessapp.calendar.repository
+package com.groupfive.fitnessapp.model.calendar.repository
 
 import android.util.Log
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.groupfive.fitnessapp.model.calendar.PlannedWorkoutSession
 import kotlinx.coroutines.tasks.await
 import java.time.Instant
 
