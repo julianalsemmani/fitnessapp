@@ -3,6 +3,7 @@ package com.groupfive.fitnessapp.screens.workoutday
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.groupfive.fitnessapp.R
 import com.groupfive.fitnessapp.calendar.repository.PlannedWorkoutSession
@@ -12,7 +13,9 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
-class PlannedWorkoutSessionsAdapter(private val workoutDayViewModel: WorkoutDayViewModel)
+class PlannedWorkoutSessionsAdapter(
+    private val workoutDayViewModel: WorkoutDayViewModel,
+    private val onPlannedWorkoutSessionClicked: (PlannedWorkoutSession)->Unit)
     : RecyclerView.Adapter<PlannedWorkoutSessionsAdapter.ViewHolder>() {
 
     // Called when there's a need for a new ViewHolder (a new item in the list/grid)
@@ -20,7 +23,7 @@ class PlannedWorkoutSessionsAdapter(private val workoutDayViewModel: WorkoutDayV
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.layout_workout_session, parent, false)
 
         // Create the view holder with the corresponding view (list item)
-        return ViewHolder(itemView)
+        return ViewHolder(itemView, onPlannedWorkoutSessionClicked)
     }
 
     // Called when data is bound to a specific ViewHolder (and item in the list/grid)
@@ -35,7 +38,11 @@ class PlannedWorkoutSessionsAdapter(private val workoutDayViewModel: WorkoutDayV
     }
 
 
-    class ViewHolder (view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder (
+        private val view: View,
+        private val onPlannedWorkoutSessionClicked: (PlannedWorkoutSession)->Unit)
+            : RecyclerView.ViewHolder(view) {
+
         private val binding = LayoutWorkoutSessionBinding.bind(view)
 
         fun bind(item: PlannedWorkoutSession) {
@@ -43,6 +50,10 @@ class PlannedWorkoutSessionsAdapter(private val workoutDayViewModel: WorkoutDayV
             binding.beginTimeView.text = startTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
             val endTime = LocalDateTime.ofInstant(item.endTime, ZoneId.systemDefault())
             binding.endTimeView.text = endTime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))
+
+            binding.root.setOnClickListener {
+                onPlannedWorkoutSessionClicked(item)
+            }
         }
     }
 }

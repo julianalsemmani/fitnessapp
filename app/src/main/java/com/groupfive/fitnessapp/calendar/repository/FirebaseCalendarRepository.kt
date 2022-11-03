@@ -16,8 +16,8 @@ class FirebaseCalendarRepository : CalendarRepository {
         endTime: Instant
     ) {
         val plannedWorkoutSession = hashMapOf(
-            "startTime" to startTime.epochSecond,
-            "endTime" to endTime.epochSecond,
+            "startTime" to startTime.toEpochMilli(),
+            "endTime" to endTime.toEpochMilli(),
         )
 
         userCalendarCollection()
@@ -43,11 +43,13 @@ class FirebaseCalendarRepository : CalendarRepository {
             .get()
             .await()
 
-        return plannedWorkoutSessions.map { PlannedWorkoutSession(
-            it.id,
-            Instant.ofEpochMilli(it.data["startTime"]!! as Long),
-            Instant.ofEpochMilli(it.data["endTime"]!! as Long)
-        ) }
+        return plannedWorkoutSessions.map {
+            PlannedWorkoutSession(
+                it.id,
+                Instant.ofEpochMilli(it.data["startTime"]!! as Long),
+                Instant.ofEpochMilli(it.data["endTime"]!! as Long)
+            )
+        }
     }
 
     private fun userCalendarCollection() =

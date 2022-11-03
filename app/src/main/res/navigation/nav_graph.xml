@@ -99,6 +99,14 @@
         android:name="com.groupfive.fitnessapp.screens.workoutday.SetupPlannedExerciseFragment"
         android:label="fragment_setup_planned_exercise"
         tools:layout="@layout/fragment_setup_planned_exercise" >
+        <argument
+            android:name="day"
+            app:argType="java.time.LocalDate" />
+<!--        <argument-->
+<!--            android:name="plannedWorkoutSession"-->
+<!--            app:argType="com.groupfive.fitnessapp.calendar.repository.PlannedWorkoutSession"-->
+<!--            app:nullable="true" />-->
+
         <action
             android:id="@+id/action_setupPlannedExerciseFragment_to_workoutDayFragment"
             app:destination="@id/workoutDayFragment" />

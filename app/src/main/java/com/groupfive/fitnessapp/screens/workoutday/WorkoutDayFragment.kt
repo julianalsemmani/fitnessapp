@@ -37,11 +37,20 @@ class WorkoutDayFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.floatingActionButton.setOnClickListener {
-            findNavController().navigate(R.id.action_workoutDayFragment_to_setupPlannedExerciseFragment)
+            findNavController().navigate(WorkoutDayFragmentDirections.actionWorkoutDayFragmentToSetupPlannedExerciseFragment(
+                args.day,
+//                null
+            ))
         }
 
         val plannedSessionsRecyclerView = binding.plannedSessionsRecyclerView
-        plannedSessionsRecyclerView.adapter = PlannedWorkoutSessionsAdapter(viewModel)
+        plannedSessionsRecyclerView.adapter = PlannedWorkoutSessionsAdapter(viewModel) { plannedWorkoutSession ->
+            findNavController().navigate(WorkoutDayFragmentDirections.actionWorkoutDayFragmentToSetupPlannedExerciseFragment(
+                args.day,
+//                plannedWorkoutSession
+            ))
+        }
+
         plannedSessionsRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     }
 

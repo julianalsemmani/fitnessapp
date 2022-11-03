@@ -7,6 +7,7 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.groupfive.fitnessapp.calendar.repository.CalendarRepository
+import com.groupfive.fitnessapp.calendar.repository.FirebaseCalendarRepository
 import com.groupfive.fitnessapp.calendar.repository.TestCalendarRepository
 import com.groupfive.fitnessapp.exercise.WorkoutType
 import kotlinx.coroutines.runBlocking
@@ -32,8 +33,7 @@ class TrainingNotificationService : Service() {
 
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        //TODO: Use proper persistent repository here
-        calendarRepository = TestCalendarRepository.instance()
+        calendarRepository = FirebaseCalendarRepository()
 
         setupNotificationChannel()
     }
