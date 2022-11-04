@@ -7,11 +7,11 @@ enum class ComparisonType {
 }
 
 class ExerciseAngleConstraint(
-    private val firstPoint: Int,
-    private val midPoint: Int,
-    private val lastPoint: Int,
-    private val comparisonType: ComparisonType,
-    private val angle: Double) : ExercisePoseConstraint {
+    val firstPoint: Int,
+    val midPoint: Int,
+    val lastPoint: Int,
+    val comparisonType: ComparisonType,
+    val angle: Double) : ExercisePoseConstraint {
 
     override fun evaluate(pose: Pose): Boolean {
         val currentAngle = ExerciseUtils.getAngle(pose, firstPoint, midPoint, lastPoint)

@@ -10,6 +10,8 @@ import android.util.Log
 import android.view.View
 import com.google.mlkit.vision.pose.Pose
 import com.google.mlkit.vision.pose.PoseLandmark
+import com.groupfive.fitnessapp.exercise.ExerciseAngleConstraint
+import com.groupfive.fitnessapp.exercise.ExercisePoseConstraint
 
 /**
  * Draws a given pose using canvas
@@ -49,7 +51,21 @@ class PoseView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         style = Paint.Style.STROKE
     }
 
+    private val failurePaint = Paint(0).apply {
+        color = Color.RED
+        strokeWidth = 5f
+        style = Paint.Style.STROKE
+    }
+
+    private val passingPaint = Paint(0).apply {
+        color = Color.GREEN
+        strokeWidth = 5f
+        style = Paint.Style.STROKE
+    }
+
     private var pose: Pose? = null
+    private var failingConstraints: List<ExercisePoseConstraint>? = null
+    private var passingConstraints: List<ExercisePoseConstraint>? = null
 
     // The factor of overlay View size to image size. Anything in the image coordinates need to be
     // scaled by this amount to fit with the area of overlay View.
@@ -67,6 +83,13 @@ class PoseView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     fun setPose(pose: Pose?) {
         this.pose = pose
+    }
+
+    fun setPassingAndFailingConstraints(
+        failingConstraints: List<ExercisePoseConstraint>,
+        passingConstraints: List<ExercisePoseConstraint>) {
+        this.failingConstraints = failingConstraints
+        this.passingConstraints = passingConstraints
     }
 
     fun setImageSourceInfo(imageWidth: Int, imageHeight: Int, isFlipped: Boolean) {
@@ -116,12 +139,39 @@ class PoseView(context: Context, attrs: AttributeSet) : View(context, attrs) {
             canvas.apply {
                 // Loop through all line strips and draw line between detected pose landmarks
                 LINE_STRIPS.forEach {
-                    val begin = pose!!.getPoseLandmark(it.begin)!!
-                    val end = pose!!.getPoseLandmark(it.end)!!
-                    canvas.drawLine(
-                        translateX(begin.position.x), translateY(begin.position.y),
-                        translateX(end.position.x), translateY(end.position.y),
-                        bonePaint)
+                    drawLineBetweenLandmarks(it.begin, it.end, canvas, bonePaint)
+                }
+
+                // Draw failing constraints
+                failingConstraints?.forEach { failingConstraint ->
+                    when(failingConstraint) {
+                        is ExerciseAngleConstraint -> {
+                            drawLineBetweenLandmarks(
+                                failingConstraint.firstPoint,
+                                failingConstraint.midPoint,
+                                canvas, failurePaint)
+                            drawLineBetweenLandmarks(
+                                failingConstraint.midPoint,
+                                failingConstraint.lastPoint,
+                                canvas, failurePaint)
+                        }
+                    }
+                }
+
+                // Draw passing constraints
+                passingConstraints?.forEach { passingConstraint ->
+                    when(passingConstraint) {
+                        is ExerciseAngleConstraint -> {
+                            drawLineBetweenLandmarks(
+                                passingConstraint.firstPoint,
+                                passingConstraint.midPoint,
+                                canvas, passingPaint)
+                            drawLineBetweenLandmarks(
+                                passingConstraint.midPoint,
+                                passingConstraint.lastPoint,
+                                canvas, passingPaint)
+                        }
+                    }
                 }
             }
         } else {
@@ -131,5 +181,14 @@ class PoseView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
         // Mark the view for redraw
         invalidate()
+    }
+
+    private fun drawLineBetweenLandmarks(beginId: Int, endId: Int, canvas: Canvas, paint: Paint) {
+        val begin = pose!!.getPoseLandmark(beginId)!!
+        val end = pose!!.getPoseLandmark(endId)!!
+        canvas.drawLine(
+            translateX(begin.position.x), translateY(begin.position.y),
+            translateX(end.position.x), translateY(end.position.y),
+            paint)
     }
 }

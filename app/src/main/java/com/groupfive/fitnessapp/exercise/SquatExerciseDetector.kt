@@ -1,6 +1,5 @@
 package com.groupfive.fitnessapp.exercise
 
-import android.util.Log
 import com.google.mlkit.vision.pose.Pose
 import com.google.mlkit.vision.pose.PoseLandmark
 
@@ -22,21 +21,28 @@ class SquatExerciseDetector : ExerciseDetector {
             ComparisonType.GREATER_THAN, 160.0)
     )
 
-    var isSquatDown = true
+    private var currentConstraints = squatDownConstraints
 
-    override fun detectRepetition(pose: Pose): Boolean {
-        if(isSquatDown) {
-            if(squatDownConstraints.checkPose(pose)) {
-                isSquatDown = false
-                Log.w(javaClass.name, "DOWN")
-            }
-        } else {
-            if(squatUpConstraints.checkPose(pose)) {
-                isSquatDown = true
-                Log.w(javaClass.name, "UP")
-                return true
+    override fun detectRepetition(pose: Pose): ExerciseDetector.Result {
+        val constraintsResult = currentConstraints.checkPose(pose)
+        var repetition = false
+
+        if(constraintsResult.allPassed()) {
+            when(currentConstraints) {
+                squatDownConstraints -> {
+                    currentConstraints = squatUpConstraints
+                }
+                squatUpConstraints -> {
+                    currentConstraints = squatDownConstraints
+                    repetition = true
+                }
             }
         }
-        return false
+
+        return ExerciseDetector.Result(
+            repetition,
+            constraintsResult.failingConstraints,
+            constraintsResult.passingConstraints
+        )
     }
 }
