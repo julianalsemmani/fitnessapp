@@ -9,16 +9,16 @@ class SquatExerciseDetector : ExerciseDetector {
 
     private val squatDownConstraints = ExercisePoseConstraints(
         ExerciseAngleConstraint(PoseLandmark.LEFT_ANKLE, PoseLandmark.LEFT_KNEE, PoseLandmark.LEFT_HIP,
-            ComparisonType.SMALLER_THAN, (95.0 + safetyMargin)),
+            ComparisonType.SMALLER_THAN, 95.0, safetyMargin),
         ExerciseAngleConstraint(PoseLandmark.RIGHT_ANKLE, PoseLandmark.RIGHT_KNEE, PoseLandmark.RIGHT_HIP,
-            ComparisonType.SMALLER_THAN, 95.0 + safetyMargin)
+            ComparisonType.SMALLER_THAN, 95.0, safetyMargin)
     )
 
     private val squatUpConstraints = ExercisePoseConstraints(
         ExerciseAngleConstraint(PoseLandmark.LEFT_ANKLE, PoseLandmark.LEFT_KNEE, PoseLandmark.LEFT_HIP,
-            ComparisonType.GREATER_THAN, 160.0),
+            ComparisonType.GREATER_THAN, 160.0, safetyMargin),
         ExerciseAngleConstraint(PoseLandmark.RIGHT_ANKLE, PoseLandmark.RIGHT_KNEE, PoseLandmark.RIGHT_HIP,
-            ComparisonType.GREATER_THAN, 160.0)
+            ComparisonType.GREATER_THAN, 160.0, safetyMargin)
     )
 
     private var currentConstraints = squatDownConstraints
