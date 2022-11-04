@@ -87,9 +87,15 @@ class ExerciseCameraFragment : Fragment() {
      */
     private fun onPoseDetected(pose: Pose)  {
         // Check if we have a repetition
-        if (exerciseDetector.detectRepetition(pose)) {
+        val repetitionResult = exerciseDetector.detectRepetition(pose)
+        if (repetitionResult.repetition) {
             viewModel.addRep()
         }
+
+        // Send failing and passing checks to pose view
+        binding.poseView.setPassingAndFailingConstraints(
+            repetitionResult.failingConstraints,
+            repetitionResult.passingConstraints)
 
         // Send the pose to pose view to for drawing
         binding.poseView.setPose(pose)
