@@ -24,7 +24,7 @@ import com.google.mlkit.vision.pose.defaults.PoseDetectorOptions
 import com.groupfive.fitnessapp.R
 import com.groupfive.fitnessapp.databinding.FragmentExerciseCameraBinding
 import com.groupfive.fitnessapp.exercise.ExerciseDetector
-import com.groupfive.fitnessapp.exercise.SquatExerciseDetector
+import com.groupfive.fitnessapp.exercise.ExerciseDetectorFactory
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -52,7 +52,7 @@ class ExerciseCameraFragment : Fragment() {
             .build()
     )
 
-    private var exerciseDetector: ExerciseDetector = SquatExerciseDetector()
+    private val exerciseDetector: ExerciseDetector = ExerciseDetectorFactory.create(args.workoutType)
 
     // Permission handler
     private val permissionResultLauncher =
