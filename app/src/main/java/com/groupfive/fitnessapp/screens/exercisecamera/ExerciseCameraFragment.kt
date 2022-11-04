@@ -117,6 +117,16 @@ class ExerciseCameraFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.switchCameraButton.setOnClickListener {
+            lensFacing =
+                if(lensFacing == CameraSelector.LENS_FACING_BACK)
+                    CameraSelector.LENS_FACING_FRONT
+                else
+                    CameraSelector.LENS_FACING_BACK
+
+            startCamera()
+        }
+
         binding.completeFAB.setOnClickListener {
             viewModel.submitWorkoutSession()
             findNavController().navigate(R.id.action_global_homeFragment)
