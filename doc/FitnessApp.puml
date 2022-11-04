@@ -2,65 +2,145 @@
 
 left to right direction
 
-package com.groupfive.fitness <<Folder>> {
+package com.groupfive.fitness  {
     Class MainActivity
     Class MyApp
     Class TrainingNotificationService
 
-    package Calender <<Folder>>{ 
-        package Repository <<Folder>> { 
-        Interface CalenderRepository
-            Class PlannedWorkoutSession
-            Class TestCalenderRepository 
-        }  
-    }
-
-    package Exercise <<Folder>> {
+    package exercise  {
         Class ExerciseAngleConstraint
         Interface ExerciseDetector
+        Class ExerciseDetectorFactory
         Interface ExercisePoseConstraint
         Class ExercisePoseConstraints
         Class ExerciseUtils
         Class SquatExerciseDetector
+        Class SitUpExerciseDetector
         Enum WorkoutType
     }
 
-    package Fragments <<Folder>> {
-        package Calendar <<Folder>> {
-        	Class CalenderFragment
+    package model {
+        package calender { 
+            package repository as calendar-repository { 
+                Interface CalenderRepository
+                class FirebaseCalenderRepository
+                class TestCalenderRepository 
+            }
+            Class PlannedWorkoutSession  
+        }
+
+        package workout {
+            package repository as workout-repository {
+                Interface WorkoutSessionRepository
+                Class FirebaseWorkoutSessionRepository
+            }
+            Class WorkoutSession
+        }
+
+        package user {
+            package repository as user-repository  {
+                Interface UserRepository
+                Class FirebaseUserRepository
+            }
+            Class User
+        }
+    }
+
+    package screens {
+        package calendar {
+        	Class CalendarFragment
         	Class DayViewContainer
         	Class MonthViewContainer
-	}
-        Class ExerciseCameraFragment
-        Class HomeFragment
-        Class NotficiationsFragment
-        Class ProfileFragment
-        Class StatsFragment
+	    }
 
-        package Workoutday <<Folder>> {
+        package exercisecamera {
+            Class ExerciseCameraFragment
+            Class ExerciseCameraViewModel
+            Class PoseView    
+        }
+
+        package home {
+            Class HomeFragment
+        }
+
+        package profile {
+            class ProfileFragment
+        }
+
+        package selectworkout {
+            Class SelectWorkoutFragment
+            Class WorkoutTypeAdapter
+        }
+
+        package startupscreen {
+            Class LoginFragment
+            Class RegisterFragment
+        }
+
+        package stats {
+            Class StatsFragment
+        }
+
+        package notifications {
+            Class NotificiationsFragment
+        }
+
+        package workoutday  {
             Class PlannedWorkoutSessionAdapter
             Class WorkoutDayFragment
             Class WorkoutDayViewModel
-
+            Class SetupPlannedExerciseFragment
+            Class SetupPlannedExerciseViewModel
         }
     }
 }
 
 ' Exercise system
 ExerciseDetector <|-- SquatExerciseDetector
+ExerciseDetector <|-- SitUpExerciseDetector
 ExercisePoseConstraint <|-- ExerciseAngleConstraint
 ExercisePoseConstraints o-- ExercisePoseConstraint
-ExerciseCameraFragment o-- ExerciseDetector
-ExercisePoseConstraint o-- SquatExerciseDetector
+ExercisePoseConstraints o-- SquatExerciseDetector
+ExercisePoseConstraints o-- SitUpExerciseDetector
+ExerciseDetectorFactory o-- SquatExerciseDetector
+ExerciseDetectorFactory o-- SitUpExerciseDetector
 
+' Model
 ' Calender
 CalenderRepository <|-- TestCalenderRepository
+CalenderRepository <|-- FirebaseCalenderRepository
 PlannedWorkoutSession o-- CalenderRepository
+TrainingNotificationService o-- MyApp
+
+' User
+User o-- UserRepository
+UserRepository <|-- FirebaseUserRepository 
+
+' Workout
+WorkoutSession o-- WorkoutSessionRepository
+WorkoutSessionRepository <|-- FirebaseWorkoutSessionRepository
+
+' Screens
+' ExerciseCamera
+ExerciseCameraFragment o-- ExerciseDetector
+ExerciseCameraFragment o-- ExerciseCameraViewModel
+PoseView o-- ExerciseCameraFragment
+
+' Calendar
+CalenderRepository o-- CalendarFragment
+DayViewContainer o-- CalendarFragment
+MonthViewContainer o-- CalendarFragment
+
+' WorkoutDay
 CalenderRepository o-- WorkoutDayViewModel
-CalenderRepository o-- CalenderFragment
 WorkoutDayViewModel o-- WorkoutDayFragment
 PlannedWorkoutSessionAdapter o-- WorkoutDayFragment
-TrainingNotificationService o-- MyApp
-DayViewContainer o-- CalenderFragment
-MonthViewContainer o-- CalenderFragment
+SetupPlannedExerciseViewModel o-- SetupPlannedExerciseFragment
+
+' Profile
+UserRepository o-- ProfileFragment
+
+' SelectWorkout
+WorkoutTypeAdapter o-- SelectWorkoutFragment
+
 @enduml
