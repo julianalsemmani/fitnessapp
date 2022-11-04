@@ -3,6 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android'
     id 'androidx.navigation.safeargs'
+    id 'com.google.gms.google-services'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -42,6 +44,7 @@ android {
     // CameraX
     buildFeatures {
         viewBinding true
+        dataBinding true
     }
 }
 
@@ -72,10 +75,6 @@ dependencies {
     implementation "androidx.camera:camera-view:${camerax_version}"
     implementation "androidx.camera:camera-extensions:${camerax_version}"
 
-    // Material Design
-    def material_version = "1.6.0"
-    implementation "com.google.android.material:material:${material_version}"
-
     // NotificationCompat
     def core_version = "1.6.0"
     implementation"androidx.core:core-ktx:${core_version}"
@@ -89,4 +88,14 @@ dependencies {
 
     // JUnit
     testImplementation "junit:junit:1.9.1"
+
+    // Material Design
+    def material_version = "1.7.0"
+    implementation "com.google.android.material:material:${material_version}"
+
+    // Google Firebase
+    implementation platform('com.google.firebase:firebase-bom:31.0.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'com.google.firebase:firebase-firestore-ktx'
 }
