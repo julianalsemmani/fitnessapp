@@ -24,7 +24,7 @@ class HomeFragment : Fragment() {
 
         binding.cameraBtn.setOnClickListener {
             findNavController().navigate(
-                HomeFragmentDirections.actionHomeFragmentToExerciseCameraFragment(WorkoutType.SIT_UP)
+                HomeFragmentDirections.actionHomeFragmentToSelectWorkoutFragment()
             )
         }
 

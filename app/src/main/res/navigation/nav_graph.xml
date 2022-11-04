@@ -11,14 +11,14 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_homeFragment_to_exerciseCameraFragment"
-            app:destination="@id/exerciseCameraFragment" />
-        <action
             android:id="@+id/action_homeFragment_to_calendarFragment"
             app:destination="@id/calendarFragment" />
         <action
             android:id="@+id/action_homeFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_selectWorkoutFragment"
+            app:destination="@id/selectWorkoutFragment" />
     </fragment>
     <fragment
         android:id="@+id/calendarFragment"
@@ -114,5 +114,14 @@
         <action
             android:id="@+id/action_setupPlannedExerciseFragment_to_workoutDayFragment"
             app:destination="@id/workoutDayFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectWorkoutFragment"
+        android:name="com.groupfive.fitnessapp.screens.selectworkout.SelectWorkoutFragment"
+        android:label="fragment_select_workout"
+        tools:layout="@layout/fragment_select_workout" >
+        <action
+            android:id="@+id/action_selectWorkoutFragment_to_exerciseCameraFragment"
+            app:destination="@id/exerciseCameraFragment" />
     </fragment>
 </navigation>
