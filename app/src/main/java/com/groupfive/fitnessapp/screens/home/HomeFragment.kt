@@ -23,10 +23,9 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(inflater)
 
         binding.cameraBtn.setOnClickListener {
-            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToExerciseCameraFragment()
-                .also {
-                    it.workoutType = WorkoutType.SIT_UP
-                })
+            findNavController().navigate(
+                HomeFragmentDirections.actionHomeFragmentToExerciseCameraFragment(WorkoutType.SIT_UP)
+            )
         }
 
         binding.signOutBtn.setOnClickListener {

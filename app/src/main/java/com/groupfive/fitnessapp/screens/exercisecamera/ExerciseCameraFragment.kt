@@ -52,7 +52,7 @@ class ExerciseCameraFragment : Fragment() {
             .build()
     )
 
-    private val exerciseDetector: ExerciseDetector = ExerciseDetectorFactory.create(args.workoutType)
+    private lateinit var exerciseDetector: ExerciseDetector
 
     // Permission handler
     private val permissionResultLauncher =
@@ -106,6 +106,7 @@ class ExerciseCameraFragment : Fragment() {
         // Request camera permission
         permissionResultLauncher.launch(Manifest.permission.CAMERA)
 
+        exerciseDetector = ExerciseDetectorFactory.create(args.workoutType)
         viewModel.setWorkoutType(args.workoutType)
     }
 
