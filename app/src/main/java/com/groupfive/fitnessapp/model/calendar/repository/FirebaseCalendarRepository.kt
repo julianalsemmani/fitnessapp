@@ -16,6 +16,8 @@ class FirebaseCalendarRepository : CalendarRepository {
         startTime: Instant,
         endTime: Instant
     ) {
+        if(auth.currentUser == null) return
+
         val plannedWorkoutSession = hashMapOf(
             "startTime" to startTime.toEpochMilli(),
             "endTime" to endTime.toEpochMilli(),
@@ -34,6 +36,8 @@ class FirebaseCalendarRepository : CalendarRepository {
         startTime: Instant,
         endTime: Instant
     ) {
+        if(auth.currentUser == null) return
+
         val plannedWorkoutSession = mapOf(
             "startTime" to startTime.toEpochMilli(),
             "endTime" to endTime.toEpochMilli(),
@@ -46,6 +50,8 @@ class FirebaseCalendarRepository : CalendarRepository {
     }
 
     override suspend fun deletePlannedWorkoutSession(id: String) {
+        if(auth.currentUser == null) return
+
         userCalendarCollection()
             .document(id)
             .delete()
@@ -56,6 +62,8 @@ class FirebaseCalendarRepository : CalendarRepository {
     }
 
     override suspend fun getPlannedWorkoutSession(id: String): PlannedWorkoutSession? {
+        if(auth.currentUser == null) return null
+
         val document = userCalendarCollection()
             .document(id)
             .get()
@@ -72,6 +80,8 @@ class FirebaseCalendarRepository : CalendarRepository {
     }
 
     override suspend fun getPlannedWorkoutSessions(): List<PlannedWorkoutSession> {
+        if(auth.currentUser == null) return listOf()
+
         val plannedWorkoutSessions = userCalendarCollection()
             .get()
             .await()
