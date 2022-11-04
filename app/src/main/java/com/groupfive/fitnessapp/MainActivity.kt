@@ -36,9 +36,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         navController.addOnDestinationChangedListener {
-                navController: NavController,
-                navDestination: NavDestination,
-                bundle: Bundle? ->
+                _, navDestination: NavDestination, _ ->
 
             if(navDestination.label?.equals("fragment_login")!! ||
                     navDestination.label?.equals("fragment_register")!! ||
