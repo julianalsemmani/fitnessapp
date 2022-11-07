@@ -1,8 +1,12 @@
 package com.groupfive.fitnessapp
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
+import androidx.transition.Visibility
 import com.groupfive.fitnessapp.databinding.ActivityMainBinding
 
 
@@ -31,7 +35,17 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        
+        navController.addOnDestinationChangedListener {
+                _, navDestination: NavDestination, _ ->
+
+            if(navDestination.label?.equals("fragment_login")!! ||
+                    navDestination.label?.equals("fragment_register")!! ||
+                    navDestination.label?.equals("fragment_exercise_camera")!!) {
+                binding.bottomNavigation.visibility = View.GONE
+            } else {
+                binding.bottomNavigation.visibility = View.VISIBLE
+            }
+        }
 
         setContentView(binding.root)
     }

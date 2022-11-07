@@ -1,6 +1,5 @@
 package com.groupfive.fitnessapp.exercise
 
-import android.util.Log
 import com.google.mlkit.vision.pose.Pose
 import com.google.mlkit.vision.pose.PoseLandmark
 
@@ -10,33 +9,40 @@ class SquatExerciseDetector : ExerciseDetector {
 
     private val squatDownConstraints = ExercisePoseConstraints(
         ExerciseAngleConstraint(PoseLandmark.LEFT_ANKLE, PoseLandmark.LEFT_KNEE, PoseLandmark.LEFT_HIP,
-            ComparisonType.SMALLER_THAN, (95.0 + safetyMargin)),
+            ComparisonType.SMALLER_THAN, 95.0, safetyMargin),
         ExerciseAngleConstraint(PoseLandmark.RIGHT_ANKLE, PoseLandmark.RIGHT_KNEE, PoseLandmark.RIGHT_HIP,
-            ComparisonType.SMALLER_THAN, 95.0 + safetyMargin)
+            ComparisonType.SMALLER_THAN, 95.0, safetyMargin)
     )
 
     private val squatUpConstraints = ExercisePoseConstraints(
         ExerciseAngleConstraint(PoseLandmark.LEFT_ANKLE, PoseLandmark.LEFT_KNEE, PoseLandmark.LEFT_HIP,
-            ComparisonType.GREATER_THAN, 160.0),
+            ComparisonType.GREATER_THAN, 160.0, safetyMargin),
         ExerciseAngleConstraint(PoseLandmark.RIGHT_ANKLE, PoseLandmark.RIGHT_KNEE, PoseLandmark.RIGHT_HIP,
-            ComparisonType.GREATER_THAN, 160.0)
+            ComparisonType.GREATER_THAN, 160.0, safetyMargin)
     )
 
-    var isSquatDown = true
+    private var currentConstraints = squatDownConstraints
 
-    override fun detectRepetition(pose: Pose): Boolean {
-        if(isSquatDown) {
-            if(squatDownConstraints.checkPose(pose)) {
-                isSquatDown = false
-                Log.w(javaClass.name, "DOWN")
-            }
-        } else {
-            if(squatUpConstraints.checkPose(pose)) {
-                isSquatDown = true
-                Log.w(javaClass.name, "UP")
-                return true
+    override fun detectRepetition(pose: Pose): ExerciseDetector.Result {
+        val constraintsResult = currentConstraints.checkPose(pose)
+        var repetition = false
+
+        if(constraintsResult.allPassed()) {
+            when(currentConstraints) {
+                squatDownConstraints -> {
+                    currentConstraints = squatUpConstraints
+                }
+                squatUpConstraints -> {
+                    currentConstraints = squatDownConstraints
+                    repetition = true
+                }
             }
         }
-        return false
+
+        return ExerciseDetector.Result(
+            repetition,
+            constraintsResult.failingConstraints,
+            constraintsResult.passingConstraints
+        )
     }
 }
