@@ -1,12 +1,12 @@
-package com.groupfive.fitnessapp.model.calendar.repository
+package com.groupfive.fitnessapp.model.plannedworkout.repository
 
-import com.groupfive.fitnessapp.model.calendar.PlannedWorkoutSession
+import com.groupfive.fitnessapp.model.plannedworkout.PlannedWorkoutSession
 import kotlinx.coroutines.runBlocking
 import java.time.Instant
 import kotlin.math.roundToLong
 import kotlin.random.Random
 
-class TestCalendarRepository: CalendarRepository {
+class TestPlannedWorkoutRepository: PlannedWorkoutRepository {
     private var plannedWorkoutSessions: ArrayList<PlannedWorkoutSession> = ArrayList()
     private var nextId = 0
 
@@ -36,10 +36,10 @@ class TestCalendarRepository: CalendarRepository {
     }
 
     companion object {
-        private var instance: TestCalendarRepository? = null
+        private var instance: TestPlannedWorkoutRepository? = null
 
-        private suspend fun repositoryWithPlannedExercisesForToday(): TestCalendarRepository {
-            val result = TestCalendarRepository()
+        private suspend fun repositoryWithPlannedExercisesForToday(): TestPlannedWorkoutRepository {
+            val result = TestPlannedWorkoutRepository()
 
             // Add random workouts with random time beginning from 5 minutes from now
             var time = Instant.now().plusSeconds(300)
@@ -55,13 +55,13 @@ class TestCalendarRepository: CalendarRepository {
             return result
         }
 
-        fun instance(): TestCalendarRepository {
+        fun instance(): TestPlannedWorkoutRepository {
             if(instance == null) {
                 runBlocking {
                     instance = repositoryWithPlannedExercisesForToday()
                 }
             }
-            return instance as TestCalendarRepository
+            return instance as TestPlannedWorkoutRepository
         }
     }
 }

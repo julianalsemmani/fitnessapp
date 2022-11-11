@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.groupfive.fitnessapp.R
-import com.groupfive.fitnessapp.model.calendar.PlannedWorkoutSession
+import com.groupfive.fitnessapp.model.plannedworkout.PlannedWorkoutSession
 import com.groupfive.fitnessapp.databinding.LayoutWorkoutSessionBinding
 import java.time.LocalDateTime
 import java.time.ZoneId

@@ -3,14 +3,14 @@ package com.groupfive.fitnessapp.screens.workoutday
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.groupfive.fitnessapp.model.calendar.repository.FirebaseCalendarRepository
-import com.groupfive.fitnessapp.model.calendar.PlannedWorkoutSession
+import com.groupfive.fitnessapp.model.plannedworkout.repository.FirebasePlannedWorkoutRepository
+import com.groupfive.fitnessapp.model.plannedworkout.PlannedWorkoutSession
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 import java.time.ZoneOffset
 
 class WorkoutDayViewModel: ViewModel() {
-    private val calendarRepository = FirebaseCalendarRepository()
+    private val plannedWorkoutRepository = FirebasePlannedWorkoutRepository()
 
     private val _plannedWorkoutSessions = MutableLiveData<List<PlannedWorkoutSession>>()
     val plannedWorkoutSessions: LiveData<List<PlannedWorkoutSession>>
@@ -27,7 +27,7 @@ class WorkoutDayViewModel: ViewModel() {
         val startOfDay = day.atStartOfDay(ZoneOffset.systemDefault()).toInstant()
         val endOfDay = day.plusDays(1).atStartOfDay(ZoneOffset.systemDefault()).toInstant()
         runBlocking {
-            _plannedWorkoutSessions.value = calendarRepository.getPlannedWorkoutSessions().filter {
+            _plannedWorkoutSessions.value = plannedWorkoutRepository.getPlannedWorkoutSessions().filter {
                 it.startTime.isAfter(startOfDay) && it.startTime.isBefore(endOfDay)
             }
         }

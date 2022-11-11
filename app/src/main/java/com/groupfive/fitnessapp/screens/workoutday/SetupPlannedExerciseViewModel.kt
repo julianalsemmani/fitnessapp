@@ -3,14 +3,14 @@ package com.groupfive.fitnessapp.screens.workoutday
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.groupfive.fitnessapp.model.calendar.repository.FirebaseCalendarRepository
+import com.groupfive.fitnessapp.model.plannedworkout.repository.FirebasePlannedWorkoutRepository
 import kotlinx.coroutines.runBlocking
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
 
 class SetupPlannedExerciseViewModel: ViewModel() {
-    private val calendarRepository = FirebaseCalendarRepository()
+    private val plannedWorkoutRepository = FirebasePlannedWorkoutRepository()
 
     private val _day = MutableLiveData<LocalDate>()
     val day: LiveData<LocalDate>
@@ -45,7 +45,7 @@ class SetupPlannedExerciseViewModel: ViewModel() {
 
         if(plannedWorkoutSessionId != null) {
             runBlocking {
-                val plannedWorkoutSession = calendarRepository.getPlannedWorkoutSession(plannedWorkoutSessionId)
+                val plannedWorkoutSession = plannedWorkoutRepository.getPlannedWorkoutSession(plannedWorkoutSessionId)
 
                 if(plannedWorkoutSession != null) {
                     setStartTime(plannedWorkoutSession.startTime)
@@ -62,7 +62,7 @@ class SetupPlannedExerciseViewModel: ViewModel() {
                 // Update session with given id
                 //TODO(Edward): Do we really need to run blocking all the time here?
                 runBlocking {
-                    calendarRepository.updatePlannedWorkoutSession(
+                    plannedWorkoutRepository.updatePlannedWorkoutSession(
                         plannedWorkoutSessionToUpdateId!!,
                         startTime.value!!,
                         startTime.value!!.plusSeconds((getDurationMinutes()*60).toLong())
@@ -72,7 +72,7 @@ class SetupPlannedExerciseViewModel: ViewModel() {
                 // Create new session
                 //TODO(Edward): Do we really need to run blocking all the time here?
                 runBlocking {
-                    calendarRepository.createPlannedWorkoutSession(
+                    plannedWorkoutRepository.createPlannedWorkoutSession(
                         startTime.value!!,
                         startTime.value!!.plusSeconds((getDurationMinutes()*60).toLong())
                     )

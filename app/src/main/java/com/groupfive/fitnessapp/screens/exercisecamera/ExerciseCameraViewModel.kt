@@ -5,12 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.groupfive.fitnessapp.exercise.WorkoutType
-import com.groupfive.fitnessapp.model.calendar.repository.FirebaseCalendarRepository
 import com.groupfive.fitnessapp.model.workout.repository.FirebaseWorkoutSessionRepository
 import kotlinx.coroutines.runBlocking
-import java.time.Duration
 import java.time.Instant
-import java.time.LocalDate
 
 class ExerciseCameraViewModel: ViewModel() {
     private val workoutSessionRepository = FirebaseWorkoutSessionRepository()
