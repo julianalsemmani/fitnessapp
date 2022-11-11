@@ -46,6 +46,11 @@ android {
         viewBinding true
         dataBinding true
     }
+
+    lintOptions {
+        // Had to add this to fix building with async set mutable live data...
+        disable 'NullSafeMutableLiveData'
+    }
 }
 
 dependencies {
