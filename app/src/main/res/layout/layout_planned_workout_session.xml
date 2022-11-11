@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="2dp"
-    app:cardBackgroundColor="?attr/colorPrimaryVariant"
+    app:cardBackgroundColor="?colorPrimary"
     app:cardCornerRadius="10dp"
     tools:layout_editor_absoluteX="5dp"
     tools:layout_editor_absoluteY="5dp">
@@ -23,7 +23,7 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
             android:text="00:00"
-            android:textColor="?attr/colorOnPrimary"
+            android:textColor="?colorOnPrimary"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -36,7 +36,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="5dp"
             android:text="01:00"
-            android:textColor="?attr/colorOnPrimary"
+            android:textColor="?colorOnPrimary"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
