@@ -5,14 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.groupfive.fitnessapp.R
-import com.groupfive.fitnessapp.model.calendar.PlannedWorkoutSession
-import com.groupfive.fitnessapp.databinding.LayoutWorkoutSessionBinding
 import com.groupfive.fitnessapp.databinding.LayoutWorkoutTypeBinding
 import com.groupfive.fitnessapp.exercise.WorkoutType
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 
 class WorkoutTypeAdapter(
     private val onWorkoutTypeClicked: (WorkoutType)->Unit)

@@ -1,14 +1,14 @@
-package com.groupfive.fitnessapp.model.calendar.repository
+package com.groupfive.fitnessapp.model.plannedworkout.repository
 
 import android.util.Log
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.groupfive.fitnessapp.model.calendar.PlannedWorkoutSession
+import com.groupfive.fitnessapp.model.plannedworkout.PlannedWorkoutSession
 import kotlinx.coroutines.tasks.await
 import java.time.Instant
 
-class FirebaseCalendarRepository : CalendarRepository {
+class FirebasePlannedWorkoutRepository : PlannedWorkoutRepository {
     private val db = Firebase.firestore
     private val auth = Firebase.auth
 
@@ -98,5 +98,5 @@ class FirebaseCalendarRepository : CalendarRepository {
     private fun userCalendarCollection() =
         db.collection("users")
         .document(auth.currentUser?.uid!!)
-        .collection("calendar")
+        .collection("planned-workout")
 }

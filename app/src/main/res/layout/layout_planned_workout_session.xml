@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="5dp"
             android:text="01:00"
             android:textColor="?colorOnPrimary"
@@ -41,31 +41,5 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/beginTimeView" />
-
-        <TextView
-            android:id="@+id/workoutTypeView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:text="Squats"
-            android:textColor="?colorOnPrimary"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="parent" />
-
-        <TextView
-            android:id="@+id/repsView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:text="5"
-            android:textColor="?colorOnPrimary"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/workoutTypeView"
-            app:layout_constraintEnd_toStartOf="@+id/workoutTypeView"
-            app:layout_constraintTop_toTopOf="@+id/workoutTypeView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

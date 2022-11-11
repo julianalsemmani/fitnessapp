@@ -20,4 +20,6 @@
     <string name="complete_planned_exercise">Complete planned exercise</string>
     <string name="complete_workout_session">Complete workout session</string>
     <string name="switch_camera">Switch camera</string>
+    <string name="completed_exercises">Completed exercises</string>
+    <string name="planned_exercises">Planned exercises</string>
 </resources>

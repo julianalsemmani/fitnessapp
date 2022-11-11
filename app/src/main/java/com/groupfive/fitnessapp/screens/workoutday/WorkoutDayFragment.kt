@@ -9,8 +9,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.groupfive.fitnessapp.R
 import com.groupfive.fitnessapp.databinding.FragmentWorkoutDayBinding
+import java.time.format.DateTimeFormatter
 
 class WorkoutDayFragment : Fragment() {
     private lateinit var binding: FragmentWorkoutDayBinding
@@ -50,8 +50,20 @@ class WorkoutDayFragment : Fragment() {
                 selectedPlannedWorkoutSession.id
             ))
         }
-
         plannedSessionsRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        val workoutSessionsRecyclerView = binding.workoutSessionsRecyclerView
+        workoutSessionsRecyclerView.adapter = WorkoutSessionsAdapter(viewModel) { selectedWorkoutSession ->
+//            findNavController().navigate(WorkoutDayFragmentDirections.actionWorkoutDayFragmentToSetupPlannedExerciseFragment(
+//                args.day,
+//                selectedWorkoutSession.id
+//            ))
+        }
+        workoutSessionsRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        viewModel.day.observe(viewLifecycleOwner) {
+            binding.dateView.text = it.toString()
+        }
     }
 
     companion object {
