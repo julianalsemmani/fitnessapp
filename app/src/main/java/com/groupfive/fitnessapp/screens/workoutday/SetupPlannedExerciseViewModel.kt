@@ -16,7 +16,7 @@ class SetupPlannedExerciseViewModel: ViewModel() {
     val day: LiveData<LocalDate>
         get() = _day
 
-    private val _startTime = MutableLiveData<Instant>()
+    private val _startTime = MutableLiveData(Instant.now())
     val startTime: LiveData<Instant>
         get() = _startTime
 
