@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.groupfive.fitnessapp.databinding.FragmentWorkoutDayBinding
+import java.time.format.DateTimeFormatter
 
 class WorkoutDayFragment : Fragment() {
     private lateinit var binding: FragmentWorkoutDayBinding
@@ -59,6 +60,10 @@ class WorkoutDayFragment : Fragment() {
 //            ))
         }
         workoutSessionsRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        viewModel.day.observe(viewLifecycleOwner) {
+            binding.dateView.text = it.toString()
+        }
     }
 
     companion object {

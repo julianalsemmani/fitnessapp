@@ -7,10 +7,8 @@ import com.groupfive.fitnessapp.model.plannedworkout.repository.FirebasePlannedW
 import com.groupfive.fitnessapp.model.plannedworkout.PlannedWorkoutSession
 import com.groupfive.fitnessapp.model.workout.WorkoutSession
 import com.groupfive.fitnessapp.model.workout.repository.FirebaseWorkoutSessionRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.ZoneOffset
 
