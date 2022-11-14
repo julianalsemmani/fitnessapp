@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.color.MaterialColors
+import com.google.android.material.R
 import com.groupfive.fitnessapp.databinding.FragmentCalendarBinding
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
@@ -41,7 +43,7 @@ class CalendarFragment : Fragment() {
                 container.textView.text = day.date.dayOfMonth.toString()
                 // Color days that are outside selected month differently
                 if (day.owner == DayOwner.THIS_MONTH) {
-                    container.textView.setTextColor(Color.BLACK)
+                    container.textView.setTextColor(MaterialColors.getColor(view!!, R.attr.colorOnSurface))
                 } else {
                     container.textView.setTextColor(Color.GRAY)
                 }
