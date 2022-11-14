@@ -16,8 +16,10 @@
         app:layout_constraintRight_toRightOf="parent"
         app:menu="@menu/menu"
         app:itemBackground="?android:colorBackground"
-        app:itemIconTint="?colorOnBackground"
-        app:itemTextColor="?colorOnBackground"/>
+        app:itemRippleColor="?colorSecondary"
+        app:itemIconTint="?colorSecondary"
+        app:itemTextColor="?colorOnBackground"
+        android:background="@drawable/top_border"/>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"
