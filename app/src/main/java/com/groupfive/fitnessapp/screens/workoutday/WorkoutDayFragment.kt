@@ -53,16 +53,22 @@ class WorkoutDayFragment : Fragment() {
         plannedSessionsRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         val workoutSessionsRecyclerView = binding.workoutSessionsRecyclerView
-        workoutSessionsRecyclerView.adapter = WorkoutSessionsAdapter(viewModel) { selectedWorkoutSession ->
-//            findNavController().navigate(WorkoutDayFragmentDirections.actionWorkoutDayFragmentToSetupPlannedExerciseFragment(
-//                args.day,
-//                selectedWorkoutSession.id
-//            ))
-        }
+        workoutSessionsRecyclerView.adapter = WorkoutSessionsAdapter(viewModel)
+
         workoutSessionsRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         viewModel.day.observe(viewLifecycleOwner) {
             binding.dateView.text = it.toString()
+        }
+
+        viewModel.workoutSessions.observe(viewLifecycleOwner) {
+            if(it.isNotEmpty()) {
+                binding.completedExercisesTextView.visibility = View.VISIBLE
+                binding.workoutSessionsRecyclerView.visibility = View.VISIBLE
+            } else {
+                binding.completedExercisesTextView.visibility = View.GONE
+                binding.workoutSessionsRecyclerView.visibility = View.GONE
+            }
         }
     }
 

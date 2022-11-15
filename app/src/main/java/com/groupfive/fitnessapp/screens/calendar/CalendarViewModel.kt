@@ -1,5 +1,6 @@
-package com.groupfive.fitnessapp.screens.workoutday
+package com.groupfive.fitnessapp.screens.calendar
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,14 +8,14 @@ import com.groupfive.fitnessapp.model.plannedworkout.repository.FirebasePlannedW
 import com.groupfive.fitnessapp.model.plannedworkout.PlannedWorkoutSession
 import com.groupfive.fitnessapp.model.workout.WorkoutSession
 import com.groupfive.fitnessapp.model.workout.repository.FirebaseWorkoutSessionRepository
-import com.groupfive.fitnessapp.util.CalendarUtils
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
-import java.time.Instant
 import java.time.LocalDate
+import java.time.YearMonth
 import java.time.ZoneOffset
 
-class WorkoutDayViewModel: ViewModel() {
+class CalendarViewModel: ViewModel() {
+
     private val plannedWorkoutRepository = FirebasePlannedWorkoutRepository()
     private val workoutRepository = FirebaseWorkoutSessionRepository()
 
@@ -26,29 +27,21 @@ class WorkoutDayViewModel: ViewModel() {
     val workoutSessions: LiveData<List<WorkoutSession>>
         get() = _workoutSessions
 
-    private val _day = MutableLiveData<LocalDate>()
-    val day: LiveData<LocalDate>
-        get() = _day
+    private val _currentMonth = MutableLiveData(YearMonth.now())
+    val currentMonth: LiveData<YearMonth>
+        get() = _currentMonth
 
-    fun setDay(day: LocalDate) {
-        _day.value = day
-
-        // Only show planned workouts/workouts that begin in the set day
+    init {
         runBlocking {
-            // Get planned workouts and completed workouts in parallel
-            val plannedWorkouts = async {
-                plannedWorkoutRepository.getPlannedWorkoutSessions().filter { CalendarUtils.isInstantInDay(it.startTime, day) }
-            }
-
-            val workoutSessions = async {
-                workoutRepository.getWorkoutSessions().filter { CalendarUtils.isInstantInDay(it.startTime, day) }
-            }
-
-            _plannedWorkoutSessions.value = plannedWorkouts.await()
+            val plannedWorkoutSessions = async { plannedWorkoutRepository.getPlannedWorkoutSessions() }
+            val workoutSessions = async { workoutRepository.getWorkoutSessions() }
+            Log.e(javaClass.simpleName, "OJFHSAHJFSAJHKLFSHASFJHFKLSFSHJKL")
+            _plannedWorkoutSessions.value = plannedWorkoutSessions.await()
             _workoutSessions.value = workoutSessions.await()
         }
-
-
     }
 
+    fun setCurrentMonth(currentMonth: YearMonth) {
+        _currentMonth.value = currentMonth
+    }
 }

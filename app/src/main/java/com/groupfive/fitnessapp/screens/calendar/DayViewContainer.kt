@@ -5,7 +5,9 @@ import com.groupfive.fitnessapp.databinding.LayoutCalendarDayBinding
 import com.kizitonwose.calendarview.ui.ViewContainer
 
 class DayViewContainer(view: View) : ViewContainer(view) {
-    val textView = LayoutCalendarDayBinding.bind(view).dayText
+    val binding = LayoutCalendarDayBinding.bind(view)
 
+    val dayNumberView = binding.dayNumberView
+    val dayBackground = binding.dayBackground
 
 }
