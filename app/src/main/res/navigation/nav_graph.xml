@@ -14,9 +14,6 @@
             android:id="@+id/action_homeFragment_to_calendarFragment"
             app:destination="@id/calendarFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-        <action
             android:id="@+id/action_homeFragment_to_selectWorkoutFragment"
             app:destination="@id/selectWorkoutFragment" />
     </fragment>
@@ -47,7 +44,11 @@
         android:id="@+id/profileFragment"
         android:name="com.groupfive.fitnessapp.screens.profile.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/statsFragment"
         android:name="com.groupfive.fitnessapp.screens.stats.StatsFragment"
