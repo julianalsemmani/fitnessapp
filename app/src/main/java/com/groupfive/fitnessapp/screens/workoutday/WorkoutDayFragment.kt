@@ -53,12 +53,7 @@ class WorkoutDayFragment : Fragment() {
         plannedSessionsRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         val workoutSessionsRecyclerView = binding.workoutSessionsRecyclerView
-        workoutSessionsRecyclerView.adapter = WorkoutSessionsAdapter(viewModel) { selectedWorkoutSession ->
-//            findNavController().navigate(WorkoutDayFragmentDirections.actionWorkoutDayFragmentToSetupPlannedExerciseFragment(
-//                args.day,
-//                selectedWorkoutSession.id
-//            ))
-        }
+        workoutSessionsRecyclerView.adapter = WorkoutSessionsAdapter(viewModel)
 
         workoutSessionsRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
