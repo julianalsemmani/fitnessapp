@@ -59,10 +59,21 @@ class WorkoutDayFragment : Fragment() {
 //                selectedWorkoutSession.id
 //            ))
         }
+
         workoutSessionsRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         viewModel.day.observe(viewLifecycleOwner) {
             binding.dateView.text = it.toString()
+        }
+
+        viewModel.workoutSessions.observe(viewLifecycleOwner) {
+            if(it.isNotEmpty()) {
+                binding.completedExercisesTextView.visibility = View.VISIBLE
+                binding.workoutSessionsRecyclerView.visibility = View.VISIBLE
+            } else {
+                binding.completedExercisesTextView.visibility = View.GONE
+                binding.workoutSessionsRecyclerView.visibility = View.GONE
+            }
         }
     }
 
