@@ -20,7 +20,6 @@ import com.kizitonwose.calendarview.model.ScrollMode
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
 import java.time.DayOfWeek
-import java.time.YearMonth
 import java.time.temporal.WeekFields
 import java.util.*
 
@@ -35,6 +34,9 @@ class CalendarFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCalendarBinding.inflate(inflater)
+
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         val calendarView = binding.calendarView
 
@@ -85,16 +87,31 @@ class CalendarFragment : Fragment() {
 
             // Called every time we need to reuse a container.
             override fun bind(container: MonthViewContainer, month: CalendarMonth) {
-                container.textView.text = "${month.yearMonth.month.name.lowercase(Locale.getDefault()).capitalize()} ${month.year}"
+                container.textView.text = "${month.yearMonth.month.name.lowercase(Locale.getDefault()).replaceFirstChar { char -> char.uppercase() }} ${month.year}"
                 container.dayTexts.forEachIndexed { i, textView -> textView.text = daysOfWeek[i].name.substring(0, 3) }
+
+                container.previousMonthButton.setOnClickListener {
+                    viewModel.setCurrentMonth(viewModel.currentMonth.value!!.minusMonths(1))
+                }
+                container.nextMonthButton.setOnClickListener {
+                    viewModel.setCurrentMonth(viewModel.currentMonth.value!!.plusMonths(1))
+                }
             }
+        }
+
+        // Update calendar view from current month in view model
+        viewModel.currentMonth.observe(viewLifecycleOwner) {
+            calendarView.scrollToMonth(it)
+        }
+        calendarView.monthScrollListener = {
+            viewModel.setCurrentMonth(it.yearMonth)
         }
 
         calendarView.scrollMode = ScrollMode.PAGED
         calendarView.orientation = 0
         calendarView.maxRowCount = 6
 
-        val currentMonth = YearMonth.now()
+        val currentMonth = viewModel.currentMonth.value!!
         val startMonth = currentMonth.minusMonths(10)
         val endMonth = currentMonth.plusMonths(10)
         calendarView.setup(startMonth, endMonth, daysOfWeek.first())

@@ -22,4 +22,6 @@
     <string name="switch_camera">Switch camera</string>
     <string name="completed_exercises">Completed exercises</string>
     <string name="planned_exercises">Planned exercises</string>
+    <string name="go_to_next_month">Go to next month</string>
+    <string name="go_to_previous_month">Go to previous month</string>
 </resources>
