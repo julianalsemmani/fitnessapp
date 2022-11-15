@@ -7,10 +7,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.R
 import com.groupfive.fitnessapp.databinding.FragmentCalendarBinding
+import com.groupfive.fitnessapp.util.CalendarUtils
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
 import com.kizitonwose.calendarview.model.DayOwner
@@ -26,6 +28,8 @@ class CalendarFragment : Fragment() {
 
     private lateinit var binding: FragmentCalendarBinding
 
+    private val viewModel: CalendarViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,21 +44,36 @@ class CalendarFragment : Fragment() {
 
             // Called every time we need to reuse a container.
             override fun bind(container: DayViewContainer, day: CalendarDay) {
-                container.textView.text = day.date.dayOfMonth.toString()
-                // Color days that are outside selected month differently
-                if (day.owner == DayOwner.THIS_MONTH) {
-                    container.textView.setTextColor(MaterialColors.getColor(view!!, R.attr.colorOnSurface))
-                } else {
-                    container.textView.setTextColor(Color.GRAY)
+                container.dayNumberView.text = day.date.dayOfMonth.toString()
+
+                var backgroundColor = MaterialColors.getColor(view!!, R.attr.colorSurfaceVariant)
+                var textColor = MaterialColors.getColor(view!!, R.attr.colorOnSurfaceVariant)
+
+                // Color background green if there are completed  workout sessions in this day
+                if(viewModel.workoutSessions.value?.any { CalendarUtils.isInstantInDay(it.startTime, day.date) } == true) {
+                    backgroundColor = MaterialColors.getColor(view!!, R.attr.colorSecondary)
+                    textColor = MaterialColors.getColor(view!!, R.attr.colorOnSecondary)
+                }
+                // Color background primary if there are planned workout sessions in this day
+                else if(viewModel.plannedWorkoutSessions.value?.any { CalendarUtils.isInstantInDay(it.startTime, day.date) } == true) {
+                    backgroundColor = MaterialColors.getColor(view!!, R.attr.colorPrimary)
+                    textColor = MaterialColors.getColor(view!!, R.attr.colorOnPrimary)
                 }
 
+                // Color days that are outside selected month differently
+                if (day.owner != DayOwner.THIS_MONTH) {
+                    textColor = Color.GRAY
+                }
+
+                container.dayBackground.setCardBackgroundColor(backgroundColor)
+                container.dayNumberView.setTextColor(textColor)
+
                 container.view.setOnClickListener {
-                    val action =
+                    findNavController().navigate(
                         CalendarFragmentDirections.actionCalendarFragmentToWorkoutDayFragment(
                             day.date
                         )
-
-                    findNavController().navigate(action)
+                    )
                 }
             }
         }
