@@ -28,11 +28,6 @@ class HomeFragment : Fragment() {
             )
         }
 
-        binding.signOutBtn.setOnClickListener {
-            Firebase.auth.signOut()
-            findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
-        }
-
         binding.calenderBtn.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_calendarFragment)
         }
