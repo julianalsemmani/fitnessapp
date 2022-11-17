@@ -2,27 +2,30 @@ package com.groupfive.fitnessapp.util
 
 import com.google.mlkit.vision.pose.Pose
 import com.google.mlkit.vision.pose.PoseLandmark
+import dev.romainguy.kotlin.math.Float3
+import dev.romainguy.kotlin.math.dot
+import dev.romainguy.kotlin.math.length
 import kotlin.math.*
 
 class PoseUtils {
     companion object {
         fun getAngle(firstPoint: PoseLandmark, midPoint: PoseLandmark, lastPoint: PoseLandmark): Double {
-            val a = listOf(
+            val a = Float3(
                 firstPoint.position3D.x - midPoint.position3D.x,
                 firstPoint.position3D.y - midPoint.position3D.y,
                 firstPoint.position3D.z - midPoint.position3D.z
             )
-            val b = listOf(
+            val b = Float3(
                 lastPoint.position3D.x - midPoint.position3D.x,
                 lastPoint.position3D.y - midPoint.position3D.y,
                 lastPoint.position3D.z - midPoint.position3D.z
             )
-            val dot = a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
-            val aLength = sqrt((a[0].pow(2) + a[1].pow(2) + a[2].pow(2)).toDouble())
-            val bLength = sqrt((b[0].pow(2) + b[1].pow(2) + b[2].pow(2)).toDouble())
+            val dot = dot(a, b)
+            val aLength = length(a)
+            val bLength = length(b)
             val cos = dot / (aLength * bLength)
 
-            var result = Math.toDegrees(acos(cos))
+            var result = Math.toDegrees(acos(cos).toDouble())
             result = abs(result) // Angle should never be negative
             if (result > 180) {
                 result = 360.0 - result // Always get the acute representation of the angle
