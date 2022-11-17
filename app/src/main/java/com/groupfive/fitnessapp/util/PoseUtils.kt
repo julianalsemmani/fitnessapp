@@ -1,10 +1,10 @@
-package com.groupfive.fitnessapp.exercise
+package com.groupfive.fitnessapp.util
 
 import com.google.mlkit.vision.pose.Pose
 import com.google.mlkit.vision.pose.PoseLandmark
 import kotlin.math.*
 
-class ExerciseUtils {
+class PoseUtils {
     companion object {
         fun getAngle(firstPoint: PoseLandmark, midPoint: PoseLandmark, lastPoint: PoseLandmark): Double {
             val a = listOf(
