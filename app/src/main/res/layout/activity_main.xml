@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@drawable/background_destination_v2">
+    android:background="@drawable/background_destination_v4">
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
