@@ -55,7 +55,7 @@ class RegisterFragment : Fragment() {
                             val user = auth.currentUser
                             Toast.makeText(context, "Registration Successful", Toast.LENGTH_SHORT).show()
                             firebaseDb.collection("users")
-                                .document(auth.currentUser?.uid!!).set(addUserToDb(auth.currentUser?.uid.toString(), "firstname", "lastname", "20", "20", "2022", binding.registerEmailInput.text.toString()))
+                                .document(auth.currentUser?.uid!!).set(addUserToDb(auth.currentUser?.uid.toString(), binding.registerFirstnameInput.text.toString(), binding.registerLastnameInput.text.toString(), "20", "20", "2022", binding.registerEmailInput.text.toString()))
                                 .addOnSuccessListener {
                                     Log.d(javaClass.name, "DocumentSnapshot added with ID: ${auth.currentUser?.uid}")
                                 }
