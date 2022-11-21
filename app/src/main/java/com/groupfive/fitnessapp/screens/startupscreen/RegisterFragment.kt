@@ -55,7 +55,7 @@ class RegisterFragment : Fragment() {
                             val user = auth.currentUser
                             Toast.makeText(context, "Registration Successful", Toast.LENGTH_SHORT).show()
                             firebaseDb.collection("users")
-                                .document(auth.currentUser?.uid!!).set(addUserToDb(binding.registerEmailInput.text.toString(), auth.currentUser?.uid.toString()))
+                                .document(auth.currentUser?.uid!!).set(addUserToDb(auth.currentUser?.uid.toString(), binding.registerFirstnameInput.text.toString(), binding.registerLastnameInput.text.toString(), "20", "20", "2022", binding.registerEmailInput.text.toString()))
                                 .addOnSuccessListener {
                                     Log.d(javaClass.name, "DocumentSnapshot added with ID: ${auth.currentUser?.uid}")
                                 }
@@ -78,14 +78,14 @@ class RegisterFragment : Fragment() {
         return binding.root
     }
 
-    fun addUserToDb(email: String, uID: String): HashMap<String, String> {
+    fun addUserToDb(uID: String, firstName: String, lastName: String, weight: String, height: String, birthDate: String, email: String): HashMap<String, String> {
         return hashMapOf(
             "uid" to uID,
-            "firstName" to "null",
-            "lastname" to "null",
-            "weight" to "75",
-            "height" to "180",
-            "birthDate" to "00-00-0000",
+            "firstName" to firstName,
+            "lastname" to lastName,
+            "weight" to weight,
+            "height" to height,
+            "birthDate" to birthDate,
             "email" to email
         )
     }
