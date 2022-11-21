@@ -13,6 +13,8 @@ import com.google.mlkit.vision.pose.PoseLandmark
 import com.groupfive.fitnessapp.exercise.ExerciseAngleConstraint
 import com.groupfive.fitnessapp.exercise.ExerciseDetector
 import com.groupfive.fitnessapp.exercise.ExercisePoseConstraints
+import com.groupfive.fitnessapp.util.PoseUtils
+import dev.romainguy.kotlin.math.Float2
 
 /**
  * Draws a given pose using canvas
@@ -149,33 +151,35 @@ class PoseView(context: Context, attrs: AttributeSet) : View(context, attrs) {
                                 failing.result.passRate.toFloat(),
                                 Color.RED, Color.GREEN) as Int
 
-                            drawLineBetweenLandmarks(
-                                failing.constraint.firstPoint,
-                                failing.constraint.midPoint,
+                            val first = PoseUtils.float2FromLandmark(pose!!, failing.constraint.firstPoint)
+                            val mid = PoseUtils.float2FromLandmark(pose!!, failing.constraint.midPoint)
+                            val last = PoseUtils.float2FromLandmark(pose!!, failing.constraint.lastPoint)
+
+                            drawLineBetweenPoints(mid,
+                                first - (first - mid)/2f,
                                 canvas, failurePaint)
-                            drawLineBetweenLandmarks(
-                                failing.constraint.midPoint,
-                                failing.constraint.lastPoint,
+                            drawLineBetweenPoints(mid,
+                                last - (last - mid)/2f,
                                 canvas, failurePaint)
                         }
                     }
                 }
 
                 // Draw passing constraints
-                constraintResult?.passingConstraints?.forEach { passing ->
-                    when(passing.constraint) {
-                        is ExerciseAngleConstraint -> {
-                            drawLineBetweenLandmarks(
-                                passing.constraint.firstPoint,
-                                passing.constraint.midPoint,
-                                canvas, passingPaint)
-                            drawLineBetweenLandmarks(
-                                passing.constraint.midPoint,
-                                passing.constraint.lastPoint,
-                                canvas, passingPaint)
-                        }
-                    }
-                }
+//                constraintResult?.passingConstraints?.forEach { passing ->
+//                    when(passing.constraint) {
+//                        is ExerciseAngleConstraint -> {
+//                            drawLineBetweenLandmarks(
+//                                passing.constraint.firstPoint,
+//                                passing.constraint.midPoint,
+//                                canvas, passingPaint)
+//                            drawLineBetweenLandmarks(
+//                                passing.constraint.midPoint,
+//                                passing.constraint.lastPoint,
+//                                canvas, passingPaint)
+//                        }
+//                    }
+//                }
             }
         } else {
             // Clear canvas when there is no pose
@@ -186,12 +190,16 @@ class PoseView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         invalidate()
     }
 
+    private fun drawLineBetweenPoints(a: Float2, b: Float2, canvas: Canvas, paint: Paint) {
+        canvas.drawLine(
+            translateX(a.x), translateY(a.y),
+            translateX(b.x), translateY(b.y),
+            paint)
+    }
+
     private fun drawLineBetweenLandmarks(beginId: Int, endId: Int, canvas: Canvas, paint: Paint) {
         val begin = pose!!.getPoseLandmark(beginId)!!
         val end = pose!!.getPoseLandmark(endId)!!
-        canvas.drawLine(
-            translateX(begin.position.x), translateY(begin.position.y),
-            translateX(end.position.x), translateY(end.position.y),
-            paint)
+        drawLineBetweenPoints(PoseUtils.float2FromLandmark(begin), PoseUtils.float2FromLandmark(end), canvas, paint)
     }
 }

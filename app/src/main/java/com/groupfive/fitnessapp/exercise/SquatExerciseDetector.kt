@@ -5,7 +5,7 @@ import com.google.mlkit.vision.pose.PoseLandmark
 
 class SquatExerciseDetector : ExerciseDetector {
 
-    private val safetyMargin = 10.0
+    private val safetyMargin = 20.0
 
     private val squatDownConstraints = ExercisePoseConstraints(
         ExerciseAngleConstraint(PoseLandmark.LEFT_ANKLE, PoseLandmark.LEFT_KNEE, PoseLandmark.LEFT_HIP,
