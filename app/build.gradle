@@ -104,6 +104,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx'
 
+    // CircleImageView
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
     // 3D Math
     implementation 'dev.romainguy:kotlin-math:1.5.2'
 }
