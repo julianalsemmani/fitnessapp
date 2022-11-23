@@ -6,10 +6,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.trusted.ScreenOrientation
-import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
-import androidx.transition.Visibility
 import com.groupfive.fitnessapp.databinding.ActivityMainBinding
 
 
@@ -40,10 +38,10 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNavigation.setOnItemSelectedListener {
             when(it.itemId){
-                R.id.ic_home->navController.navigate(R.id.action_global_homeFragment)
-                R.id.ic_stats->navController.navigate(R.id.action_global_statsFragment)
-                R.id.ic_notifications->navController.navigate(R.id.action_global_notificationsFragment)
                 R.id.ic_profile->navController.navigate(R.id.action_global_profileFragment)
+                R.id.ic_exercise->navController.navigate(R.id.action_global_homeFragment)
+                R.id.ic_calendar->navController.navigate(R.id.action_global_calendarFragment)
+                R.id.ic_stats->navController.navigate(R.id.action_global_statsFragment)
             }
             true
         }
