@@ -3,6 +3,7 @@ package com.groupfive.fitnessapp.screens.selectworkout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import com.groupfive.fitnessapp.R
 import com.groupfive.fitnessapp.databinding.LayoutWorkoutTypeBinding
@@ -29,7 +30,6 @@ class WorkoutTypeAdapter(
         return WorkoutType.values().size
     }
 
-
     class ViewHolder (
         private val view: View,
         private val onPlannedWorkoutSessionClicked: (WorkoutType)->Unit)
@@ -38,11 +38,11 @@ class WorkoutTypeAdapter(
         private val binding = LayoutWorkoutTypeBinding.bind(view)
 
         fun bind(item: WorkoutType) {
-            binding.workoutNameTextView.text = item.name
-            //TODO(edward): We need to add description and probably images at some point
-            binding.descriptionTextView.text = "Description here at some point"
+            binding.workoutNameTextView.text = view.context.getString(item.nameResource)
+            binding.descriptionTextView.text = view.context.getString(item.descriptionResource)
+            binding.workoutImage.setImageDrawable(AppCompatResources.getDrawable(view.context, item.imageResource))
 
-            binding.root.setOnClickListener {
+            binding.beginExerciseButton.setOnClickListener {
                 onPlannedWorkoutSessionClicked(item)
             }
         }
