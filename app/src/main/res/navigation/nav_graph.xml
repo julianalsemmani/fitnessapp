@@ -124,5 +124,5 @@
         <action
             android:id="@+id/action_selectWorkoutFragment_to_exerciseCameraFragment"
             app:destination="@id/exerciseCameraFragment" />
-    </fragment>
+    </fragment><action android:id="@+id/action_global_calendarFragment" app:destination="@id/calendarFragment"/>
 </navigation>

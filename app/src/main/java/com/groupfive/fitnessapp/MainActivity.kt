@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
             when(it.itemId){
                 R.id.ic_home->navController.navigate(R.id.action_global_homeFragment)
                 R.id.ic_stats->navController.navigate(R.id.action_global_statsFragment)
-                R.id.ic_notifications->navController.navigate(R.id.action_global_notificationsFragment)
+                R.id.ic_notifications->navController.navigate(R.id.action_global_calendarFragment)
                 R.id.ic_profile->navController.navigate(R.id.action_global_profileFragment)
             }
             true
