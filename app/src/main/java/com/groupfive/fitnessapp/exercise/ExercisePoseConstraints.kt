@@ -3,9 +3,11 @@ package com.groupfive.fitnessapp.exercise
 import com.google.mlkit.vision.pose.Pose
 
 class ExercisePoseConstraints(vararg constraintArgs: ExercisePoseConstraint) {
-    data class Result(
-        val failingConstraints: List<ExercisePoseConstraint>,
-        val passingConstraints: List<ExercisePoseConstraint>) {
+    data class ConstraintResult(val constraint: ExercisePoseConstraint, val result: ExercisePoseConstraint.ConstraintResult)
+
+    data class ConstraintsResult(
+        val failingConstraints: List<ConstraintResult>,
+        val passingConstraints: List<ConstraintResult>) {
 
         fun allPassed(): Boolean {
             return failingConstraints.isEmpty()
@@ -14,19 +16,20 @@ class ExercisePoseConstraints(vararg constraintArgs: ExercisePoseConstraint) {
 
     private val constraints: List<ExercisePoseConstraint> = listOf(*constraintArgs)
 
-    fun checkPose(pose: Pose): Result {
-        val passingConstraints = ArrayList<ExercisePoseConstraint>()
-        val failingConstraints = ArrayList<ExercisePoseConstraint>()
+    fun checkPose(pose: Pose): ConstraintsResult {
+        val passingConstraints = ArrayList<ConstraintResult>()
+        val failingConstraints = ArrayList<ConstraintResult>()
 
         constraints.forEach() {
-            if(it.evaluate(pose)) {
-                passingConstraints.add(it)
+            val result = it.evaluate(pose)
+            if(result.passed) {
+                passingConstraints.add(ConstraintResult(it, result))
             } else {
-                failingConstraints.add(it)
+                failingConstraints.add(ConstraintResult(it, result))
             }
         }
 
-        return Result(
+        return ConstraintsResult(
             passingConstraints = passingConstraints,
             failingConstraints = failingConstraints
         )

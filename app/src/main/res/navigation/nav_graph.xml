@@ -14,8 +14,8 @@
             android:id="@+id/action_homeFragment_to_calendarFragment"
             app:destination="@id/calendarFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_selectWorkoutFragment"
-            app:destination="@id/selectWorkoutFragment" />
+            android:id="@+id/action_homeFragment_to_exerciseCameraFragment"
+            app:destination="@id/exerciseCameraFragment" />
     </fragment>
     <fragment
         android:id="@+id/calendarFragment"

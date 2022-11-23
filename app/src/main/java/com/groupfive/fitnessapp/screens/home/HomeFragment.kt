@@ -6,12 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.groupfive.fitnessapp.R
 import com.groupfive.fitnessapp.databinding.FragmentHomeBinding
 import com.groupfive.fitnessapp.exercise.WorkoutType
+import com.groupfive.fitnessapp.screens.selectworkout.SelectWorkoutFragmentDirections
+import com.groupfive.fitnessapp.screens.selectworkout.WorkoutTypeAdapter
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
@@ -22,14 +25,11 @@ class HomeFragment : Fragment() {
     ): View {
         binding = FragmentHomeBinding.inflate(inflater)
 
-        binding.cameraBtn.setOnClickListener {
+        binding.workoutList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        binding.workoutList.adapter = WorkoutTypeAdapter() { selectedWorkoutType ->
             findNavController().navigate(
-                HomeFragmentDirections.actionHomeFragmentToSelectWorkoutFragment()
+                HomeFragmentDirections.actionHomeFragmentToExerciseCameraFragment(selectedWorkoutType)
             )
-        }
-
-        binding.calenderBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_calendarFragment)
         }
 
         return binding.root
