@@ -117,8 +117,6 @@ class CalendarFragment : Fragment() {
         calendarView.setup(startMonth, endMonth, daysOfWeek.first())
         calendarView.scrollToMonth(currentMonth)
 
-        Log.e(javaClass.name, currentMonth.toString())
-
         return binding.root
     }
 
