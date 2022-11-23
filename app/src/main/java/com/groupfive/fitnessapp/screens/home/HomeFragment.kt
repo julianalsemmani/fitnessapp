@@ -22,16 +22,6 @@ class HomeFragment : Fragment() {
     ): View {
         binding = FragmentHomeBinding.inflate(inflater)
 
-        binding.cameraBtn.setOnClickListener {
-            findNavController().navigate(
-                HomeFragmentDirections.actionHomeFragmentToSelectWorkoutFragment()
-            )
-        }
-
-        binding.calenderBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_calendarFragment)
-        }
-
         return binding.root
     }
 }
