@@ -5,16 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.groupfive.fitnessapp.R
-import com.groupfive.fitnessapp.model.plannedworkout.PlannedWorkoutSession
 import com.groupfive.fitnessapp.databinding.LayoutWorkoutSessionBinding
 import com.groupfive.fitnessapp.exercise.WorkoutType
-import com.groupfive.fitnessapp.model.workout.WorkoutSession
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 import java.util.*
-import kotlin.collections.HashMap
 
 class WorkoutSessionsAdapter(
     private val workoutDayViewModel: WorkoutDayViewModel)
@@ -48,14 +41,13 @@ class WorkoutSessionsAdapter(
         return workoutReps.size
     }
 
-    class ViewHolder (view: View): RecyclerView.ViewHolder(view) {
+    class ViewHolder (val view: View): RecyclerView.ViewHolder(view) {
 
         private val binding = LayoutWorkoutSessionBinding.bind(view)
 
         fun bind(item: Pair<WorkoutType, Int>) {
             binding.repsView.text = item.second.toString()
-
-            binding.workoutTypeView.text = item.first.name
+            binding.workoutTypeView.text = view.context.getString(item.first.nameResource)
         }
     }
 }
