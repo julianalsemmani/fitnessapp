@@ -1,21 +1,34 @@
 package com.groupfive.fitnessapp
 
+import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.trusted.ScreenOrientation
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import com.groupfive.fitnessapp.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        // These fragments do not show bottom navigation
+        private val HIDE_NAVBAR_FRAGMENTS = listOf(
+            "fragment_login",
+            "fragment_register",
+            "fragment_exercise_camera")
+
+        // These fragments allow landscape
+        private val ALLOW_LANDSCAPE_FRAGMENTS = listOf(
+            "fragment_exercise_camera")
+    }
+
     private lateinit var binding: ActivityMainBinding
 
+    @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Notifications
-        // activityResultLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
 
@@ -36,31 +49,23 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener {
                 _, navDestination: NavDestination, _ ->
 
-            if(navDestination.label?.equals("fragment_login")!! ||
-                    navDestination.label?.equals("fragment_register")!! ||
-                    navDestination.label?.equals("fragment_exercise_camera")!!) {
-                binding.bottomNavigation.visibility = View.GONE
-            } else {
-                binding.bottomNavigation.visibility = View.VISIBLE
+            if(navDestination.label != null) {
+                val destination = navDestination.label!!
+                if(HIDE_NAVBAR_FRAGMENTS.any { it == destination }) {
+                    binding.bottomNavigation.visibility = View.GONE
+                } else {
+                    binding.bottomNavigation.visibility = View.VISIBLE
+                }
+
+                requestedOrientation = if(ALLOW_LANDSCAPE_FRAGMENTS.any { it == destination }) {
+                    ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                } else {
+                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                }
             }
+
         }
 
         setContentView(binding.root)
     }
-
-    // Notification permission
-/*    private val activityResultLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            // Handle Permission granted/rejected
-            if (isGranted) {
-                // Permission is granted
-                val trainingNotificationService = TrainingNotificationService(this)
-                trainingNotificationService.showNotification(10,1)
-            } else {
-                // Permission is denied
-                Toast.makeText(this,
-                    "Permissions not granted by the user.",
-                    Toast.LENGTH_SHORT).show()
-            }
-        }*/
 }
