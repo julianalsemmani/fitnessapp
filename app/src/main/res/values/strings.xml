@@ -24,6 +24,7 @@
     <string name="planned_exercises">Planned exercises</string>
     <string name="go_to_next_month">Go to next month</string>
     <string name="go_to_previous_month">Go to previous month</string>
+    <string name="start_exercise">Start exercise</string>
 
     <!-- WorkoutType -->
     <string name="squat">Squat</string>
@@ -42,5 +43,4 @@
     <string name="sit_up_description">Situps are classic abdominal exercises done by lying on your
         back and lifting your torso. They use your body weight to strengthen and tone the
         core-stabilizing abdominal muscles.</string>
-    <string name="start_workout">Start workout</string>
 </resources>
