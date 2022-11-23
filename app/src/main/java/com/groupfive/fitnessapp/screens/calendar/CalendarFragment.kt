@@ -1,5 +1,6 @@
 package com.groupfive.fitnessapp.screens.calendar
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -86,6 +87,7 @@ class CalendarFragment : Fragment() {
             override fun create(view: View) = MonthViewContainer(view)
 
             // Called every time we need to reuse a container.
+            @SuppressLint("SetTextI18n")
             override fun bind(container: MonthViewContainer, month: CalendarMonth) {
                 container.textView.text = "${month.yearMonth.month.name.lowercase(Locale.getDefault()).replaceFirstChar { char -> char.uppercase() }} ${month.year}"
                 container.dayTexts.forEachIndexed { i, textView -> textView.text = daysOfWeek[i].name.substring(0, 3) }
