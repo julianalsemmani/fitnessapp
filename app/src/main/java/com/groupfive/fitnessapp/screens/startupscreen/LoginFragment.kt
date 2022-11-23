@@ -48,13 +48,12 @@ class LoginFragment : Fragment() {
                     .addOnCompleteListener(requireActivity()) { task ->
                         if (task.isSuccessful) {
                             Log.d(javaClass.name, "signInWithEmail:success")
-                            Toast.makeText(context, "Auth success", Toast.LENGTH_SHORT).show()
-                            val user = auth.currentUser
-                            val controller = findNavController()
-                            controller.navigate(R.id.action_loginFragment_to_profileFragment)
+                            Toast.makeText(context, "Login Successful.", Toast.LENGTH_SHORT).show()
+
+                            findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
                         } else {
                             Log.w(javaClass.name, "signInWithEmail:failure", task.exception)
-                            Toast.makeText(context, "Auth failed", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Login Failed", Toast.LENGTH_SHORT).show()
                         }
                     }
             } else {
