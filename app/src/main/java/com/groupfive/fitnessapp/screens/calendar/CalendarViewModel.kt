@@ -35,7 +35,7 @@ class CalendarViewModel: ViewModel() {
         runBlocking {
             val plannedWorkoutSessions = async { plannedWorkoutRepository.getPlannedWorkoutSessions() }
             val workoutSessions = async { workoutRepository.getWorkoutSessions() }
-            Log.e(javaClass.simpleName, "OJFHSAHJFSAJHKLFSHASFJHFKLSFSHJKL")
+            
             _plannedWorkoutSessions.value = plannedWorkoutSessions.await()
             _workoutSessions.value = workoutSessions.await()
         }
