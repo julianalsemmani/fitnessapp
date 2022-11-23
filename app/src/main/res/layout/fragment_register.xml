@@ -21,7 +21,7 @@
             android:id="@+id/registerEmailInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email"
+            android:hint="@string/email"
             android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -38,7 +38,7 @@
             android:id="@+id/registerFirstnameInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Firstname" />
+            android:hint="@string/firstname" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -53,7 +53,7 @@
             android:id="@+id/registerLastnameInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Lastname" />
+            android:hint="@string/lastname" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -72,7 +72,7 @@
             android:id="@+id/registerPasswordInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password"
+            android:hint="@string/password"
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -80,7 +80,7 @@
         android:id="@+id/registerBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register"
+        android:text="@string/register"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

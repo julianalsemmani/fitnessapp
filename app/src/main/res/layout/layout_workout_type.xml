@@ -38,7 +38,8 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/workoutNameTextView"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@drawable/squat" />
+            tools:srcCompat="@drawable/squat"
+            android:contentDescription="@string/image_of_exercise" />
 
 
         <TextView

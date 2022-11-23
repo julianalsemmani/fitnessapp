@@ -48,7 +48,7 @@ class ProfileFragment : Fragment() {
             userInfo = userRepository.getLoggedInUser()
         }
 
-        binding.profile.text = "Hello, " + userInfo.firstName
-        binding.name.text = "${userInfo.firstName} ${userInfo.lastName}"
+        binding.profile.text = getString(R.string.hello_user, userInfo.firstName)
+        binding.name.text = getString(R.string.full_name, userInfo.firstName, userInfo.lastName)
     }
 }
