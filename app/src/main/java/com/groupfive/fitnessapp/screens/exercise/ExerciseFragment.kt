@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.groupfive.fitnessapp.databinding.FragmentExerciseBinding
-import com.groupfive.fitnessapp.screens.selectworkout.WorkoutTypeAdapter
 
 class ExerciseFragment : Fragment() {
     private lateinit var binding: FragmentExerciseBinding

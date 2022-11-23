@@ -1,4 +1,4 @@
-package com.groupfive.fitnessapp.screens.selectworkout
+package com.groupfive.fitnessapp.screens.exercise
 
 import android.view.LayoutInflater
 import android.view.View
