@@ -25,10 +25,6 @@ class HomeFragment : Fragment() {
     ): View {
         binding = FragmentHomeBinding.inflate(inflater)
 
-        binding.calenderBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_calendarFragment)
-        }
-
         binding.workoutList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         binding.workoutList.adapter = WorkoutTypeAdapter() { selectedWorkoutType ->
             findNavController().navigate(
