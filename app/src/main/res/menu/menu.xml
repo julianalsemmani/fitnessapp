@@ -11,7 +11,7 @@
         android:title="Stats"
     />
     <item
-        android:id="@+id/ic_notifications"
+        android:id="@+id/ic_calendar"
         android:icon="@drawable/ic_calendar"
         android:title="Calendar"
     />

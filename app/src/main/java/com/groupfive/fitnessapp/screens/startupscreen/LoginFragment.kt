@@ -31,7 +31,7 @@ class LoginFragment : Fragment() {
         val currentUser = auth.currentUser
         if (currentUser != null) {
             val controller = findNavController()
-            controller.navigate(R.id.action_loginFragment_to_homeFragment)
+            controller.navigate(R.id.action_loginFragment_to_profileFragment)
         }
     }
 
@@ -51,7 +51,7 @@ class LoginFragment : Fragment() {
                             Toast.makeText(context, "Auth success", Toast.LENGTH_SHORT).show()
                             val user = auth.currentUser
                             val controller = findNavController()
-                            controller.navigate(R.id.action_loginFragment_to_homeFragment)
+                            controller.navigate(R.id.action_loginFragment_to_profileFragment)
                         } else {
                             Log.w(javaClass.name, "signInWithEmail:failure", task.exception)
                             Toast.makeText(context, "Auth failed", Toast.LENGTH_SHORT).show()
