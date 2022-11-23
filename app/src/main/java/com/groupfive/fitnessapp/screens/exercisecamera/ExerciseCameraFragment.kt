@@ -20,7 +20,7 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.pose.Pose
 import com.google.mlkit.vision.pose.PoseDetection
 import com.google.mlkit.vision.pose.PoseDetector
-import com.google.mlkit.vision.pose.defaults.PoseDetectorOptions
+import com.google.mlkit.vision.pose.accurate.AccuratePoseDetectorOptions
 import com.groupfive.fitnessapp.R
 import com.groupfive.fitnessapp.databinding.FragmentExerciseCameraBinding
 import com.groupfive.fitnessapp.exercise.ExerciseDetector
@@ -47,8 +47,8 @@ class ExerciseCameraFragment : Fragment() {
 
     // ML-kit
     private val poseDetector: PoseDetector  = PoseDetection.getClient(
-        PoseDetectorOptions.Builder()
-            .setDetectorMode(PoseDetectorOptions.STREAM_MODE)
+        AccuratePoseDetectorOptions.Builder()
+            .setDetectorMode(AccuratePoseDetectorOptions.STREAM_MODE)
             .build()
     )
 
@@ -93,9 +93,7 @@ class ExerciseCameraFragment : Fragment() {
         }
 
         // Send failing and passing checks to pose view
-        binding.poseView.setPassingAndFailingConstraints(
-            repetitionResult.failingConstraints,
-            repetitionResult.passingConstraints)
+        binding.poseView.setConstraintsResult(repetitionResult)
 
         // Send the pose to pose view to for drawing
         binding.poseView.setPose(pose)

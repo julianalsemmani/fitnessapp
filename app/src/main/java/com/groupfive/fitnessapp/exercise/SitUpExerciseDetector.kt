@@ -5,7 +5,7 @@ import com.google.mlkit.vision.pose.PoseLandmark
 
 class SitUpExerciseDetector : ExerciseDetector {
 
-    private val safetyMargin = 10.0
+    private val safetyMargin = 20.0
 
     private val sitUpConstraints = ExercisePoseConstraints(
         ExerciseAngleConstraint(PoseLandmark.LEFT_KNEE, PoseLandmark.LEFT_HIP, PoseLandmark.LEFT_SHOULDER,
