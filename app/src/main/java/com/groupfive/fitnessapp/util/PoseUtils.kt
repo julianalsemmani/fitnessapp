@@ -2,7 +2,6 @@ package com.groupfive.fitnessapp.util
 
 import com.google.mlkit.vision.pose.Pose
 import com.google.mlkit.vision.pose.PoseLandmark
-import com.google.mlkit.vision.pose.PoseLandmark.LandmarkType
 import dev.romainguy.kotlin.math.Float2
 import dev.romainguy.kotlin.math.Float3
 import dev.romainguy.kotlin.math.dot
@@ -11,7 +10,28 @@ import kotlin.math.*
 
 class PoseUtils {
     companion object {
-        fun getAngle(firstPoint: PoseLandmark, midPoint: PoseLandmark, lastPoint: PoseLandmark): Double {
+        fun getAngle2D(firstPoint: PoseLandmark, midPoint: PoseLandmark, lastPoint: PoseLandmark): Double {
+            var result = Math.toDegrees(
+                (atan2(lastPoint.position.y - midPoint.position.y,
+                    lastPoint.position.x - midPoint.position.x)
+                        - atan2(firstPoint.position.y - midPoint.position.y,
+                    firstPoint.position.x - midPoint.position.x)).toDouble())
+
+            result = abs(result) // Angle should never be negative
+            if (result > 180) {
+                result = 360.0 - result // Always get the acute representation of the angle
+            }
+            return result
+        }
+
+        fun getAngle2D(pose: Pose, firstPoint: Int, midPoint: Int, lastPoint: Int): Double {
+            return getAngle2D(
+                pose.getPoseLandmark(firstPoint)!!,
+                pose.getPoseLandmark(midPoint)!!,
+                pose.getPoseLandmark(lastPoint)!!)
+        }
+
+        fun getAngle3D(firstPoint: PoseLandmark, midPoint: PoseLandmark, lastPoint: PoseLandmark): Double {
             val a = float3FromLandmark(firstPoint) - float3FromLandmark(midPoint)
             val b = float3FromLandmark(lastPoint) - float3FromLandmark(midPoint)
             val cos = dot(a, b) / (length(a) * length(b))
@@ -24,8 +44,8 @@ class PoseUtils {
             return result
         }
 
-        fun getAngle(pose: Pose, firstPoint: Int, midPoint: Int, lastPoint: Int): Double {
-            return getAngle(
+        fun getAngle3D(pose: Pose, firstPoint: Int, midPoint: Int, lastPoint: Int): Double {
+            return getAngle3D(
                 pose.getPoseLandmark(firstPoint)!!,
                 pose.getPoseLandmark(midPoint)!!,
                 pose.getPoseLandmark(lastPoint)!!)
