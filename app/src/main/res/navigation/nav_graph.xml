@@ -6,13 +6,10 @@
     app:startDestination="@id/loginFragment">
 
     <fragment
-        android:id="@+id/homeFragment"
+        android:id="@+id/exerciseFragment"
         android:name="com.groupfive.fitnessapp.screens.exercise.ExerciseFragment"
-        android:label="fragment_home"
+        android:label="exercise_home"
         tools:layout="@layout/fragment_exercise">
-        <action
-            android:id="@+id/action_homeFragment_to_calendarFragment"
-            app:destination="@id/calendarFragment" />
         <action
             android:id="@+id/action_homeFragment_to_exerciseCameraFragment"
             app:destination="@id/exerciseCameraFragment" />
@@ -51,7 +48,7 @@
         tools:layout="@layout/fragment_stats" />
     <action
         android:id="@+id/action_global_homeFragment"
-        app:destination="@id/homeFragment" />
+        app:destination="@id/exerciseFragment" />
     <action
         android:id="@+id/action_global_profileFragment"
         app:destination="@id/profileFragment" />
@@ -89,7 +86,7 @@
         tools:layout="@layout/fragment_register" >
         <action
             android:id="@+id/action_registerFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/exerciseFragment" />
     </fragment>
     <fragment
         android:id="@+id/setupPlannedExerciseFragment"
@@ -108,13 +105,5 @@
             android:id="@+id/action_setupPlannedExerciseFragment_to_workoutDayFragment"
             app:destination="@id/workoutDayFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/selectWorkoutFragment"
-        android:name="com.groupfive.fitnessapp.screens.selectworkout.SelectWorkoutFragment"
-        android:label="fragment_select_workout"
-        tools:layout="@layout/fragment_select_workout" >
-        <action
-            android:id="@+id/action_selectWorkoutFragment_to_exerciseCameraFragment"
-            app:destination="@id/exerciseCameraFragment" />
-    </fragment><action android:id="@+id/action_global_calendarFragment" app:destination="@id/calendarFragment"/>
+    <action android:id="@+id/action_global_calendarFragment" app:destination="@id/calendarFragment"/>
 </navigation>
