@@ -1,5 +1,6 @@
 package com.groupfive.fitnessapp.screens.stats
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +16,8 @@ class ExerciseStatsAdapter(
     : RecyclerView.Adapter<ExerciseStatsAdapter.ViewHolder>() {
 
     private var workoutReps = listOf<Pair<WorkoutType, Int>>()
-    init {
+
+    private fun parseData() {
         val workouts = EnumMap<WorkoutType, Int>(WorkoutType::class.java)
         statsViewModel.workoutSessions.value?.forEach { workoutSession ->
             workouts.compute(workoutSession.workoutType) { _, currentReps ->
@@ -40,6 +42,12 @@ class ExerciseStatsAdapter(
 
     override fun getItemCount(): Int {
         return workoutReps.size
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun refresh() {
+        parseData()
+        notifyDataSetChanged()
     }
 
     class ViewHolder (val view: View): RecyclerView.ViewHolder(view) {

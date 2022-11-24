@@ -101,6 +101,14 @@ class CalendarFragment : Fragment() {
             }
         }
 
+        // Update calendar data when view model receives data from repository
+        viewModel.workoutSessions.observe(viewLifecycleOwner) {
+            calendarView.notifyCalendarChanged()
+        }
+        viewModel.plannedWorkoutSessions.observe(viewLifecycleOwner) {
+            calendarView.notifyCalendarChanged()
+        }
+
         // Update calendar view from current month in view model
         viewModel.currentMonth.observe(viewLifecycleOwner) {
             calendarView.scrollToMonth(it)

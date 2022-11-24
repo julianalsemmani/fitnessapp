@@ -3,8 +3,10 @@ package com.groupfive.fitnessapp.screens.stats
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.groupfive.fitnessapp.model.workout.WorkoutSession
 import com.groupfive.fitnessapp.model.workout.repository.FirebaseWorkoutSessionRepository
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class StatsViewModel: ViewModel() {
@@ -15,7 +17,7 @@ class StatsViewModel: ViewModel() {
         get() = _workoutSessions
 
     init {
-        runBlocking {
+        viewModelScope.launch {
             _workoutSessions.value = workoutRepository.getWorkoutSessions()
         }
     }

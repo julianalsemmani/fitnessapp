@@ -1,5 +1,6 @@
 package com.groupfive.fitnessapp.screens.workoutday
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -33,6 +34,7 @@ class WorkoutDayFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -54,7 +56,6 @@ class WorkoutDayFragment : Fragment() {
 
         val workoutSessionsRecyclerView = binding.workoutSessionsRecyclerView
         workoutSessionsRecyclerView.adapter = WorkoutSessionsAdapter(viewModel)
-
         workoutSessionsRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
         viewModel.day.observe(viewLifecycleOwner) {
@@ -62,6 +63,9 @@ class WorkoutDayFragment : Fragment() {
         }
 
         viewModel.workoutSessions.observe(viewLifecycleOwner) {
+            workoutSessionsRecyclerView.adapter?.notifyDataSetChanged()
+            plannedSessionsRecyclerView.adapter?.notifyDataSetChanged()
+
             if(it.isNotEmpty()) {
                 binding.completedExercisesTextView.visibility = View.VISIBLE
                 binding.workoutSessionsRecyclerView.visibility = View.VISIBLE
