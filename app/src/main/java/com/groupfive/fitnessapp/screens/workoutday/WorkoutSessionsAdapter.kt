@@ -1,5 +1,6 @@
 package com.groupfive.fitnessapp.screens.workoutday
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +15,14 @@ class WorkoutSessionsAdapter(
     : RecyclerView.Adapter<WorkoutSessionsAdapter.ViewHolder>() {
 
     private var workoutReps = listOf<Pair<WorkoutType, Int>>()
-    init {
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun refresh() {
+        parse()
+        notifyDataSetChanged()
+    }
+
+    private fun parse() {
         val workouts = EnumMap<WorkoutType, Int>(WorkoutType::class.java)
         workoutDayViewModel.workoutSessions.value?.forEach { workoutSession ->
             workouts.compute(workoutSession.workoutType) { _, currentReps ->

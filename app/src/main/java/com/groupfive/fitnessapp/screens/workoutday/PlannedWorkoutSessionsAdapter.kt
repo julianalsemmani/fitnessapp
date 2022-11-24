@@ -1,5 +1,6 @@
 package com.groupfive.fitnessapp.screens.workoutday
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +36,11 @@ class PlannedWorkoutSessionsAdapter(
 
     override fun getItemCount(): Int {
         return workoutDayViewModel.plannedWorkoutSessions.value?.size ?: 0
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun refresh() {
+        notifyDataSetChanged()
     }
 
     class ViewHolder (

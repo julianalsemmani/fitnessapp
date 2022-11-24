@@ -62,9 +62,12 @@ class WorkoutDayFragment : Fragment() {
             binding.dateView.text = it.toString()
         }
 
+        viewModel.plannedWorkoutSessions.observe(viewLifecycleOwner) {
+            (plannedSessionsRecyclerView.adapter!! as PlannedWorkoutSessionsAdapter).refresh()
+        }
+
         viewModel.workoutSessions.observe(viewLifecycleOwner) {
-            workoutSessionsRecyclerView.adapter?.notifyDataSetChanged()
-            plannedSessionsRecyclerView.adapter?.notifyDataSetChanged()
+            (workoutSessionsRecyclerView.adapter!! as WorkoutSessionsAdapter).refresh()
 
             if(it.isNotEmpty()) {
                 binding.completedExercisesTextView.visibility = View.VISIBLE
