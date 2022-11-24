@@ -34,7 +34,7 @@ class RegisterFragment : Fragment() {
         val currentUser = auth.currentUser
         if(currentUser != null){
             val controller = findNavController()
-            controller.navigate(R.id.action_registerFragment_to_homeFragment)
+            controller.navigate(R.id.action_registerFragment_to_profileFragment)
         }
 
     }
@@ -63,7 +63,7 @@ class RegisterFragment : Fragment() {
                                     Log.w(javaClass.name, "Error adding document", e)
                                 }
                             val controller = findNavController()
-                            controller.navigate(R.id.action_registerFragment_to_homeFragment)
+                            controller.navigate(R.id.action_registerFragment_to_profileFragment)
                         } else {
                             Log.w(javaClass.name, "createUserWithEmail:failure", task.exception)
                             Toast.makeText(context, "Authentication failed", Toast.LENGTH_SHORT).show()

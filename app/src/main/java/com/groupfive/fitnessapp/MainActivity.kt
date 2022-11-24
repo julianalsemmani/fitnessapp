@@ -3,9 +3,11 @@ package com.groupfive.fitnessapp
 import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.forEach
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import com.groupfive.fitnessapp.databinding.ActivityMainBinding
@@ -22,9 +24,18 @@ class MainActivity : AppCompatActivity() {
         // These fragments allow landscape
         private val ALLOW_LANDSCAPE_FRAGMENTS = listOf(
             "fragment_exercise_camera")
+
+        private val HIDE_ACTION_BAR = listOf(
+            "fragment_profile",
+            "fragment_exercise",
+            "fragment_calendar",
+            "fragment_stats",
+            "fragment_login"
+        )
     }
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +45,7 @@ class MainActivity : AppCompatActivity() {
 
         // Retrieve nav controller
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
+        navController = navHostFragment.navController
 
         binding.bottomNavigation.setOnItemSelectedListener {
             when(it.itemId){
@@ -63,6 +74,12 @@ class MainActivity : AppCompatActivity() {
                     ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 }
 
+                if(HIDE_ACTION_BAR.any { it == destination }) {
+                    supportActionBar?.hide()
+                } else {
+                    supportActionBar?.show()
+                }
+
                 // Make sure that fragment navigated to updates bottom navigation
                 val selectedItemId = when(destination) {
                     "fragment_profile" -> R.id.ic_profile
@@ -79,5 +96,15 @@ class MainActivity : AppCompatActivity() {
         }
 
         setContentView(binding.root)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> navController.popBackStack()
+        }
+        return true
     }
 }
