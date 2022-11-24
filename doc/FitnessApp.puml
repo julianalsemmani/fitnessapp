@@ -16,6 +16,7 @@ package com.groupfive.fitness  {
         Class ExercisePoseConstraints
         Class SquatExerciseDetector
         Class SitUpExerciseDetector
+        Class PushUpExerciseDetector
         Enum WorkoutType
     }
 
@@ -100,15 +101,27 @@ package com.groupfive.fitness  {
 ' Exercise system
 ExerciseDetector <|-- SquatExerciseDetector
 ExerciseDetector <|-- SitUpExerciseDetector
+ExerciseDetector <|-- PushUpExerciseDetector
+
+ComparisonType <-- ExerciseAngleConstraint
 ExercisePoseConstraint <|-- ExerciseAngleConstraint
-ExercisePoseConstraints o-- ExercisePoseConstraint
+ExercisePoseConstraint o-- ExercisePoseConstraints
+
 ExercisePoseConstraints o-- SquatExerciseDetector
 ExercisePoseConstraints o-- SitUpExerciseDetector
-ExerciseDetectorFactory o-- SquatExerciseDetector
-ExerciseDetectorFactory o-- SitUpExerciseDetector
+ExercisePoseConstraints o-- PushUpExerciseDetector
+
+ExerciseAngleConstraint o-- SquatExerciseDetector
+ExerciseAngleConstraint o-- SitUpExerciseDetector
+ExerciseAngleConstraint o-- PushUpExerciseDetector
+
+SquatExerciseDetector <-- ExerciseDetectorFactory
+SitUpExerciseDetector <-- ExerciseDetectorFactory
+PushUpExerciseDetector <-- ExerciseDetectorFactory
+PushUpExerciseDetector <-- ExerciseDetectorFactory
 
 ' Model
-' Calender
+' PlannedWorkout
 PlannedWorkoutRepository <|-- TestPlannedWorkoutRepository
 PlannedWorkoutRepository <|-- FirebasePlannedWorkoutRepository
 PlannedWorkoutSession o-- PlannedWorkoutRepository
@@ -126,12 +139,14 @@ WorkoutSessionRepository <|-- FirebaseWorkoutSessionRepository
 ' ExerciseCamera
 ExerciseCameraFragment o-- ExerciseDetector
 ExerciseCameraFragment o-- ExerciseCameraViewModel
+WorkoutSessionRepository <-- ExerciseCameraViewModel
 PoseView o-- ExerciseCameraFragment
 
 ' Calendar
-PlannedWorkoutRepository o-- CalendarFragment
+PlannedWorkoutRepository o-- CalendarViewModel
 DayViewContainer o-- CalendarFragment
 MonthViewContainer o-- CalendarFragment
+CalendarViewModel o-- CalendarFragment
 
 ' WorkoutDay
 PlannedWorkoutRepository o-- WorkoutDayViewModel
@@ -142,7 +157,12 @@ SetupPlannedExerciseViewModel o-- SetupPlannedExerciseFragment
 ' Profile
 UserRepository o-- ProfileFragment
 
+' Exercise
+WorkoutTypeAdapter o-- ExerciseFragment
 
-
+' Stats
+StatsViewModel o-- StatsFragment
+WorkoutSessionRepository <-- StatsViewModel
+ExerciseStatsAdapter o-- StatsFragment
 
 @enduml
