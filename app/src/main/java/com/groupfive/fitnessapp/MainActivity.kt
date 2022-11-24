@@ -3,9 +3,10 @@ package com.groupfive.fitnessapp
 import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.browser.trusted.ScreenOrientation
+import androidx.core.view.forEach
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import com.groupfive.fitnessapp.databinding.ActivityMainBinding
@@ -61,6 +62,18 @@ class MainActivity : AppCompatActivity() {
                     ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
                 } else {
                     ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                }
+
+                // Make sure that fragment navigated to updates bottom navigation
+                val selectedItemId = when(destination) {
+                    "fragment_profile" -> R.id.ic_profile
+                    "fragment_stats" -> R.id.ic_stats
+                    "fragment_exercise" -> R.id.ic_exercise
+                    "fragment_calendar" -> R.id.ic_calendar
+                    else -> -1
+                }
+                binding.bottomNavigation.menu.forEach {
+                    if(it.itemId == selectedItemId) it.isChecked = true
                 }
             }
 

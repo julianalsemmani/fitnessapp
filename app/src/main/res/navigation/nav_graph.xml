@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/exerciseFragment"
         android:name="com.groupfive.fitnessapp.screens.exercise.ExerciseFragment"
-        android:label="exercise_home"
+        android:label="fragment_exercise"
         tools:layout="@layout/fragment_exercise">
         <action
             android:id="@+id/action_homeFragment_to_exerciseCameraFragment"
