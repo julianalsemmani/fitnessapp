@@ -6,9 +6,7 @@ class ExerciseDetectorFactory {
             return when(workoutType) {
                 WorkoutType.SIT_UP -> SitUpExerciseDetector()
                 WorkoutType.SQUAT -> SquatExerciseDetector()
-                else -> {
-                    TODO("Detector not implemented ${workoutType.name}")
-                }
+                WorkoutType.PUSH_UP -> PushUpExerciseDetector()
             }
         }
     }

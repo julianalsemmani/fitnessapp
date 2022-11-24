@@ -1,17 +1,18 @@
 package com.groupfive.fitnessapp.screens.exercisecamera
 
+import android.animation.ArgbEvaluator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.PorterDuff
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import com.google.mlkit.vision.pose.Pose
 import com.google.mlkit.vision.pose.PoseLandmark
 import com.groupfive.fitnessapp.exercise.ExerciseAngleConstraint
-import com.groupfive.fitnessapp.exercise.ExercisePoseConstraint
+import com.groupfive.fitnessapp.exercise.ExerciseDetector
+import com.groupfive.fitnessapp.util.PoseUtils
+import dev.romainguy.kotlin.math.Float2
 
 /**
  * Draws a given pose using canvas
@@ -63,9 +64,10 @@ class PoseView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         style = Paint.Style.STROKE
     }
 
+    private val argbEvaluator = ArgbEvaluator()
+
     private var pose: Pose? = null
-    private var failingConstraints: List<ExercisePoseConstraint>? = null
-    private var passingConstraints: List<ExercisePoseConstraint>? = null
+    private var constraintResult: ExerciseDetector.Result? = null
 
     // The factor of overlay View size to image size. Anything in the image coordinates need to be
     // scaled by this amount to fit with the area of overlay View.
@@ -85,11 +87,8 @@ class PoseView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         this.pose = pose
     }
 
-    fun setPassingAndFailingConstraints(
-        failingConstraints: List<ExercisePoseConstraint>,
-        passingConstraints: List<ExercisePoseConstraint>) {
-        this.failingConstraints = failingConstraints
-        this.passingConstraints = passingConstraints
+    fun setConstraintsResult(constraintResult: ExerciseDetector.Result) {
+        this.constraintResult = constraintResult
     }
 
     fun setImageSourceInfo(imageWidth: Int, imageHeight: Int, isFlipped: Boolean) {
@@ -143,36 +142,42 @@ class PoseView(context: Context, attrs: AttributeSet) : View(context, attrs) {
                 }
 
                 // Draw failing constraints
-                failingConstraints?.forEach { failingConstraint ->
-                    when(failingConstraint) {
+                constraintResult?.failingConstraints?.forEach { failing ->
+                    when(failing.constraint) {
                         is ExerciseAngleConstraint -> {
-                            drawLineBetweenLandmarks(
-                                failingConstraint.firstPoint,
-                                failingConstraint.midPoint,
+                            failurePaint.color = argbEvaluator.evaluate(
+                                failing.result.passRate.toFloat(),
+                                Color.RED, Color.GREEN) as Int
+
+                            val first = PoseUtils.float2FromLandmark(pose!!, failing.constraint.firstPoint)
+                            val mid = PoseUtils.float2FromLandmark(pose!!, failing.constraint.midPoint)
+                            val last = PoseUtils.float2FromLandmark(pose!!, failing.constraint.lastPoint)
+
+                            drawLineBetweenPoints(mid,
+                                first - (first - mid)/2f,
                                 canvas, failurePaint)
-                            drawLineBetweenLandmarks(
-                                failingConstraint.midPoint,
-                                failingConstraint.lastPoint,
+                            drawLineBetweenPoints(mid,
+                                last - (last - mid)/2f,
                                 canvas, failurePaint)
                         }
                     }
                 }
 
                 // Draw passing constraints
-                passingConstraints?.forEach { passingConstraint ->
-                    when(passingConstraint) {
-                        is ExerciseAngleConstraint -> {
-                            drawLineBetweenLandmarks(
-                                passingConstraint.firstPoint,
-                                passingConstraint.midPoint,
-                                canvas, passingPaint)
-                            drawLineBetweenLandmarks(
-                                passingConstraint.midPoint,
-                                passingConstraint.lastPoint,
-                                canvas, passingPaint)
-                        }
-                    }
-                }
+//                constraintResult?.passingConstraints?.forEach { passing ->
+//                    when(passing.constraint) {
+//                        is ExerciseAngleConstraint -> {
+//                            drawLineBetweenLandmarks(
+//                                passing.constraint.firstPoint,
+//                                passing.constraint.midPoint,
+//                                canvas, passingPaint)
+//                            drawLineBetweenLandmarks(
+//                                passing.constraint.midPoint,
+//                                passing.constraint.lastPoint,
+//                                canvas, passingPaint)
+//                        }
+//                    }
+//                }
             }
         } else {
             // Clear canvas when there is no pose
@@ -183,12 +188,16 @@ class PoseView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         invalidate()
     }
 
+    private fun drawLineBetweenPoints(a: Float2, b: Float2, canvas: Canvas, paint: Paint) {
+        canvas.drawLine(
+            translateX(a.x), translateY(a.y),
+            translateX(b.x), translateY(b.y),
+            paint)
+    }
+
     private fun drawLineBetweenLandmarks(beginId: Int, endId: Int, canvas: Canvas, paint: Paint) {
         val begin = pose!!.getPoseLandmark(beginId)!!
         val end = pose!!.getPoseLandmark(endId)!!
-        canvas.drawLine(
-            translateX(begin.position.x), translateY(begin.position.y),
-            translateX(end.position.x), translateY(end.position.y),
-            paint)
+        drawLineBetweenPoints(PoseUtils.float2FromLandmark(begin), PoseUtils.float2FromLandmark(end), canvas, paint)
     }
 }

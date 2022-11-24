@@ -1,15 +1,15 @@
 package com.groupfive.fitnessapp.screens.workoutday
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.groupfive.fitnessapp.R
 import com.groupfive.fitnessapp.databinding.FragmentWorkoutDayBinding
 
 class WorkoutDayFragment : Fragment() {
@@ -33,6 +33,7 @@ class WorkoutDayFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -50,8 +51,31 @@ class WorkoutDayFragment : Fragment() {
                 selectedPlannedWorkoutSession.id
             ))
         }
-
         plannedSessionsRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        val workoutSessionsRecyclerView = binding.workoutSessionsRecyclerView
+        workoutSessionsRecyclerView.adapter = WorkoutSessionsAdapter(viewModel)
+        workoutSessionsRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        viewModel.day.observe(viewLifecycleOwner) {
+            binding.dateView.text = it.toString()
+        }
+
+        viewModel.plannedWorkoutSessions.observe(viewLifecycleOwner) {
+            (plannedSessionsRecyclerView.adapter!! as PlannedWorkoutSessionsAdapter).refresh()
+        }
+
+        viewModel.workoutSessions.observe(viewLifecycleOwner) {
+            (workoutSessionsRecyclerView.adapter!! as WorkoutSessionsAdapter).refresh()
+
+            if(it.isNotEmpty()) {
+                binding.completedExercisesTextView.visibility = View.VISIBLE
+                binding.workoutSessionsRecyclerView.visibility = View.VISIBLE
+            } else {
+                binding.completedExercisesTextView.visibility = View.GONE
+                binding.workoutSessionsRecyclerView.visibility = View.GONE
+            }
+        }
     }
 
     companion object {

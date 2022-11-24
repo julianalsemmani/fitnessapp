@@ -1,14 +1,19 @@
 package com.groupfive.fitnessapp.screens.profile
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.groupfive.fitnessapp.R
 import com.groupfive.fitnessapp.databinding.FragmentProfileBinding
-import com.groupfive.fitnessapp.model.user.repository.FirebaseUserRepository
 import com.groupfive.fitnessapp.model.user.User
-import kotlinx.coroutines.runBlocking
+import com.groupfive.fitnessapp.model.user.repository.FirebaseUserRepository
+import kotlinx.coroutines.launch
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
@@ -28,17 +33,23 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentProfileBinding.inflate(inflater)
+
+        binding.signOutBtnProfile.setOnClickListener {
+            Firebase.auth.signOut()
+            findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
+        }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        runBlocking {
+        lifecycleScope.launch {
             userInfo = userRepository.getLoggedInUser()
-        }
 
-        binding.profile.text = "Hello, " + userInfo.firstName
-        binding.name.text = "${userInfo.firstName} ${userInfo.lastName}"
+            binding.profile.text = getString(R.string.hello_user, userInfo.firstName)
+            binding.name.text = getString(R.string.full_name, userInfo.firstName, userInfo.lastName)
+        }
     }
 }

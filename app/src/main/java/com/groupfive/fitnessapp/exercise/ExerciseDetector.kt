@@ -5,8 +5,8 @@ import com.google.mlkit.vision.pose.Pose
 interface ExerciseDetector  {
     data class Result(
         val repetition: Boolean,
-        val failingConstraints: List<ExercisePoseConstraint>,
-        val passingConstraints: List<ExercisePoseConstraint>)
+        val failingConstraints: List<ExercisePoseConstraints.ConstraintResult>,
+        val passingConstraints: List<ExercisePoseConstraints.ConstraintResult>)
 
     /**
      * Returns true when a new repetition is detected

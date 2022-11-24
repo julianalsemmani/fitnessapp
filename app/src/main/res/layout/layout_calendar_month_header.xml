@@ -8,8 +8,10 @@
         android:id="@+id/headerTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:textSize="26sp"
+        android:padding="32dp"
+        android:textAlignment="center"
+        android:textSize="22sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -33,7 +35,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="SUN"
-            android:textColor="?colorOnPrimary"
+            android:textColor="?colorOnSurface"
             android:textSize="14sp" />
 
         <TextView
@@ -43,7 +45,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="MON"
-            android:textColor="?colorOnPrimary"
+            android:textColor="?colorOnSurface"
             android:textSize="14sp" />
 
         <TextView
@@ -53,7 +55,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="TUE"
-            android:textColor="?colorOnPrimary"
+            android:textColor="?colorOnSurface"
             android:textSize="14sp" />
 
         <TextView
@@ -63,7 +65,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="WED"
-            android:textColor="?colorOnPrimary"
+            android:textColor="?colorOnSurface"
             android:textSize="14sp" />
 
         <TextView
@@ -73,7 +75,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="THU"
-            android:textColor="?colorOnPrimary"
+            android:textColor="?colorOnSurface"
             android:textSize="14sp" />
 
         <TextView
@@ -83,7 +85,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="FRI"
-            android:textColor="?colorOnPrimary"
+            android:textColor="?colorOnSurface"
             android:textSize="14sp" />
 
         <TextView
@@ -93,9 +95,32 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="SAT"
-            android:textColor="?colorOnPrimary"
+            android:textColor="?colorOnSurface"
             android:textSize="14sp" />
     </LinearLayout>
 
+    <Button
+        style="@style/Widget.App.Button.IconButton"
+        android:id="@+id/previousMonthButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:contentDescription="@string/go_to_previous_month"
+        app:icon="@drawable/ic_baseline_arrow_back_ios_new_24"
+        app:layout_constraintBottom_toBottomOf="@+id/headerTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        style="@style/Widget.App.Button.IconButton"
+        android:id="@+id/nextMonthButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/go_to_next_month"
+        app:icon="@drawable/ic_baseline_arrow_forward_ios_24"
+        app:layout_constraintBottom_toBottomOf="@+id/headerTextView"
+        app:layout_constraintEnd_toEndOf="@+id/headerTextView"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

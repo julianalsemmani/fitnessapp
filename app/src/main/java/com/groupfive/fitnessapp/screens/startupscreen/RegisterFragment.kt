@@ -2,11 +2,11 @@ package com.groupfive.fitnessapp.screens.startupscreen
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -34,7 +34,7 @@ class RegisterFragment : Fragment() {
         val currentUser = auth.currentUser
         if(currentUser != null){
             val controller = findNavController()
-            controller.navigate(R.id.action_registerFragment_to_homeFragment)
+            controller.navigate(R.id.action_registerFragment_to_profileFragment)
         }
 
     }
@@ -55,7 +55,7 @@ class RegisterFragment : Fragment() {
                             val user = auth.currentUser
                             Toast.makeText(context, "Registration Successful", Toast.LENGTH_SHORT).show()
                             firebaseDb.collection("users")
-                                .document(auth.currentUser?.uid!!).set(addUserToDb(binding.registerEmailInput.text.toString(), auth.currentUser?.uid.toString()))
+                                .document(auth.currentUser?.uid!!).set(addUserToDb(auth.currentUser?.uid.toString(), binding.registerFirstnameInput.text.toString(), binding.registerLastnameInput.text.toString(), "20", "20", "2022", binding.registerEmailInput.text.toString()))
                                 .addOnSuccessListener {
                                     Log.d(javaClass.name, "DocumentSnapshot added with ID: ${auth.currentUser?.uid}")
                                 }
@@ -63,7 +63,7 @@ class RegisterFragment : Fragment() {
                                     Log.w(javaClass.name, "Error adding document", e)
                                 }
                             val controller = findNavController()
-                            controller.navigate(R.id.action_registerFragment_to_homeFragment)
+                            controller.navigate(R.id.action_registerFragment_to_profileFragment)
                         } else {
                             Log.w(javaClass.name, "createUserWithEmail:failure", task.exception)
                             Toast.makeText(context, "Authentication failed", Toast.LENGTH_SHORT).show()
@@ -78,14 +78,14 @@ class RegisterFragment : Fragment() {
         return binding.root
     }
 
-    fun addUserToDb(email: String, uID: String): HashMap<String, String> {
+    fun addUserToDb(uID: String, firstName: String, lastName: String, weight: String, height: String, birthDate: String, email: String): HashMap<String, String> {
         return hashMapOf(
             "uid" to uID,
-            "firstName" to "null",
-            "lastname" to "null",
-            "weight" to "75",
-            "height" to "180",
-            "birthDate" to "00-00-0000",
+            "firstName" to firstName,
+            "lastname" to lastName,
+            "weight" to weight,
+            "height" to height,
+            "birthDate" to birthDate,
             "email" to email
         )
     }

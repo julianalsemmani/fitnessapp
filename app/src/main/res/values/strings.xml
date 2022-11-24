@@ -1,23 +1,49 @@
 <resources>
     <string name="app_name">Fitness App</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome!"</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
-
     <string name="add_planned_workout_session_for_this_day">Add planned workout session for this day</string>
-    <string name="session_end_time">Session end time</string>
-    <string name="session_start_time">Session start time</string>
-    <string name="add">Add</string>
     <string name="repeating">Repeating</string>
     <string name="complete_planned_exercise">Complete planned exercise</string>
     <string name="complete_workout_session">Complete workout session</string>
     <string name="switch_camera">Switch camera</string>
+    <string name="completed_exercises">Completed exercises</string>
+    <string name="planned_exercises">Planned exercises</string>
+    <string name="go_to_next_month">Go to next month</string>
+    <string name="go_to_previous_month">Go to previous month</string>
+    <string name="start_exercise">Start exercise</string>
+
+    <string name="stats_completed_exercises">Stats - completed exercises</string>
+    <string name="image_of_exercise">Image of exercise</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="hello_user">Hello, %1$s</string>
+    <string name="full_name">%1$s %2$s</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="firstname">Firstname</string>
+    <string name="lastname">Lastname</string>
+    <string name="duration">Duration</string>
+    <string name="profile">Profile</string>
+    <string name="exercise">Exercise</string>
+    <string name="calendar">Calendar</string>
+    <string name="stats">Stats</string>
+
+    <!-- WorkoutType -->
+    <string name="squat">Squat</string>
+    <!-- Source: https://en.wikipedia.org/wiki/Squat_(exercise)-->
+    <string name="squat_description">Squats is a strength exercise. The trainee lowers their hips
+        from a standing position and then stands back up again.</string>
+
+    <string name="push_up">Push-up</string>
+    <!-- Source: https://www.collinsdictionary.com/dictionary/english/push-up-->
+    <string name="push_up_description">Push-ups are exercises to strengthen your arms and chest
+        muscles. They are done by lying with your face towards the floor and pushing with your hands
+        to raise your body until your arms are straight.</string>
+
+    <string name="sit_up">Sit-up</string>
+    <!-- Source: https://www.healthline.com/health/sit-ups-benefits-->
+    <string name="sit_up_description">Situps are classic abdominal exercises done by lying on your
+        back and lifting your torso. They use your body weight to strengthen and tone the
+        core-stabilizing abdominal muscles.</string>
 </resources>

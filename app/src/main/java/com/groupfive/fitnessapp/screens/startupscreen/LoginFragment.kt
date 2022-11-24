@@ -1,13 +1,12 @@
 package com.groupfive.fitnessapp.screens.startupscreen
 
-import android.nfc.Tag
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -31,7 +30,7 @@ class LoginFragment : Fragment() {
         val currentUser = auth.currentUser
         if (currentUser != null) {
             val controller = findNavController()
-            controller.navigate(R.id.action_loginFragment_to_homeFragment)
+            controller.navigate(R.id.action_loginFragment_to_profileFragment)
         }
     }
 
@@ -48,13 +47,12 @@ class LoginFragment : Fragment() {
                     .addOnCompleteListener(requireActivity()) { task ->
                         if (task.isSuccessful) {
                             Log.d(javaClass.name, "signInWithEmail:success")
-                            Toast.makeText(context, "Auth success", Toast.LENGTH_SHORT).show()
-                            val user = auth.currentUser
-                            val controller = findNavController()
-                            controller.navigate(R.id.action_loginFragment_to_homeFragment)
+                            Toast.makeText(context, "Login Successful.", Toast.LENGTH_SHORT).show()
+
+                            findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
                         } else {
                             Log.w(javaClass.name, "signInWithEmail:failure", task.exception)
-                            Toast.makeText(context, "Auth failed", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Login Failed", Toast.LENGTH_SHORT).show()
                         }
                     }
             } else {

@@ -15,5 +15,7 @@ class MonthViewContainer(view: View) : ViewContainer(view) {
         binding.day5Text,
         binding.day6Text,
         binding.day7Text)
+    val nextMonthButton = binding.nextMonthButton
+    val previousMonthButton = binding.previousMonthButton
 
 }
