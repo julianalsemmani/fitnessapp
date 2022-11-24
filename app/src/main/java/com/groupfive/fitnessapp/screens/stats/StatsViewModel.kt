@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.groupfive.fitnessapp.model.workout.WorkoutSession
 import com.groupfive.fitnessapp.model.workout.repository.FirebaseWorkoutSessionRepository
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class StatsViewModel: ViewModel() {
     private val workoutRepository = FirebaseWorkoutSessionRepository()

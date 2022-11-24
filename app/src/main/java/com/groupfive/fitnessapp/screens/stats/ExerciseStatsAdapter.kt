@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.groupfive.fitnessapp.R
 import com.groupfive.fitnessapp.databinding.LayoutExerciseStatsBinding
-import com.groupfive.fitnessapp.databinding.LayoutWorkoutSessionBinding
 import com.groupfive.fitnessapp.exercise.WorkoutType
 import java.util.*
 

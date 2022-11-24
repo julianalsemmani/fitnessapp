@@ -4,7 +4,6 @@ import android.animation.ArgbEvaluator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
@@ -12,7 +11,6 @@ import com.google.mlkit.vision.pose.Pose
 import com.google.mlkit.vision.pose.PoseLandmark
 import com.groupfive.fitnessapp.exercise.ExerciseAngleConstraint
 import com.groupfive.fitnessapp.exercise.ExerciseDetector
-import com.groupfive.fitnessapp.exercise.ExercisePoseConstraints
 import com.groupfive.fitnessapp.util.PoseUtils
 import dev.romainguy.kotlin.math.Float2
 

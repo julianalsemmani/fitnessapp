@@ -6,8 +6,8 @@ import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.groupfive.fitnessapp.model.plannedworkout.repository.PlannedWorkoutRepository
 import com.groupfive.fitnessapp.model.plannedworkout.repository.FirebasePlannedWorkoutRepository
+import com.groupfive.fitnessapp.model.plannedworkout.repository.PlannedWorkoutRepository
 import kotlinx.coroutines.runBlocking
 import java.time.Duration
 import java.time.Instant

@@ -1,6 +1,5 @@
 package com.groupfive.fitnessapp.exercise
 
-import android.util.Log
 import com.google.mlkit.vision.pose.Pose
 import com.groupfive.fitnessapp.util.PoseUtils
 import kotlin.math.abs

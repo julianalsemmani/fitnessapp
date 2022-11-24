@@ -3,15 +3,14 @@ package com.groupfive.fitnessapp.screens.calendar
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.color.MaterialColors
 import com.google.android.material.R
+import com.google.android.material.color.MaterialColors
 import com.groupfive.fitnessapp.databinding.FragmentCalendarBinding
 import com.groupfive.fitnessapp.util.CalendarUtils
 import com.kizitonwose.calendarview.model.CalendarDay

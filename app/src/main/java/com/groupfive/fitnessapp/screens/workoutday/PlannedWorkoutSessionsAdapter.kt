@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.groupfive.fitnessapp.R
 import com.groupfive.fitnessapp.databinding.LayoutPlannedWorkoutSessionBinding
 import com.groupfive.fitnessapp.model.plannedworkout.PlannedWorkoutSession
-import com.groupfive.fitnessapp.databinding.LayoutWorkoutSessionBinding
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter

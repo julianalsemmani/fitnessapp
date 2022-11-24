@@ -6,7 +6,9 @@ import dev.romainguy.kotlin.math.Float2
 import dev.romainguy.kotlin.math.Float3
 import dev.romainguy.kotlin.math.dot
 import dev.romainguy.kotlin.math.length
-import kotlin.math.*
+import kotlin.math.abs
+import kotlin.math.acos
+import kotlin.math.atan2
 
 class PoseUtils {
     companion object {
