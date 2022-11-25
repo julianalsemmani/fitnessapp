@@ -118,7 +118,6 @@ ExerciseAngleConstraint o-- PushUpExerciseDetector
 SquatExerciseDetector <-- ExerciseDetectorFactory
 SitUpExerciseDetector <-- ExerciseDetectorFactory
 PushUpExerciseDetector <-- ExerciseDetectorFactory
-PushUpExerciseDetector <-- ExerciseDetectorFactory
 
 ' Model
 ' PlannedWorkout
@@ -137,7 +136,8 @@ WorkoutSessionRepository <|-- FirebaseWorkoutSessionRepository
 
 ' Screens
 ' ExerciseCamera
-ExerciseCameraFragment o-- ExerciseDetector
+ExerciseDetector o-- ExerciseCameraFragment
+ExerciseDetectorFactory <-- ExerciseCameraFragment
 ExerciseCameraFragment o-- ExerciseCameraViewModel
 WorkoutSessionRepository <-- ExerciseCameraViewModel
 PoseView o-- ExerciseCameraFragment
@@ -159,6 +159,7 @@ UserRepository o-- ProfileFragment
 
 ' Exercise
 WorkoutTypeAdapter o-- ExerciseFragment
+WorkoutType <-- WorkoutTypeAdapter
 
 ' Stats
 StatsViewModel o-- StatsFragment
