@@ -8,33 +8,27 @@ package com.groupfive.fitness  {
     Class TrainingNotificationService
 
     package exercise  {
+        Enum ComparisonType
         Class ExerciseAngleConstraint
         Interface ExerciseDetector
         Class ExerciseDetectorFactory
         Interface ExercisePoseConstraint
         Class ExercisePoseConstraints
-        Class ExerciseUtils
         Class SquatExerciseDetector
         Class SitUpExerciseDetector
+        Class PushUpExerciseDetector
         Enum WorkoutType
     }
 
     package model {
-        package calender { 
-            package repository as calendar-repository { 
-                Interface CalenderRepository
-                class FirebaseCalenderRepository
-                class TestCalenderRepository 
+        package plannedworkout {
+            package repository {
+                Class FirebasePlannedWorkoutRepository
+                Interface PlannedWorkoutRepository
+                Class TestPlannedWorkoutRepository
             }
-            Class PlannedWorkoutSession  
-        }
 
-        package workout {
-            package repository as workout-repository {
-                Interface WorkoutSessionRepository
-                Class FirebaseWorkoutSessionRepository
-            }
-            Class WorkoutSession
+            Class PlannedWorkoutSession
         }
 
         package user {
@@ -44,32 +38,37 @@ package com.groupfive.fitness  {
             }
             Class User
         }
+
+        package workout {
+            package repository as workout-repository {
+                Interface WorkoutSessionRepository
+                Class FirebaseWorkoutSessionRepository
+            }
+            Class WorkoutSession
+        }
     }
 
     package screens {
         package calendar {
-        	Class CalendarFragment
-        	Class DayViewContainer
-        	Class MonthViewContainer
-	    }
+            Class CalendarFragment
+            Class CalendarViewModel
+            Class DayViewContainer
+            Class MonthViewContainer
+        }
 
         package exercisecamera {
             Class ExerciseCameraFragment
             Class ExerciseCameraViewModel
-            Class PoseView    
+            Class PoseView
         }
 
-        package home {
-            Class HomeFragment
+        package Exercise {
+            Class ExerciseFragment
+            Class WorkoutTypeAdapter
         }
 
         package profile {
             class ProfileFragment
-        }
-
-        package selectworkout {
-            Class SelectWorkoutFragment
-            Class WorkoutTypeAdapter
         }
 
         package startupscreen {
@@ -78,11 +77,9 @@ package com.groupfive.fitness  {
         }
 
         package stats {
+            Class ExerciseStatsAdapter
             Class StatsFragment
-        }
-
-        package notifications {
-            Class NotificiationsFragment
+            Class StatsViewModel
         }
 
         package workoutday  {
@@ -91,30 +88,47 @@ package com.groupfive.fitness  {
             Class WorkoutDayViewModel
             Class SetupPlannedExerciseFragment
             Class SetupPlannedExerciseViewModel
+            Class WorkoutSessionsAdapter
         }
+    }
+
+    package util {
+        Class CalendarUtils
+        Class PoseUtils
     }
 }
 
 ' Exercise system
 ExerciseDetector <|-- SquatExerciseDetector
 ExerciseDetector <|-- SitUpExerciseDetector
+ExerciseDetector <|-- PushUpExerciseDetector
+
+ComparisonType <-- ExerciseAngleConstraint
 ExercisePoseConstraint <|-- ExerciseAngleConstraint
-ExercisePoseConstraints o-- ExercisePoseConstraint
+ExercisePoseConstraint o-- ExercisePoseConstraints
+
 ExercisePoseConstraints o-- SquatExerciseDetector
 ExercisePoseConstraints o-- SitUpExerciseDetector
-ExerciseDetectorFactory o-- SquatExerciseDetector
-ExerciseDetectorFactory o-- SitUpExerciseDetector
+ExercisePoseConstraints o-- PushUpExerciseDetector
+
+ExerciseAngleConstraint o-- SquatExerciseDetector
+ExerciseAngleConstraint o-- SitUpExerciseDetector
+ExerciseAngleConstraint o-- PushUpExerciseDetector
+
+SquatExerciseDetector <-- ExerciseDetectorFactory
+SitUpExerciseDetector <-- ExerciseDetectorFactory
+PushUpExerciseDetector <-- ExerciseDetectorFactory
 
 ' Model
-' Calender
-CalenderRepository <|-- TestCalenderRepository
-CalenderRepository <|-- FirebaseCalenderRepository
-PlannedWorkoutSession o-- CalenderRepository
+' PlannedWorkout
+PlannedWorkoutRepository <|-- TestPlannedWorkoutRepository
+PlannedWorkoutRepository <|-- FirebasePlannedWorkoutRepository
+PlannedWorkoutSession o-- PlannedWorkoutRepository
 TrainingNotificationService o-- MyApp
 
 ' User
 User o-- UserRepository
-UserRepository <|-- FirebaseUserRepository 
+UserRepository <|-- FirebaseUserRepository
 
 ' Workout
 WorkoutSession o-- WorkoutSessionRepository
@@ -122,17 +136,20 @@ WorkoutSessionRepository <|-- FirebaseWorkoutSessionRepository
 
 ' Screens
 ' ExerciseCamera
-ExerciseCameraFragment o-- ExerciseDetector
+ExerciseDetector o-- ExerciseCameraFragment
+ExerciseDetectorFactory <-- ExerciseCameraFragment
 ExerciseCameraFragment o-- ExerciseCameraViewModel
+WorkoutSessionRepository <-- ExerciseCameraViewModel
 PoseView o-- ExerciseCameraFragment
 
 ' Calendar
-CalenderRepository o-- CalendarFragment
+PlannedWorkoutRepository o-- CalendarViewModel
 DayViewContainer o-- CalendarFragment
 MonthViewContainer o-- CalendarFragment
+CalendarViewModel o-- CalendarFragment
 
 ' WorkoutDay
-CalenderRepository o-- WorkoutDayViewModel
+PlannedWorkoutRepository o-- WorkoutDayViewModel
 WorkoutDayViewModel o-- WorkoutDayFragment
 PlannedWorkoutSessionAdapter o-- WorkoutDayFragment
 SetupPlannedExerciseViewModel o-- SetupPlannedExerciseFragment
@@ -140,7 +157,13 @@ SetupPlannedExerciseViewModel o-- SetupPlannedExerciseFragment
 ' Profile
 UserRepository o-- ProfileFragment
 
-' SelectWorkout
-WorkoutTypeAdapter o-- SelectWorkoutFragment
+' Exercise
+WorkoutTypeAdapter o-- ExerciseFragment
+WorkoutType <-- WorkoutTypeAdapter
+
+' Stats
+StatsViewModel o-- StatsFragment
+WorkoutSessionRepository <-- StatsViewModel
+ExerciseStatsAdapter o-- StatsFragment
 
 @enduml
